@@ -1,0 +1,280 @@
+# German (de_DE) translation of the readme.txt strings, prepared for
+# manual review/import into the WordPress.org "stable readme" GlotPress
+# project once the plugin has been approved and that project exists.
+# Best-effort paragraph/bullet/FAQ segmentation — verify against the
+# live project originals before importing; adjust any mismatched msgid
+# so it matches the real original text exactly (GlotPress import
+# matches on original text, not on any id of ours).
+msgid ""
+msgstr ""
+"Project-Id-Version: Nota Invoice Sync for Lexware Office readme\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Description
+msgid "Nota Invoice Sync for Lexware Office creates a real Lexware Office invoice directly from a\nWooCommerce order — no ERP or middleware in between."
+msgstr "Nota Invoice Sync for Lexware Office erstellt eine echte Lexware-Office-Rechnung direkt aus\neiner WooCommerce-Bestellung – ohne ERP oder zwischengeschaltete Software."
+
+#. Description
+msgid "**Why not go through a sync tool?**"
+msgstr "**Warum nicht über ein Synchronisationstool?**"
+
+#. Description
+msgid "Most WooCommerce ↔ Lexware connectors work by re-calculating tax on their side and sending a\nfinished total to Lexware, which then re-validates that calculation. On low-value line items\n(a sample product priced at a few cents, for example) that round-trip can produce a rate that\ndoesn't quite match after rounding, and the invoice is rejected."
+msgstr "Die meisten WooCommerce-↔-Lexware-Konnektoren berechnen die Steuer auf ihrer Seite neu und\nsenden einen fertigen Gesamtbetrag an Lexware, der dort erneut geprüft wird. Bei\nniedrigpreisigen Positionen (z. B. einem Musterprodukt für wenige Cent) kann dieser Umweg nach\ndem Runden einen Satz ergeben, der nicht mehr genau passt – die Rechnung wird abgelehnt."
+
+#. Description
+msgid "This plugin sends only the net amount and tax rate for each line. Lexware Office itself\ncomputes every tax amount and total — there is no second calculation to disagree with."
+msgstr "Dieses Plugin sendet für jede Position nur den Nettobetrag und den Steuersatz. Lexware Office\nberechnet sämtliche Steuerbeträge und Summen selbst – es gibt keine zweite Berechnung, die\ndavon abweichen könnte."
+
+#. Description
+msgid "**What it does**"
+msgstr "**Was das Plugin macht**"
+
+#. Description
+msgid "Creates a Lexware Office invoice (draft or finalised) from the order screen, with one click."
+msgstr "Erstellt mit einem Klick von der Bestellseite aus eine Lexware-Office-Rechnung (Entwurf oder festgeschrieben)."
+
+#. Description
+msgid "Finds or creates the matching Lexware contact by email, and keeps the contact's address in sync with the order if it changes on a later order."
+msgstr "Findet oder erstellt den passenden Lexware-Kontakt anhand der E-Mail-Adresse und hält dessen Adresse mit der Bestellung synchron, wenn sie sich bei einer späteren Bestellung ändert."
+
+#. Description
+msgid "Works out the correct German/EU tax treatment for the order — domestic, intra-community reverse charge, EU distance sales (OSS), or export to a third country."
+msgstr "Ermittelt die korrekte deutsche/EU-steuerliche Behandlung der Bestellung – Inland, innergemeinschaftliche Lieferung (Reverse Charge), EU-Fernverkauf (OSS) oder Ausfuhr in ein Drittland."
+
+#. Description
+msgid "Warns you on the settings page if your shop's tax setup conflicts with your Lexware Office account's own configuration, before it causes a rejected invoice."
+msgstr "Warnt auf der Einstellungsseite, wenn die Steuerkonfiguration Ihres Shops der Ihres Lexware-Office-Kontos widerspricht, bevor dies zu einer abgelehnten Rechnung führt."
+
+#. Description
+msgid "Shows the invoice number and status right on the order list and the order screen."
+msgstr "Zeigt Rechnungsnummer und -status direkt in der Bestellliste und auf der Bestellseite an."
+
+#. Description
+msgid "Includes a test mode that builds the full invoice payload and writes it to the log without sending anything, so you can verify everything before the first real invoice."
+msgstr "Enthält einen Testmodus, der die vollständigen Rechnungsdaten erstellt und protokolliert, ohne etwas zu senden, damit Sie vor der ersten echten Rechnung alles prüfen können."
+
+#. Description
+msgid "**Requirements**"
+msgstr "**Voraussetzungen**"
+
+#. Description
+msgid "WooCommerce, installed and active."
+msgstr "WooCommerce, installiert und aktiv."
+
+#. Description
+msgid "A Lexware Office account with access to the Public API (a personal API key, created in Lexware Office under the Public API settings)."
+msgstr "Ein Lexware-Office-Konto mit Zugang zur Public API (ein persönlicher API-Schlüssel, erstellt in Lexware Office unter den Public-API-Einstellungen)."
+
+#. Description
+msgid "Shop currency EUR — Lexware Office invoicing supports only EUR, so orders in any other currency are skipped and the reason is logged."
+msgstr "Shop-Währung EUR – die Lexware-Office-Rechnungsstellung unterstützt nur EUR, daher werden Bestellungen in anderer Währung übersprungen und der Grund protokolliert."
+
+#. Description
+msgid "= External services ="
+msgstr "= Externe Dienste ="
+
+#. Description
+msgid "This plugin connects to the Lexware Office Public API at `https://api.lexware.io`, operated by\nHaufe-Lexware GmbH & Co. KG (Germany), to create documents in your own Lexware Office account.\nIt is required for everything the plugin does — without an API key, the plugin does nothing."
+msgstr "Dieses Plugin verbindet sich mit der Lexware Office Public API unter `https://api.lexware.io`,\nbetrieben von der Haufe-Lexware GmbH & Co. KG (Deutschland), um Dokumente in Ihrem eigenen\nLexware-Office-Konto zu erstellen. Sie ist für alles erforderlich, was das Plugin tut – ohne\nAPI-Schlüssel tut das Plugin nichts."
+
+#. Description
+msgid "What is sent, and when:"
+msgstr "Was wird gesendet, und wann:"
+
+#. Description
+msgid "When you create an invoice for an order: the customer's name, billing address, email address, the order's line items (product names, quantities, net prices, tax rates), shipping cost, order number and order/delivery dates."
+msgstr "Beim Erstellen einer Rechnung für eine Bestellung: Name, Rechnungsadresse, E-Mail-Adresse des Kunden, die Positionen der Bestellung (Produktnamen, Mengen, Nettopreise, Steuersätze), Versandkosten, Bestellnummer sowie Bestell-/Lieferdatum."
+
+#. Description
+msgid "As part of creating an invoice, the plugin looks up the matching Lexware contact by the customer's email address, and creates or updates that contact with the customer's name, billing address and email address."
+msgstr "Als Teil der Rechnungserstellung sucht das Plugin den passenden Lexware-Kontakt anhand der E-Mail-Adresse des Kunden und erstellt oder aktualisiert diesen Kontakt mit Name, Rechnungsadresse und E-Mail-Adresse des Kunden."
+
+#. Description
+msgid "Once a day, and when you click \"Save and test connection\": a connection check that requests your own organisation profile. No customer data is included in this check."
+msgstr "Einmal täglich sowie beim Klick auf „Speichern und Verbindung testen“: eine Verbindungsprüfung, die Ihr eigenes Unternehmensprofil abruft. Diese Prüfung enthält keine Kundendaten."
+
+#. Description
+msgid "No data is sent to any other external service, and no customer data leaves your site until\nyou create an invoice yourself."
+msgstr "Es werden keine Daten an einen anderen externen Dienst gesendet, und keine Kundendaten\nverlassen Ihre Website, bevor Sie selbst eine Rechnung erstellen."
+
+#. Description
+msgid "Lexware Office Public API terms: [Public API Lizenz- und Nutzungsbedingungen](https://agb.lexware.de/lexware-office/public-api-lizenz--und-nutzungsbedingungen)\nLexware privacy information: [Datenschutz & Datensicherheit](https://www.lexware.de/datenschutz-datensicherheit/)"
+msgstr "Nutzungsbedingungen der Lexware Office Public API: [Public API Lizenz- und Nutzungsbedingungen](https://agb.lexware.de/lexware-office/public-api-lizenz--und-nutzungsbedingungen)\nDatenschutzinformationen von Lexware: [Datenschutz & Datensicherheit](https://www.lexware.de/datenschutz-datensicherheit/)"
+
+#. Description
+msgid "= What this version does not do ="
+msgstr "= Was diese Version nicht kann ="
+
+#. Description
+msgid "Invoices in this version are created by hand, from a button on the order screen. Automatic\ninvoicing on order status, bulk invoice creation, payment status sync, automatic PDF delivery,\npayment reminders and large-scale bulk import are part of\n[Nota Invoice Sync Pro](https://www.wp-nota.com/lexware-invoice-sync)."
+msgstr "Rechnungen werden in dieser Version manuell über eine Schaltfläche auf der Bestellseite\nerstellt. Automatische Rechnungserstellung anhand des Bestellstatus, Rechnungserstellung für\nmehrere Bestellungen gleichzeitig, Zahlungsstatus-Abgleich, automatische PDF-Zustellung,\nZahlungserinnerungen und ein groß angelegter Massenimport sind Teil von\n[Nota Invoice Sync Pro](https://www.wp-nota.com/lexware-invoice-sync)."
+
+#. Privacy
+msgid "When you create an invoice, the customer's name, billing address, email address and the order's\nline items are sent to Lexware Office (operated by Haufe-Lexware GmbH & Co. KG) over their public\nAPI. That data is then stored and processed under Lexware's own privacy policy. Once an invoice\nis finalised, German accounting law (GoBD) requires it to be kept for ten years — this plugin\ndoes not delete or modify anything in Lexware Office, including in response to a WordPress\npersonal-data erasure request. The plugin integrates with Tools → Export/Erase Personal Data and\nexplains this retention conflict there, so shop owners never wrongly assume the data was erased\neverywhere."
+msgstr "Beim Erstellen einer Rechnung werden Name, Rechnungsadresse, E-Mail-Adresse des Kunden sowie\ndie Positionen der Bestellung über die öffentliche API an Lexware Office (betrieben von der\nHaufe-Lexware GmbH & Co. KG) übermittelt. Diese Daten werden dort gemäß der eigenen\nDatenschutzerklärung von Lexware gespeichert und verarbeitet. Sobald eine Rechnung\nfestgeschrieben ist, schreibt das deutsche Handels- und Steuerrecht (GoBD) eine zehnjährige\nAufbewahrungspflicht vor – dieses Plugin löscht oder ändert nichts in Lexware Office, auch\nnicht als Reaktion auf einen WordPress-Antrag zur Löschung personenbezogener Daten. Das Plugin\nist in Werkzeuge → Personenbezogene Daten exportieren/löschen eingebunden und erläutert dort\ndiesen Aufbewahrungskonflikt, damit Shop-Betreiber nicht fälschlich annehmen, die Daten seien\nüberall gelöscht worden."
+
+#. Privacy
+msgid "The optional debug log level records customer names, addresses and invoice contents in plain\ntext in the WooCommerce log files on your own server. The settings page says so next to the\noption; turn debug logging off once things are working."
+msgstr "Die optionale Debug-Protokollierungsstufe zeichnet Kundennamen, Adressen und Rechnungsinhalte\nim Klartext in den WooCommerce-Protokolldateien auf Ihrem eigenen Server auf. Die\nEinstellungsseite weist direkt neben der Option darauf hin; schalten Sie die\nDebug-Protokollierung ab, sobald alles funktioniert."
+
+#. Privacy
+msgid "No data is sent anywhere until you actually create an invoice for an order."
+msgstr "Es werden keine Daten irgendwohin gesendet, bevor Sie tatsächlich eine Rechnung für eine\nBestellung erstellen."
+
+#. Privacy
+msgid "Lexware and Lexware Office are trademarks of Haufe-Lexware GmbH & Co. KG. This plugin is an\nindependent product and is not affiliated with or endorsed by Haufe-Lexware."
+msgstr "Lexware und Lexware Office sind Marken der Haufe-Lexware GmbH & Co. KG. Dieses Plugin ist ein\nunabhängiges Produkt und steht in keiner Verbindung zu Haufe-Lexware und wird nicht von\nHaufe-Lexware unterstützt."
+
+#. Installation
+msgid "Make sure WooCommerce is installed and active."
+msgstr "Stellen Sie sicher, dass WooCommerce installiert und aktiv ist."
+
+#. Installation
+msgid "Upload and activate the plugin."
+msgstr "Laden Sie das Plugin hoch und aktivieren Sie es."
+
+#. Installation
+msgid "Go to WooCommerce → Lexware Invoices."
+msgstr "Gehen Sie zu WooCommerce → Lexware-Rechnungen."
+
+#. Installation
+msgid "Create a personal API key in Lexware Office (Public API settings at app.lexware.de) and paste it in."
+msgstr "Erstellen Sie einen persönlichen API-Schlüssel in Lexware Office (Public-API-Einstellungen unter app.lexware.de) und fügen Sie ihn dort ein."
+
+#. Installation
+msgid "Click \"Save and test connection\". The plugin also checks your Lexware tax configuration against your shop's and warns you if the two disagree."
+msgstr "Klicken Sie auf „Speichern und Verbindung testen“. Das Plugin prüft dabei auch, ob Ihre Lexware-Steuerkonfiguration mit der Ihres Shops übereinstimmt, und warnt Sie bei Abweichungen."
+
+#. Installation
+msgid "Open any order and use the \"Create invoice now\" button in the Lexware Office invoice panel."
+msgstr "Öffnen Sie eine beliebige Bestellung und nutzen Sie die Schaltfläche „Rechnung jetzt erstellen“ im Lexware-Office-Rechnungskasten."
+
+#. FAQ question
+msgid "Is this an official Lexware plugin?"
+msgstr "Ist das ein offizielles Lexware-Plugin?"
+
+#. FAQ answer (Is this an official Lexware plugin?)
+msgid "No. This is an independent product, not affiliated with or endorsed by Haufe-Lexware GmbH &\nCo. KG. It talks to your Lexware Office account through the official public API, with an API\nkey you create yourself."
+msgstr "Nein. Dies ist ein unabhängiges Produkt und steht in keiner Verbindung zur Haufe-Lexware\nGmbH & Co. KG. Es kommuniziert über die offizielle Public API mit Ihrem Lexware-Office-Konto,\nmit einem API-Schlüssel, den Sie selbst erstellen."
+
+#. FAQ question
+msgid "I know this service as \"lexoffice\" — is this the same thing?"
+msgstr "Ich kenne den Dienst noch als „lexoffice“ — ist das dasselbe?"
+
+#. FAQ answer (I know this service as "lexoffice" — is this the same thing?)
+msgid "Yes. lexoffice is the former name of Lexware Office. This plugin uses the current\napi.lexware.io gateway."
+msgstr "Ja. lexoffice ist der frühere Name von Lexware Office. Dieses Plugin nutzt das aktuelle\nGateway api.lexware.io."
+
+#. FAQ question
+msgid "Does this work with a free Lexware Office account?"
+msgstr "Funktioniert das mit einem kostenlosen Lexware-Office-Konto?"
+
+#. FAQ answer (Does this work with a free Lexware Office account?)
+msgid "You need a Lexware Office account with API access enabled under the Public API settings.\nWhether your plan includes this depends on your Lexware Office subscription."
+msgstr "Sie benötigen ein Lexware-Office-Konto mit aktiviertem API-Zugang unter den\nPublic-API-Einstellungen. Ob Ihr Tarif dies enthält, hängt von Ihrem Lexware-Office-Abonnement\nab."
+
+#. FAQ question
+msgid "Which currencies are supported?"
+msgstr "Welche Währungen werden unterstützt?"
+
+#. FAQ answer (Which currencies are supported?)
+msgid "Only EUR. Lexware Office's invoicing does not support other currencies at the time of writing,\nso orders in another currency are not invoiced and the reason is logged."
+msgstr "Nur EUR. Die Rechnungsstellung von Lexware Office unterstützt derzeit keine anderen Währungen,\ndaher werden Bestellungen in anderer Währung nicht fakturiert und der Grund protokolliert."
+
+#. FAQ question
+msgid "Does it support HPOS (High-Performance Order Storage)?"
+msgstr "Wird HPOS (High-Performance Order Storage) unterstützt?"
+
+#. FAQ answer (Does it support HPOS (High-Performance Order Storage)?)
+msgid "Yes. The plugin declares HPOS compatibility and works with both classic and HPOS order\nstorage."
+msgstr "Ja. Das Plugin erklärt HPOS-Kompatibilität und funktioniert sowohl mit der klassischen als\nauch mit der HPOS-Bestellspeicherung."
+
+#. FAQ question
+msgid "Draft or finalised — which should I choose?"
+msgstr "Entwurf oder festgeschrieben — was soll ich wählen?"
+
+#. FAQ answer (Draft or finalised — which should I choose?)
+msgid "Start with drafts. A draft (\"Entwurf\") can still be edited or deleted in Lexware Office and is\nnot booked. A finalised invoice is permanent, is recorded for GoBD and gets its e-invoice\ndocument — it can only be reversed with a credit note, never deleted. Switch to finalising\nonce you have checked a few drafts."
+msgstr "Beginnen Sie mit Entwürfen. Ein Entwurf („Entwurf“) kann in Lexware Office noch bearbeitet\noder gelöscht werden und ist nicht gebucht. Eine festgeschriebene Rechnung ist endgültig, wird\nfür die GoBD erfasst und erhält ihr E-Rechnungsdokument – sie kann nur mit einer Gutschrift\nstorniert, aber nie gelöscht werden. Wechseln Sie zur Festschreibung, sobald Sie einige\nEntwürfe geprüft haben."
+
+#. FAQ question
+msgid "Can the plugin change or delete an invoice in Lexware Office?"
+msgstr "Kann das Plugin eine Rechnung in Lexware Office ändern oder löschen?"
+
+#. FAQ answer (Can the plugin change or delete an invoice in Lexware Office?)
+msgid "No. The plugin only ever creates documents. It never modifies or deletes anything in your\nLexware Office account — not even when the plugin itself is uninstalled."
+msgstr "Nein. Das Plugin erstellt ausschließlich Dokumente. Es ändert oder löscht niemals etwas in\nIhrem Lexware-Office-Konto – auch nicht, wenn das Plugin selbst deinstalliert wird."
+
+#. FAQ question
+msgid "What happens to orders placed before I installed the plugin?"
+msgstr "Was passiert mit Bestellungen von vor der Installation des Plugins?"
+
+#. FAQ answer (What happens to orders placed before I installed the plugin?)
+msgid "Nothing automatically. Open the order and use the manual \"Create invoice now\" button."
+msgstr "Nichts automatisch. Öffnen Sie die Bestellung und nutzen Sie die manuelle Schaltfläche\n„Rechnung jetzt erstellen“."
+
+#. FAQ question
+msgid "Something went wrong — where do I look?"
+msgstr "Etwas ist schiefgelaufen — wo schaue ich nach?"
+
+#. FAQ answer (Something went wrong — where do I look?)
+msgid "The order screen shows the last error for that order in the Lexware Office invoice panel.\nFull logs are under WooCommerce → Status → Logs, source \"nota-invoice-sync\"."
+msgstr "Die Bestellseite zeigt im Lexware-Office-Rechnungskasten den letzten Fehler für diese\nBestellung an. Vollständige Protokolle finden Sie unter WooCommerce → Status → Protokolle,\nQuelle „nota-invoice-sync“."
+
+#. Screenshot
+msgid "Settings page: connection, invoice content and diagnostics."
+msgstr "Einstellungsseite: Verbindung, Rechnungsinhalt und Diagnose."
+
+#. Screenshot
+msgid "The Lexware Office invoice panel on the order screen."
+msgstr "Der Lexware-Office-Rechnungskasten auf der Bestellseite."
+
+#. Screenshot
+msgid "Invoice status column on the WooCommerce order list."
+msgstr "Spalte mit dem Rechnungsstatus in der WooCommerce-Bestellliste."
+
+#. Screenshot
+msgid "The tax-setup warning shown when the shop and Lexware Office disagree."
+msgstr "Der Hinweis zur Steuerkonfiguration, wenn Shop und Lexware Office nicht übereinstimmen."
+
+#. Changelog entry
+msgid "Added: a visual indicator on the product edit screen (Shipping tab, and each variation row) showing that per-product delivery date overrides are available in Nota Invoice Sync Pro. No new functionality in this version."
+msgstr "Neu: ein visueller Hinweis auf der Produktbearbeitungsseite (Versand-Tab sowie bei jeder Variation), der zeigt, dass produktbezogene Überschreibungen des Lieferdatums in Nota Invoice Sync Pro verfügbar sind. Keine neue Funktionalität in dieser Version."
+
+#. Changelog entry
+msgid "Reduced the number of Pro upgrade mentions on the settings page: removed the standalone banner and combined three separate \"Available in Pro\" links into one."
+msgstr "Weniger Pro-Hinweise auf der Einstellungsseite: das eigenständige Banner wurde entfernt und drei einzelne „Verfügbar in Pro“-Links zu einem zusammengefasst."
+
+#. Changelog entry
+msgid "Fixed the Contributors field in this readme."
+msgstr "Das Feld „Contributors“ in dieser readme.txt korrigiert."
+
+#. Changelog entry
+msgid "Fixed: test mode could still create or update a real Lexware Office contact even though no invoice was sent — test mode now makes no API request at all, including contact lookups."
+msgstr "Fehlerbehebung: Der Testmodus konnte weiterhin einen echten Lexware-Office-Kontakt erstellen oder aktualisieren, obwohl keine Rechnung gesendet wurde – der Testmodus sendet jetzt überhaupt keine API-Anfrage mehr, einschließlich Kontaktabfragen."
+
+#. Changelog entry
+msgid "Fixed: the daily connection check and the \"Check payment status\" button did not consistently respect test mode — now every feature follows the same \"test mode = no API traffic\" rule."
+msgstr "Fehlerbehebung: Die tägliche Verbindungsprüfung und die Schaltfläche „Zahlungsstatus prüfen“ hielten sich nicht durchgängig an den Testmodus – jetzt folgt jede Funktion derselben Regel „Testmodus = kein API-Datenverkehr“."
+
+#. Changelog entry
+msgid "Added: a \"Refresh status\" button on the order screen, to pick up an invoice that was finalised directly in Lexware Office rather than through this plugin."
+msgstr "Neu: eine Schaltfläche „Status aktualisieren“ auf der Bestellseite, um eine Rechnung zu erfassen, die direkt in Lexware Office festgeschrieben wurde statt über dieses Plugin."
+
+#. Changelog entry
+msgid "Added: a GPL license file, and expanded the privacy and external-services documentation in this readme."
+msgstr "Neu: eine GPL-Lizenzdatei sowie erweiterte Datenschutz- und Dienste-Dokumentation in dieser readme.txt."
+
+#. Changelog entry
+msgid "Added: visual indicators on the settings page and order screen showing which additional features (automation, PDF delivery, payment reminders, credit notes, PDF download) are available in Nota Invoice Sync Pro."
+msgstr "Neu: visuelle Hinweise auf der Einstellungsseite und der Bestellseite, welche zusätzlichen Funktionen (Automatisierung, PDF-Zustellung, Zahlungserinnerungen, Gutschriften, PDF-Download) in Nota Invoice Sync Pro verfügbar sind."
+
+#. Changelog entry
+msgid "Initial release."
+msgstr "Erstveröffentlichung."
+

@@ -1,0 +1,138 @@
+/*
+ * Nota Invoice Sync — admin UI.
+ * Loaded only on the plugin's own settings page and the order edit screens
+ * (classic and HPOS) where the invoice metabox lives — see
+ * class-admin-assets.php.
+ */
+
+.nota-inv-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 2px 10px;
+	border-radius: 10px;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1.9;
+	white-space: nowrap;
+}
+
+.nota-inv-badge::before {
+	content: "";
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: currentColor;
+	flex: none;
+}
+
+.nota-inv-badge.is-success {
+	background: #edf7ed;
+	color: #1d6b28;
+}
+
+.nota-inv-badge.is-warning {
+	background: #fcf3e3;
+	color: #996800;
+}
+
+.nota-inv-badge.is-error {
+	background: #fbeaea;
+	color: #b32d2e;
+}
+
+.nota-inv-badge.is-neutral {
+	background: #f0f0f1;
+	color: #50575e;
+}
+
+.nota-inv-status-line {
+	margin: 4px 0 16px;
+}
+
+.nota-inv-nav {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 18px;
+	margin: 0 0 20px;
+	padding: 10px 14px;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+}
+
+.nota-inv-nav a {
+	text-decoration: none;
+	font-size: 13px;
+}
+
+.nota-inv-card {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	margin-bottom: 20px;
+	padding: 0 20px 8px;
+	scroll-margin-top: 32px;
+}
+
+.nota-inv-card > h2.title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+	padding: 14px 0;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.nota-inv-card > h2.title .dashicons {
+	color: #787c82;
+}
+
+.nota-inv-card > p.description:first-of-type {
+	margin-top: 12px;
+}
+
+.nota-inv-card > .form-table {
+	margin-top: 0;
+}
+
+.nota-inv-inline-fields {
+	margin-top: 8px !important;
+}
+
+.nota-inv-inline-fields label {
+	display: inline-block;
+	margin-right: 14px;
+}
+
+.nota-inv-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin: 8px 0;
+}
+
+.nota-inv-notice-inline {
+	padding: 8px 10px;
+	border-left: 4px solid #d63638;
+	background: #fbeaea;
+	margin: 10px 0;
+}
+
+.nota-inv-panel-box {
+	background: #f6f7f7;
+	border-radius: 3px;
+	padding: 8px 10px;
+	margin: 10px 0;
+}
+
+.nota-inv-subcard {
+	border-top: 1px solid #dcdcde;
+	margin-top: 14px;
+	padding-top: 12px;
+}
+
+#woocommerce-product-data ul.wc-tabs li.nota_inv_options a::before {
+	font-family: "Dashicons";
+	content: "\f496"; /* dashicons-media-spreadsheet — codepoint from memory, not verified against a live render */
+}
