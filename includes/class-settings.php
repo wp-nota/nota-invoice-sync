@@ -43,6 +43,14 @@ class Nota_Inv_Settings {
 			'auth_method'          => 'apikey', // 'apikey' now, 'oauth' later.
 			'api_key'              => '',
 
+			// VAT-ID detection.
+			// Comma-separated order meta keys to check, in order, for a
+			// customer's VAT-ID. Defaults to the field names used by the most
+			// common WooCommerce VAT compliance plugins; shown and editable
+			// as-is on the settings page so a site can add its own without
+			// needing the nota_inv_vat_id_meta_keys filter.
+			'vat_id_meta_keys'    => 'vat_number,_vat_number,_billing_vat_number,billing_vat_number,_billing_eu_vat_number,_wcpdf_billing_vat_number',
+
 			// Behaviour.
 			'trigger_statuses'     => array( 'processing' ), // which statuses create an invoice.
 			'finalize'             => 'no',         // no = draft, yes = finalized.

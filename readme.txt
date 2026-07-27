@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.5
+Stable tag: 0.1.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -131,6 +131,14 @@ Whether your plan includes this depends on your Lexware Office subscription.
 Only EUR. Lexware Office's invoicing does not support other currencies at the time of writing,
 so orders in another currency are not invoiced and the reason is logged.
 
+= Does this plugin validate EU VAT numbers (VIES)? =
+
+No. Nota Invoice Sync reads whatever VAT-ID a dedicated VAT compliance plugin (one that adds a
+VAT number field at checkout, for example) has already saved on the order, and uses it to work
+out reverse-charge treatment. It does not query the VIES database itself. If your shop needs
+live VAT-ID validation or automatic tax exemption at checkout, use a plugin built specifically
+for that.
+
 = Does it support HPOS (High-Performance Order Storage)? =
 
 Yes. The plugin declares HPOS compatibility and works with both classic and HPOS order
@@ -168,6 +176,10 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.6 =
+* Added: a "VAT-ID meta keys" setting (Invoice content) listing the order meta keys checked for a customer's VAT-ID, pre-filled with the most common ones and editable — no code required to support a VAT compliance plugin that is not already covered.
+* Added: a note on the settings page and in the FAQ clarifying that this plugin does not validate EU VAT numbers against VIES itself; it reads whatever VAT-ID a dedicated VAT compliance plugin has already saved on the order.
 
 = 0.1.5 =
 * Fixed: the invoice date sent to Lexware Office was the order's payment/creation date instead of the actual date the invoice document is issued — these are two separate legally required pieces of information under German invoicing rules (§14 UStG), and using the wrong one could backdate an invoice into an already-closed VAT reporting period when it is created some time after the order.

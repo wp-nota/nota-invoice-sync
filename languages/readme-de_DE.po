@@ -187,6 +187,14 @@ msgid "Only EUR. Lexware Office's invoicing does not support other currencies at
 msgstr "Nur EUR. Die Rechnungsstellung von Lexware Office unterstützt derzeit keine anderen Währungen,\ndaher werden Bestellungen in anderer Währung nicht fakturiert und der Grund protokolliert."
 
 #. FAQ question
+msgid "Does this plugin validate EU VAT numbers (VIES)?"
+msgstr "Validiert dieses Plugin EU-USt-IdNrn. (VIES)?"
+
+#. FAQ answer (Does this plugin validate EU VAT numbers (VIES)?)
+msgid "No. Nota Invoice Sync reads whatever VAT-ID a dedicated VAT compliance plugin (one that adds a\nVAT number field at checkout, for example) has already saved on the order, and uses it to work\nout reverse-charge treatment. It does not query the VIES database itself. If your shop needs\nlive VAT-ID validation or automatic tax exemption at checkout, use a plugin built specifically\nfor that."
+msgstr "Nein. Nota Invoice Sync liest die USt-IdNr., die ein spezialisiertes VAT-Compliance-Plugin\n(zum Beispiel eines, das ein USt-IdNr.-Feld im Checkout anbietet) bereits in der Bestellung\ngespeichert hat, und verwendet sie zur Ermittlung der Reverse-Charge-Behandlung. Es fragt die\nVIES-Datenbank nicht selbst ab. Falls Ihr Shop eine Live-Validierung der USt-IdNr. oder eine\nautomatische Steuerbefreiung im Checkout benötigt, verwenden Sie ein dafür entwickeltes Plugin."
+
+#. FAQ question
 msgid "Does it support HPOS (High-Performance Order Storage)?"
 msgstr "Wird HPOS (High-Performance Order Storage) unterstützt?"
 
@@ -227,20 +235,48 @@ msgid "The order screen shows the last error for that order in the Lexware Offic
 msgstr "Die Bestellseite zeigt im Lexware-Office-Rechnungskasten den letzten Fehler für diese\nBestellung an. Vollständige Protokolle finden Sie unter WooCommerce → Status → Protokolle,\nQuelle „nota-invoice-sync“."
 
 #. Screenshot
-msgid "Settings page: connection, invoice content and diagnostics."
-msgstr "Einstellungsseite: Verbindung, Rechnungsinhalt und Diagnose."
+msgid "The Lexware Office invoice panel on the order screen — status, actions and a credit note button."
+msgstr "Der Lexware-Office-Rechnungskasten auf der Bestellseite – Status, Aktionen und eine Schaltfläche für Gutschriften."
 
 #. Screenshot
-msgid "The Lexware Office invoice panel on the order screen."
-msgstr "Der Lexware-Office-Rechnungskasten auf der Bestellseite."
+msgid "Settings — Connection: add your Lexware Office API key."
+msgstr "Einstellungen – Verbindung: Ihren Lexware-Office-API-Schlüssel hinzufügen."
 
 #. Screenshot
-msgid "Invoice status column on the WooCommerce order list."
-msgstr "Spalte mit dem Rechnungsstatus in der WooCommerce-Bestellliste."
+msgid "Settings — When to create invoices: manual creation in this version, plus draft/finalise document mode."
+msgstr "Einstellungen – Wann Rechnungen erstellt werden: manuelle Erstellung in dieser Version, plus Entwurf-/Festschreibungsmodus."
 
 #. Screenshot
-msgid "The tax-setup warning shown when the shop and Lexware Office disagree."
-msgstr "Der Hinweis zur Steuerkonfiguration, wenn Shop und Lexware Office nicht übereinstimmen."
+msgid "Settings — Invoice content: language, payment terms, supply date and custom invoice text."
+msgstr "Einstellungen – Rechnungsinhalt: Sprache, Zahlungsbedingungen, Liefertermin und individueller Rechnungstext."
+
+#. Screenshot
+msgid "Settings — Automation: PDF delivery, payment reminders and payment status sync (available in Pro)."
+msgstr "Einstellungen – Automatisierung: PDF-Zustellung, Zahlungserinnerungen und Zahlungsstatus-Abgleich (verfügbar in Pro)."
+
+#. Screenshot
+msgid "Settings — Diagnostics: order notes, test mode, logging and uninstall behaviour."
+msgstr "Einstellungen – Diagnose: Bestellnotizen, Testmodus, Protokollierung und Deinstallationsverhalten."
+
+#. Screenshot
+msgid "Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro)."
+msgstr "Einstellungen – Compliance-Export: eine GoBD-taugliche CSV-Datei jeder festgeschriebenen Rechnung (verfügbar in Pro)."
+
+#. Changelog entry
+msgid "Fixed: the invoice date sent to Lexware Office was the order's payment/creation date instead of the actual date the invoice document is issued — these are two separate legally required pieces of information under German invoicing rules (§14 UStG), and using the wrong one could backdate an invoice into an already-closed VAT reporting period when it is created some time after the order."
+msgstr "Fehlerbehebung: Das an Lexware Office gesendete Rechnungsdatum war das Zahlungs-/Erstellungsdatum der Bestellung statt des tatsächlichen Ausstellungsdatums der Rechnung – dies sind zwei getrennte, gesetzlich vorgeschriebene Angaben nach deutschem Rechnungsrecht (§14 UStG), und die falsche Angabe konnte eine Rechnung rückwirkend in einen bereits abgeschlossenen Umsatzsteuer-Voranmeldungszeitraum datieren, wenn sie einige Zeit nach der Bestellung erstellt wird."
+
+#. Changelog entry
+msgid "Added: orders consisting entirely of virtual, downloadable products are now billed under the correct \"electronic services\" tax treatment (for shops on the destination-country VAT principle) rather than being lumped in with physical distance sales."
+msgstr "Neu: Bestellungen, die ausschließlich aus virtuellen, herunterladbaren Produkten bestehen, werden jetzt korrekt als „elektronische Dienstleistungen“ besteuert (für Shops mit Bestimmungsland-Prinzip), statt mit physischen Fernverkäufen vermischt zu werden."
+
+#. Changelog entry
+msgid "Fixed: a customer's Lexware contact was marked as eligible for tax-free invoicing merely for having a VAT ID on file, even on a domestic order where normal VAT was actually charged. This flag now only gets set when the order genuinely qualifies as an intra-community reverse charge."
+msgstr "Fehlerbehebung: Ein Lexware-Kontakt eines Kunden wurde bereits dann als steuerfrei-rechnungsfähig markiert, wenn eine USt-IdNr. hinterlegt war – selbst bei einer Inlandsbestellung, bei der tatsächlich reguläre Umsatzsteuer berechnet wurde. Dieses Kennzeichen wird jetzt nur noch gesetzt, wenn die Bestellung tatsächlich als innergemeinschaftliche Reverse-Charge-Lieferung gilt."
+
+#. Changelog entry
+msgid "Fixed: EU B2C orders could be sent to Lexware Office with the destination country's tax rate (e.g. 20%) even though the connected account only accepts German rates (origin-country taxation) — this either failed with a confusing \"Invalid taxRatePercentage\" error, or in rarer cases could silently invoice at the wrong German rate. Such orders are now refused up front with a clear explanation, and nothing is sent to Lexware Office. Orders taxed at German rates, including small-value items affected by per-line rounding, are unaffected."
+msgstr "Fehlerbehebung: EU-B2C-Bestellungen konnten mit dem Steuersatz des Bestimmungslands (z. B. 20 %) an Lexware Office gesendet werden, obwohl das verbundene Konto nur deutsche Steuersätze akzeptiert (Ursprungslandbesteuerung) – dies führte entweder zu einem verwirrenden Fehler „Invalid taxRatePercentage“ oder konnte in selteneren Fällen stillschweigend mit dem falschen deutschen Steuersatz fakturiert werden. Solche Bestellungen werden jetzt von vornherein mit einer klaren Erklärung abgelehnt, ohne dass etwas an Lexware Office gesendet wird. Bestellungen mit deutschen Steuersätzen, einschließlich kleiner Beträge mit Rundungseffekten pro Position, sind davon nicht betroffen."
 
 #. Changelog entry
 msgid "Added: a visual indicator on the product edit screen (Shipping tab, and each variation row) showing that per-product delivery date overrides are available in Nota Invoice Sync Pro. No new functionality in this version."

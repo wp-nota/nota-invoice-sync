@@ -167,18 +167,25 @@ class Nota_Inv_Tax_Resolver {
 	 * Read the customer's VAT ID from any of the meta keys commonly used by
 	 * EU VAT plugins.
 	 *
+	 * The list of keys itself lives in the `vat_id_meta_keys` setting (comma-
+	 * separated, editable on the settings page) rather than being hard-coded
+	 * here, so a site can add its own VAT plugin's field name without a code
+	 * snippet — the `nota_inv_vat_id_meta_keys` filter still runs afterwards
+	 * for anyone who prefers that route.
+	 *
 	 * @param WC_Order $order Order.
 	 * @return string Empty string when absent.
 	 */
 	public function get_vat_id( WC_Order $order ) {
-		$keys = array(
-			'vat_number',
-			'_vat_number',
-			'_billing_vat_number',
-			'billing_vat_number',
-			'_billing_eu_vat_number',
-			'_wcpdf_billing_vat_number',
-		);
+		$configured = (string) Nota_Inv_Settings::instance()->get( 'vat_id_meta_keys' );
+
+		$keys = array();
+		foreach ( explode( ',', $configured ) as $key ) {
+			$key = trim( $key );
+			if ( '' !== $key ) {
+				$keys[] = $key;
+			}
+		}
 
 		/**
 		 * Filter the meta keys searched for a customer VAT ID.

@@ -121,6 +121,7 @@ class Nota_Inv_Admin_Settings_Page {
 			'api_key'              => isset( $posted['api_key'] ) && '' !== trim( $posted['api_key'] )
 				? sanitize_text_field( trim( $posted['api_key'] ) )
 				: $current['api_key'],
+			'vat_id_meta_keys'     => $text( 'vat_id_meta_keys', $current['vat_id_meta_keys'] ),
 
 			// trigger_statuses intentionally not read from $_POST — automatic
 			// invoicing on order status is a Pro feature, the fieldset for it
@@ -411,6 +412,26 @@ class Nota_Inv_Admin_Settings_Page {
 								name="nota_inv[invoice_remark]"><?php echo esc_textarea( $s['invoice_remark'] ); ?></textarea>
 							<p class="description">
 								<?php esc_html_e( 'Leave empty to record the payment method automatically. The same placeholders apply.', 'nota-invoice-sync' ); ?>
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">
+							<label for="nota_inv_vat_id_meta_keys"><?php esc_html_e( 'VAT-ID meta keys', 'nota-invoice-sync' ); ?></label>
+						</th>
+						<td>
+							<input
+								type="text"
+								class="large-text"
+								id="nota_inv_vat_id_meta_keys"
+								name="nota_inv[vat_id_meta_keys]"
+								value="<?php echo esc_attr( $s['vat_id_meta_keys'] ); ?>"
+							/>
+							<p class="description">
+								<?php esc_html_e( 'This plugin does not validate EU VAT numbers against VIES. It reads whatever VAT-ID a dedicated VAT compliance plugin has already saved on the order to determine reverse-charge treatment. If your shop needs live VAT-ID validation or automatic tax exemption at checkout, use a plugin built for that.', 'nota-invoice-sync' ); ?>
+							</p>
+							<p class="description">
+								<?php esc_html_e( 'Order meta keys checked for a VAT-ID, in order (comma-separated). The list above already covers the most common VAT compliance plugins — edit it or add your own if a different plugin is in use; check Custom Fields on an order screen if you are not sure of the field name.', 'nota-invoice-sync' ); ?>
 							</p>
 						</td>
 					</tr>
