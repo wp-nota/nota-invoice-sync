@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.6
+Stable tag: 0.1.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -176,6 +176,9 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.7 =
+* Fixed: after clicking "Save and test connection", a successful connection could still show a "Connection failing" badge on the settings page — that badge was reading a separate, once-a-day cached status instead of the result just tested. It now updates immediately with the same result, at no extra API cost.
 
 = 0.1.6 =
 * Added: a "VAT-ID meta keys" setting (Invoice content) listing the order meta keys checked for a customer's VAT-ID, pre-filled with the most common ones and editable — no code required to support a VAT compliance plugin that is not already covered.

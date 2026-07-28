@@ -85,6 +85,11 @@ class Nota_Inv_Admin_Settings_Page {
 		if ( 'test' === $action || 'save_and_test' === $action ) {
 			$client            = new Nota_Inv_Api_Client();
 			$this->test_result = $client->get_profile();
+
+			// Refresh the daily health-check status with this same result
+			// (no extra API call), so the connection badge doesn't keep
+			// showing a stale failure right after a successful manual test.
+			Nota_Inv_Health_Check::instance()->run( $this->test_result );
 		}
 	}
 

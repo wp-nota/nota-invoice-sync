@@ -65,11 +65,17 @@ class Nota_Inv_Health_Check {
 	}
 
 	/**
-	 * The actual check, run once a day.
+	 * The actual check, run once a day by cron. Also called directly from the
+	 * settings page after a manual "Save and test connection", passing the
+	 * profile result already fetched for the on-screen notice — so the
+	 * status badge reflects that same result immediately instead of waiting
+	 * for the next cron run and showing a stale failure in the meantime.
 	 *
+	 * @param array|WP_Error|null $profile Already-fetched profile result, or
+	 *                                      null to fetch one here (cron path).
 	 * @return void
 	 */
-	public function run() {
+	public function run( $profile = null ) {
 		$settings = Nota_Inv_Settings::instance();
 
 		if ( ! $settings->is_connected() ) {
@@ -85,8 +91,10 @@ class Nota_Inv_Health_Check {
 			return;
 		}
 
-		$client  = new Nota_Inv_Api_Client();
-		$profile = $client->get_profile();
+		if ( null === $profile ) {
+			$client  = new Nota_Inv_Api_Client();
+			$profile = $client->get_profile();
+		}
 
 		$result = array(
 			'checked_at'    => time(),
