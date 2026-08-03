@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.7
+Stable tag: 0.1.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -176,6 +176,9 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.8 =
+* Fixed: an invoice for an order that was already paid (e.g. via PayPal before the invoice was created) still showed "Payable within X days" payment terms alongside the "Paid via ..." note — contradicting itself. Payment terms are now only added while the order still needs payment.
 
 = 0.1.7 =
 * Fixed: after clicking "Save and test connection", a successful connection could still show a "Connection failing" badge on the settings page — that badge was reading a separate, once-a-day cached status instead of the result just tested. It now updates immediately with the same result, at no extra API cost.

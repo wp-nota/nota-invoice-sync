@@ -93,8 +93,12 @@ class Nota_Inv_Invoice_Builder {
 			$payload['totalPrice']['totalDiscountAbsolute'] = $discount;
 		}
 
+		// Only relevant while the order is still unpaid — an order paid via
+		// PayPal or another instant gateway before the invoice was created
+		// already carries a "paid via ..." closing note (payment_note()
+		// below), and showing payment terms on top of that contradicts it.
 		$term_days = $settings->get( 'payment_term_days' );
-		if ( '' !== $term_days ) {
+		if ( '' !== $term_days && $order->needs_payment() ) {
 			$payload['paymentConditions'] = array(
 				'paymentTermLabel'    => $this->payment_term_label( (int) $term_days, $order ),
 				'paymentTermDuration' => (int) $term_days,
