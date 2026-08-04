@@ -93,15 +93,25 @@ class Nota_Inv_Invoice_Builder {
 			$payload['totalPrice']['totalDiscountAbsolute'] = $discount;
 		}
 
-		// Only relevant while the order is still unpaid — an order paid via
-		// PayPal or another instant gateway before the invoice was created
-		// already carries a "paid via ..." closing note (payment_note()
-		// below), and showing payment terms on top of that contradicts it.
-		$term_days = $settings->get( 'payment_term_days' );
-		if ( '' !== $term_days && $order->needs_payment() ) {
+		// Lexware Office fills this field in with a contact/organisation
+		// default whenever it is left out of the payload entirely — that
+		// default can be any payment-term text on file, including ones that
+		// contradict an order already paid via PayPal or another instant
+		// gateway (which carries its own "paid via ..." closing note, see
+		// payment_note() below). Sending an explicit value, in both
+		// branches, is the only way to stop Lexware substituting its own.
+		if ( $order->needs_payment() ) {
+			$term_days = $settings->get( 'payment_term_days' );
+			if ( '' !== $term_days ) {
+				$payload['paymentConditions'] = array(
+					'paymentTermLabel'    => $this->payment_term_label( (int) $term_days, $order ),
+					'paymentTermDuration' => (int) $term_days,
+				);
+			}
+		} else {
 			$payload['paymentConditions'] = array(
-				'paymentTermLabel'    => $this->payment_term_label( (int) $term_days, $order ),
-				'paymentTermDuration' => (int) $term_days,
+				'paymentTermLabel'    => $this->paid_condition_label( $order ),
+				'paymentTermDuration' => 0,
 			);
 		}
 
@@ -391,6 +401,20 @@ class Nota_Inv_Invoice_Builder {
 		return 1 === $days
 			? 'Zahlbar innerhalb von 1 Tag ohne Abzug.'
 			: sprintf( 'Zahlbar innerhalb von %d Tagen ohne Abzug.', $days );
+	}
+
+	/**
+	 * paymentConditions label for an order that is already paid — see the
+	 * comment at the call site for why this is sent explicitly rather than
+	 * left out.
+	 *
+	 * @param WC_Order $order Order (used to resolve the language).
+	 * @return string
+	 */
+	private function paid_condition_label( WC_Order $order ) {
+		return 'en' === $this->resolve_language( $order )
+			? 'Thank you for your payment.'
+			: 'Vielen Dank für Ihre Zahlung.';
 	}
 
 	/**

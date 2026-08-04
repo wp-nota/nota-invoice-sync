@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.8
+Stable tag: 0.1.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -176,6 +176,9 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.9 =
+* Fixed: an already-paid order's invoice could still pick up a leftover or contact-specific default payment-term text from Lexware Office (e.g. a due date), contradicting the "Paid via ..." note, even though this plugin no longer sent any payment terms itself. Lexware Office fills that field in with its own default whenever it is left out entirely, so a paid order's invoice now explicitly sends a "Thank you for your payment." condition instead of omitting the field.
 
 = 0.1.8 =
 * Fixed: an invoice for an order that was already paid (e.g. via PayPal before the invoice was created) still showed "Payable within X days" payment terms alongside the "Paid via ..." note — contradicting itself. Payment terms are now only added while the order still needs payment.
