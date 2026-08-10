@@ -566,6 +566,29 @@ class Nota_Inv_Admin_Settings_Page {
 							</p>
 						</td>
 					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Support', 'nota-invoice-sync' ); ?></th>
+						<td>
+							<button type="button" class="button" id="nota-inv-copy-diagnostics">
+								<?php esc_html_e( 'Copy diagnostics for support', 'nota-invoice-sync' ); ?>
+							</button>
+							<span
+								id="nota-inv-copy-diagnostics-status"
+								data-copied="<?php esc_attr_e( 'Copied!', 'nota-invoice-sync' ); ?>"
+								data-failed="<?php esc_attr_e( 'Could not copy — select the text below and copy it manually.', 'nota-invoice-sync' ); ?>"
+							></span>
+							<p class="description">
+								<?php esc_html_e( 'Copies the plugin/WordPress/WooCommerce versions and the last few invoice errors to your clipboard, ready to paste into a support email. Nothing is sent anywhere automatically — this only fills your clipboard, the same way selecting and copying text yourself would.', 'nota-invoice-sync' ); ?>
+							</p>
+							<textarea
+								id="nota-inv-diagnostics-text"
+								class="nota-inv-visually-hidden"
+								readonly="readonly"
+								tabindex="-1"
+								aria-hidden="true"
+							><?php echo esc_textarea( $this->diagnostics_text() ); ?></textarea>
+						</td>
+					</tr>
 				</table>
 				</div>
 
@@ -612,6 +635,93 @@ class Nota_Inv_Admin_Settings_Page {
 			</div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Plain-text diagnostics summary for the "Copy diagnostics for support"
+	 * button: plugin/WordPress/WooCommerce/PHP versions, the two settings
+	 * most relevant to a failed invoice (test mode, draft/finalize), and the
+	 * last few invoice errors gathered from recent_errors() below.
+	 *
+	 * Every one of these is already visible somewhere in wp-admin on its
+	 * own (the error per order, the versions in the "At a Glance"/Site
+	 * Health screens) — this only collects them in one place so a shop
+	 * owner can paste them into a support email instead of digging through
+	 * orders one by one. Nothing here is ever sent anywhere automatically;
+	 * see the "External services" section of readme.txt.
+	 *
+	 * @return string
+	 */
+	private function diagnostics_text() {
+		global $wp_version;
+
+		$settings = Nota_Inv_Settings::instance();
+
+		$lines = array(
+			'Nota Invoice Sync diagnostics',
+			'Plugin version: ' . NOTA_INV_VERSION,
+			'WordPress: ' . $wp_version,
+			'WooCommerce: ' . ( defined( 'WC_VERSION' ) ? WC_VERSION : 'unknown' ),
+			'PHP: ' . PHP_VERSION,
+			'Test mode: ' . ( $settings->is( 'test_mode' ) ? 'on' : 'off' ),
+			'Document mode: ' . ( 'yes' === $settings->get( 'finalize' ) ? 'finalize' : 'draft' ),
+			'',
+			'Recent invoice errors:',
+		);
+
+		$errors = $this->recent_errors();
+
+		if ( empty( $errors ) ) {
+			$lines[] = '(none recorded)';
+		} else {
+			foreach ( $errors as $error ) {
+				$lines[] = sprintf( '- Order #%s (%s): %s', $error['number'], $error['date'], $error['message'] );
+			}
+		}
+
+		return implode( "\n", $lines );
+	}
+
+	/**
+	 * Up to 5 most recent orders with a recorded Lexware invoice error,
+	 * newest first. The error text itself is exactly what already shows in
+	 * the order's Lexware Office invoice box (NOTA_INV_META_LAST_ERROR) —
+	 * this just gathers it across orders instead of requiring one click per
+	 * order to find.
+	 *
+	 * @return array<int, array{number: string, date: string, message: string}>
+	 */
+	private function recent_errors() {
+		$orders = wc_get_orders(
+			array(
+				'limit'      => 5,
+				'orderby'    => 'date',
+				'order'      => 'DESC',
+				'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					array(
+						'key'     => NOTA_INV_META_LAST_ERROR,
+						'compare' => 'EXISTS',
+					),
+				),
+				'return'     => 'objects',
+			)
+		);
+
+		$errors = array();
+
+		foreach ( $orders as $order ) {
+			if ( ! $order instanceof WC_Order ) {
+				continue;
+			}
+
+			$errors[] = array(
+				'number'  => $order->get_order_number(),
+				'date'    => $order->get_date_created() ? $order->get_date_created()->date( 'Y-m-d' ) : '',
+				'message' => (string) $order->get_meta( NOTA_INV_META_LAST_ERROR ),
+			);
+		}
+
+		return $errors;
 	}
 
 	/**

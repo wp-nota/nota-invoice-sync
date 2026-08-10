@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.9
+Stable tag: 0.1.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -176,6 +176,9 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.10 =
+* Added: a "Copy diagnostics for support" button on the Diagnostics section of the settings page. Copies the plugin/WordPress/WooCommerce/PHP versions and the last few invoice errors to your clipboard in one click, so they are easy to paste into a support request instead of digging through orders one by one. Nothing is ever sent anywhere automatically — this only fills your clipboard, same as selecting and copying text yourself.
 
 = 0.1.9 =
 * Fixed: an already-paid order's invoice could still pick up a leftover or contact-specific default payment-term text from Lexware Office (e.g. a due date), contradicting the "Paid via ..." note, even though this plugin no longer sent any payment terms itself. Lexware Office fills that field in with its own default whenever it is left out entirely, so a paid order's invoice now explicitly sends a "Thank you for your payment." condition instead of omitting the field.

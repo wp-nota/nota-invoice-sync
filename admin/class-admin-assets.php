@@ -1,9 +1,11 @@
 <?php
 /**
- * Enqueues the plugin's own admin stylesheet, only on the screens it
- * actually renders something on — the settings page and the order edit
- * screens (classic and HPOS) where the invoice metabox lives. Purely
- * presentational: no markup, form fields or business logic live here.
+ * Enqueues the plugin's own admin stylesheet and script, only on the
+ * screens it actually renders something on — the settings page and the
+ * order edit screens (classic and HPOS) where the invoice metabox lives.
+ * The script is settings-page-only (it only backs the "Copy diagnostics
+ * for support" button there). Purely presentational: no markup, form
+ * fields or business logic live here.
  *
  * @package Nota_Invoice_Sync
  */
@@ -52,5 +54,17 @@ class Nota_Inv_Admin_Assets {
 			array(),
 			NOTA_INV_VERSION
 		);
+
+		// Only the settings page has anything for this script to do (the
+		// "Copy diagnostics for support" button in the Diagnostics card).
+		if ( $is_settings_page ) {
+			wp_enqueue_script(
+				'nota-inv-admin',
+				NOTA_INV_URL . 'assets/js/admin.js',
+				array(),
+				NOTA_INV_VERSION,
+				true
+			);
+		}
 	}
 }

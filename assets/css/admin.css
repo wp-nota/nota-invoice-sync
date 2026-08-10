@@ -5,6 +5,14 @@
  * class-admin-assets.php.
  */
 
+.nota-inv-visually-hidden {
+	position: absolute;
+	left: -9999px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
 .nota-inv-badge {
 	display: inline-flex;
 	align-items: center;
