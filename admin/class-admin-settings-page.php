@@ -578,7 +578,7 @@ class Nota_Inv_Admin_Settings_Page {
 								data-failed="<?php esc_attr_e( 'Could not copy — select the text below and copy it manually.', 'nota-invoice-sync' ); ?>"
 							></span>
 							<p class="description">
-								<?php esc_html_e( 'Copies the plugin/WordPress/WooCommerce versions and the last few invoice errors to your clipboard, ready to paste into a support email. Nothing is sent anywhere automatically — this only fills your clipboard, the same way selecting and copying text yourself would.', 'nota-invoice-sync' ); ?>
+								<?php esc_html_e( 'Copies the plugin/WordPress/WooCommerce versions, every plugin setting (your API key is never included), the last few invoice errors and recent error-level log lines to your clipboard, ready to paste into a support email. Nothing is sent anywhere automatically — this only fills your clipboard, the same way selecting and copying text yourself would.', 'nota-invoice-sync' ); ?>
 							</p>
 							<textarea
 								id="nota-inv-diagnostics-text"
@@ -639,23 +639,30 @@ class Nota_Inv_Admin_Settings_Page {
 
 	/**
 	 * Plain-text diagnostics summary for the "Copy diagnostics for support"
-	 * button: plugin/WordPress/WooCommerce/PHP versions, the two settings
-	 * most relevant to a failed invoice (test mode, draft/finalize), and the
-	 * last few invoice errors gathered from recent_errors() below.
+	 * button: plugin/WordPress/WooCommerce/PHP versions, every plugin
+	 * setting (the API key itself excluded — see below), and the last few
+	 * invoice errors gathered from recent_errors() below.
 	 *
 	 * Every one of these is already visible somewhere in wp-admin on its
-	 * own (the error per order, the versions in the "At a Glance"/Site
-	 * Health screens) — this only collects them in one place so a shop
-	 * owner can paste them into a support email instead of digging through
-	 * orders one by one. Nothing here is ever sent anywhere automatically;
-	 * see the "External services" section of readme.txt.
+	 * own (the error per order, the settings on this very page, the
+	 * versions in the "At a Glance"/Site Health screens) — this only
+	 * collects them in one place so a shop owner can paste them into a
+	 * support email instead of re-typing or screenshotting each one.
+	 * Nothing here is ever sent anywhere automatically; see the "External
+	 * services" section of readme.txt.
+	 *
+	 * The API key is deliberately never included, not even partially —
+	 * only whether one is configured. Everything else in the settings
+	 * array is safe to include: no customer data lives in plugin settings,
+	 * only shop-level configuration (which statuses trigger an invoice,
+	 * language, custom text templates, etc.).
 	 *
 	 * @return string
 	 */
 	private function diagnostics_text() {
 		global $wp_version;
 
-		$settings = Nota_Inv_Settings::instance();
+		$all = Nota_Inv_Settings::instance()->all();
 
 		$lines = array(
 			'Nota Invoice Sync diagnostics',
@@ -663,11 +670,27 @@ class Nota_Inv_Admin_Settings_Page {
 			'WordPress: ' . $wp_version,
 			'WooCommerce: ' . ( defined( 'WC_VERSION' ) ? WC_VERSION : 'unknown' ),
 			'PHP: ' . PHP_VERSION,
-			'Test mode: ' . ( $settings->is( 'test_mode' ) ? 'on' : 'off' ),
-			'Document mode: ' . ( 'yes' === $settings->get( 'finalize' ) ? 'finalize' : 'draft' ),
 			'',
-			'Recent invoice errors:',
+			'Settings:',
+			'api_key configured: ' . ( '' !== trim( (string) $all['api_key'] ) ? 'yes' : 'no' ),
 		);
+
+		foreach ( $all as $key => $value ) {
+			if ( 'api_key' === $key ) {
+				continue; // Never included — see the line above instead.
+			}
+
+			if ( is_array( $value ) ) {
+				$value = implode( ',', $value );
+			}
+
+			$value = (string) $value;
+
+			$lines[] = $key . ': ' . ( '' === $value ? '(empty)' : $value );
+		}
+
+		$lines[] = '';
+		$lines[] = 'Recent invoice errors:';
 
 		$errors = $this->recent_errors();
 
@@ -679,7 +702,99 @@ class Nota_Inv_Admin_Settings_Page {
 			}
 		}
 
+		$lines[] = '';
+		$lines[] = 'Recent plugin log errors (last 7 days):';
+
+		$log_errors = $this->recent_log_errors();
+
+		if ( empty( $log_errors ) ) {
+			$lines[] = '(none recorded)';
+		} else {
+			foreach ( $log_errors as $log_line ) {
+				$lines[] = '- ' . $log_line;
+			}
+		}
+
 		return implode( "\n", $lines );
+	}
+
+	/**
+	 * Up to 20 ERROR-level lines from this plugin's own WooCommerce log
+	 * (source "nota-invoice-sync"), from the last 7 days, oldest first.
+	 *
+	 * WC_Logger has no query API — only a raw file per day, named
+	 * "nota-invoice-sync-{date}-{hash}.log" under WC_LOG_DIR. Read directly
+	 * and locally; nothing here is ever sent anywhere (same as the rest of
+	 * this file — see diagnostics_text()).
+	 *
+	 * Only ERROR-level lines are read, never DEBUG/INFO: at the "debug" log
+	 * level (this plugin's own setting, shown above) those routinely
+	 * include full customer names, addresses and invoice line items — the
+	 * settings page already warns about this for the log itself. ERROR
+	 * lines are technical (HTTP status, Lexware's own validation message,
+	 * a contact id, an order id) in every current call site, with one
+	 * confirmed exception: the "TEST MODE" lines in
+	 * Invoice_Service/Credit_Note_Service log the FULL built payload
+	 * (customer name/address included) at ERROR level on purpose, so they
+	 * are unmistakably visible in the log for review. Those are explicitly
+	 * excluded here by matching the literal "TEST MODE" text every such
+	 * line contains.
+	 *
+	 * @return array<int, string>
+	 */
+	private function recent_log_errors() {
+		if ( ! defined( 'WC_LOG_DIR' ) || ! is_dir( WC_LOG_DIR ) ) {
+			return array();
+		}
+
+		$files = glob( trailingslashit( WC_LOG_DIR ) . 'nota-invoice-sync-*.log' );
+
+		if ( empty( $files ) ) {
+			return array();
+		}
+
+		// Oldest day first, so lines end up in the right chronological
+		// order once concatenated across more than one day's file.
+		usort(
+			$files,
+			function ( $a, $b ) {
+				return filemtime( $a ) <=> filemtime( $b );
+			}
+		);
+
+		$cutoff = time() - ( 7 * DAY_IN_SECONDS );
+		$lines  = array();
+
+		foreach ( $files as $file ) {
+			if ( ! is_string( $file ) || filemtime( $file ) < $cutoff ) {
+				continue;
+			}
+
+			$handle = @fopen( $file, 'r' ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+
+			if ( ! $handle ) {
+				continue;
+			}
+
+			while ( false !== ( $line = fgets( $handle ) ) ) { // phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition
+				if ( false === strpos( $line, ' ERROR ' ) ) {
+					continue;
+				}
+
+				if ( false !== stripos( $line, 'TEST MODE' ) ) {
+					continue; // See docblock — the one confirmed full-payload case.
+				}
+
+				$lines[] = trim( $line );
+			}
+
+			fclose( $handle );
+		}
+
+		// Cap so the clipboard text stays a manageable size no matter how
+		// noisy a site's error history is — the most recent ones matter
+		// most, and $lines is already oldest-first, so this keeps the tail.
+		return array_slice( $lines, -20 );
 	}
 
 	/**
@@ -689,18 +804,31 @@ class Nota_Inv_Admin_Settings_Page {
 	 * this just gathers it across orders instead of requiring one click per
 	 * order to find.
 	 *
+	 * 10.08.2026: live-found bug — 'compare' => 'EXISTS' alone does not
+	 * reliably filter here on HPOS (custom order tables); it silently
+	 * matched every recent order regardless of whether the meta was ever
+	 * set, so the button showed real order numbers with blank messages
+	 * (orders that had actually succeeded). Switched to the 'value' => '',
+	 * 'compare' => '!=' pattern already proven working elsewhere in this
+	 * codebase, and — because a DB-level filter already failed silently
+	 * once — never trust it alone again: every candidate is rechecked in
+	 * PHP below before being shown, and the query pulls a wider pool (20)
+	 * than the 5 actually displayed so that filtering losses here still
+	 * leave enough to fill the list.
+	 *
 	 * @return array<int, array{number: string, date: string, message: string}>
 	 */
 	private function recent_errors() {
 		$orders = wc_get_orders(
 			array(
-				'limit'      => 5,
+				'limit'      => 20,
 				'orderby'    => 'date',
 				'order'      => 'DESC',
 				'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 					array(
 						'key'     => NOTA_INV_META_LAST_ERROR,
-						'compare' => 'EXISTS',
+						'value'   => '',
+						'compare' => '!=',
 					),
 				),
 				'return'     => 'objects',
@@ -714,11 +842,24 @@ class Nota_Inv_Admin_Settings_Page {
 				continue;
 			}
 
+			$message = (string) $order->get_meta( NOTA_INV_META_LAST_ERROR );
+
+			// Belt and suspenders: the query above has already proven
+			// unreliable once (see docblock) — never display a blank
+			// message even if the DB-level filter lets one through again.
+			if ( '' === trim( $message ) ) {
+				continue;
+			}
+
 			$errors[] = array(
 				'number'  => $order->get_order_number(),
 				'date'    => $order->get_date_created() ? $order->get_date_created()->date( 'Y-m-d' ) : '',
-				'message' => (string) $order->get_meta( NOTA_INV_META_LAST_ERROR ),
+				'message' => $message,
 			);
+
+			if ( count( $errors ) >= 5 ) {
+				break;
+			}
 		}
 
 		return $errors;

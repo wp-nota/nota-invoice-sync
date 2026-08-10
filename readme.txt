@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.10
+Stable tag: 0.1.11
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -176,6 +176,11 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.11 =
+* Fixed: the "Copy diagnostics for support" button (added in 0.1.10) could list order numbers with a blank error message — the query filtering for orders with a recorded error did not reliably work on every WooCommerce order storage setup.
+* Fixed: the API client logged every failed Lexware Office request as an "error" in WooCommerce → Status → Logs, even routine, expected ones (like polling a still-draft invoice's payment status, which always returns a specific "no payment information yet" response) — burying genuinely actionable errors under noise on active shops. Those specific, already-expected outcomes are now logged separately from real errors.
+* Added: "Copy diagnostics for support" now also includes every plugin setting (your API key is never included, only whether one is configured) and the last 7 days of error-level log lines from the plugin's own log, not just the WordPress/WooCommerce/PHP versions and per-order errors. Lines that would include full customer/order details (only ever logged this way in test mode, clearly marked) are excluded.
 
 = 0.1.10 =
 * Added: a "Copy diagnostics for support" button on the Diagnostics section of the settings page. Copies the plugin/WordPress/WooCommerce/PHP versions and the last few invoice errors to your clipboard in one click, so they are easy to paste into a support request instead of digging through orders one by one. Nothing is ever sent anywhere automatically — this only fills your clipboard, same as selecting and copying text yourself.

@@ -594,54 +594,54 @@ msgstr "Prüfbericht exportieren"
 msgid "The compliance export is available in Nota Invoice Sync Pro"
 msgstr "Der Compliance-Export ist in Nota Invoice Sync Pro verfügbar"
 
-#: admin/class-admin-settings-page.php:740
+#: admin/class-admin-settings-page.php:881
 msgid "Connection failed:"
 msgstr "Verbindung fehlgeschlagen:"
 
-#: admin/class-admin-settings-page.php:751
+#: admin/class-admin-settings-page.php:892
 msgid "Connected to Lexware Office."
 msgstr "Mit Lexware Office verbunden."
 
 #. translators: %s: Lexware organisation name.
-#: admin/class-admin-settings-page.php:757
+#: admin/class-admin-settings-page.php:898
 #, php-format
 msgid "Organisation: %s"
 msgstr "Unternehmen: %s"
 
-#: admin/class-admin-settings-page.php:765
+#: admin/class-admin-settings-page.php:906
 msgid "This organisation is flagged as a small business (Kleinunternehmer, §19 UStG). Invoices will be created without VAT."
 msgstr "Dieses Unternehmen ist als Kleinunternehmer (§19 UStG) gekennzeichnet. Rechnungen werden ohne Umsatzsteuer erstellt."
 
-#: admin/class-admin-settings-page.php:792
+#: admin/class-admin-settings-page.php:933
 msgid "Lexware Office is set to destination-country VAT (One Stop Shop). Cross-border B2C orders will be sent with the destination country's tax rate."
 msgstr "Lexware Office ist auf Bestimmungsland-Umsatzsteuer (One Stop Shop) eingestellt. Grenzüberschreitende B2C-Bestellungen werden mit dem Steuersatz des Bestimmungslands übermittelt."
 
-#: admin/class-admin-settings-page.php:800
+#: admin/class-admin-settings-page.php:941
 msgid "Tax setup mismatch"
 msgstr "Steuerkonfiguration stimmt nicht überein"
 
-#: admin/class-admin-settings-page.php:802
+#: admin/class-admin-settings-page.php:943
 msgid "Your shop applies destination-country VAT to EU orders (One Stop Shop), but your Lexware Office account is set to German VAT (\"Deutsche Umsatzsteuer\"). Cross-border B2C orders cannot be invoiced correctly while these two disagree — Lexware will reject the foreign tax rate."
 msgstr "Ihr Shop wendet für EU-Bestellungen die Umsatzsteuer des Bestimmungslands an (One Stop Shop), Ihr Lexware-Office-Konto ist jedoch auf deutsche Umsatzsteuer eingestellt. Solange diese beiden nicht übereinstimmen, können grenzüberschreitende B2C-Bestellungen nicht korrekt fakturiert werden – Lexware wird den ausländischen Steuersatz ablehnen."
 
-#: admin/class-admin-settings-page.php:804
+#: admin/class-admin-settings-page.php:945
 msgid "Either switch Lexware Office to destination-country VAT, or stop charging destination VAT in WooCommerce. Please discuss this with your tax adviser before changing anything. Domestic orders are unaffected."
 msgstr "Stellen Sie entweder Lexware Office auf Bestimmungsland-Umsatzsteuer um, oder deaktivieren Sie die Bestimmungsland-Umsatzsteuer in WooCommerce. Bitte besprechen Sie dies vor jeder Änderung mit Ihrem Steuerberater. Inlandsbestellungen sind davon nicht betroffen."
 
-#: admin/class-admin-settings-page.php:810
+#: admin/class-admin-settings-page.php:951
 msgid "Lexware Office is set to German VAT for EU distance sales. This matches your current shop configuration."
 msgstr "Lexware Office ist für EU-Fernverkäufe auf deutsche Umsatzsteuer eingestellt. Das stimmt mit Ihrer aktuellen Shop-Konfiguration überein."
 
-#: includes/class-api-client.php:181
+#: includes/class-api-client.php:188
 msgid "Lexware Office returned a response that could not be read."
 msgstr "Lexware Office hat eine nicht lesbare Antwort zurückgegeben."
 
-#: includes/class-api-client.php:191
+#: includes/class-api-client.php:198
 msgid "The request to Lexware Office failed."
 msgstr "Die Anfrage an Lexware Office ist fehlgeschlagen."
 
 #. translators: %d: HTTP status code.
-#: includes/class-api-client.php:263
+#: includes/class-api-client.php:272
 #, php-format
 msgid "Lexware Office responded with HTTP %d."
 msgstr "Lexware Office antwortete mit HTTP %d."
@@ -800,5 +800,5 @@ msgid "Could not copy — select the text below and copy it manually."
 msgstr "Kopieren fehlgeschlagen — bitte den Text unten markieren und manuell kopieren."
 
 #: admin/class-admin-settings-page.php:581
-msgid "Copies the plugin/WordPress/WooCommerce versions and the last few invoice errors to your clipboard, ready to paste into a support email. Nothing is sent anywhere automatically — this only fills your clipboard, the same way selecting and copying text yourself would."
-msgstr "Kopiert die Plugin-/WordPress-/WooCommerce-Version sowie die letzten Rechnungsfehler in die Zwischenablage, bereit zum Einfügen in eine Support-E-Mail. Es wird nichts automatisch versendet — dies füllt nur Ihre Zwischenablage, genau wie das manuelle Markieren und Kopieren von Text."
+msgid "Copies the plugin/WordPress/WooCommerce versions, every plugin setting (your API key is never included), the last few invoice errors and recent error-level log lines to your clipboard, ready to paste into a support email. Nothing is sent anywhere automatically — this only fills your clipboard, the same way selecting and copying text yourself would."
+msgstr "Kopiert die Plugin-/WordPress-/WooCommerce-Version, jede Plugin-Einstellung (Ihr API-Schlüssel wird nie einbezogen), die letzten Rechnungsfehler sowie aktuelle Fehler-Protokolleinträge in die Zwischenablage, bereit zum Einfügen in eine Support-E-Mail. Es wird nichts automatisch versendet — dies füllt nur Ihre Zwischenablage, genau wie das manuelle Markieren und Kopieren von Text."

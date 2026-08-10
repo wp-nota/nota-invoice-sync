@@ -53,15 +53,21 @@ class Nota_Inv_Api_Client {
 	/**
 	 * GET request.
 	 *
-	 * @param string $path  Path beginning with a slash, e.g. '/v1/profile'.
-	 * @param array  $query Query arguments.
+	 * @param string $path           Path beginning with a slash, e.g. '/v1/profile'.
+	 * @param array  $query          Query arguments.
+	 * @param array  $quiet_statuses HTTP status codes the caller already knows are a normal,
+	 *                               expected outcome here (e.g. 406 when polling a draft
+	 *                               invoice's payment status) — logged at debug level instead
+	 *                               of error, so the error log stays a reliable "something
+	 *                               actually needs attention" signal. Empty by default:
+	 *                               every other caller keeps today's behaviour unchanged.
 	 * @return array|WP_Error Decoded body.
 	 */
-	public function get( $path, array $query = array() ) {
+	public function get( $path, array $query = array(), array $quiet_statuses = array() ) {
 		if ( ! empty( $query ) ) {
 			$path .= ( false === strpos( $path, '?' ) ? '?' : '&' ) . http_build_query( $query );
 		}
-		return $this->request( 'GET', $path );
+		return $this->request( 'GET', $path, null, $quiet_statuses );
 	}
 
 	/**
@@ -93,12 +99,13 @@ class Nota_Inv_Api_Client {
 	/**
 	 * Perform a request, handling pacing and retries.
 	 *
-	 * @param string     $method HTTP verb.
-	 * @param string     $path   Path with optional query string.
-	 * @param array|null $body   Optional JSON body.
+	 * @param string     $method         HTTP verb.
+	 * @param string     $path           Path with optional query string.
+	 * @param array|null $body           Optional JSON body.
+	 * @param array      $quiet_statuses See get() — passed through to error_from_response().
 	 * @return array|WP_Error
 	 */
-	private function request( $method, $path, $body = null ) {
+	private function request( $method, $path, $body = null, array $quiet_statuses = array() ) {
 		$headers = $this->auth->get_auth_headers();
 
 		if ( is_wp_error( $headers ) ) {
@@ -150,7 +157,7 @@ class Nota_Inv_Api_Client {
 			$raw    = wp_remote_retrieve_body( $response );
 
 			if ( 429 === $status || $status >= 500 ) {
-				$last_error = $this->error_from_response( $status, $raw );
+				$last_error = $this->error_from_response( $status, $raw, $quiet_statuses );
 				$this->backoff( $attempt );
 				continue;
 			}
@@ -166,7 +173,7 @@ class Nota_Inv_Api_Client {
 			}
 
 			if ( $status >= 400 ) {
-				return $this->error_from_response( $status, $raw );
+				return $this->error_from_response( $status, $raw, $quiet_statuses );
 			}
 
 			if ( 204 === $status || '' === trim( (string) $raw ) ) {
@@ -228,11 +235,13 @@ class Nota_Inv_Api_Client {
 	 * Lexware uses two shapes: a legacy one with `message`, and a regular one
 	 * with `IssueList[]` entries carrying field-level details.
 	 *
-	 * @param int    $status HTTP status.
-	 * @param string $raw    Raw body.
+	 * @param int    $status         HTTP status.
+	 * @param string $raw            Raw body.
+	 * @param array  $quiet_statuses See get() — statuses the caller already
+	 *                                expects, logged as debug instead of error.
 	 * @return WP_Error
 	 */
-	private function error_from_response( $status, $raw ) {
+	private function error_from_response( $status, $raw, array $quiet_statuses = array() ) {
 		$decoded = json_decode( (string) $raw, true );
 		$parts   = array();
 
@@ -267,7 +276,15 @@ class Nota_Inv_Api_Client {
 
 		$message = implode( ' | ', $parts );
 
-		Nota_Inv_Logger::error( sprintf( 'API error %d: %s', $status, $message ) );
+		if ( in_array( $status, $quiet_statuses, true ) ) {
+			// The caller already knows this status is a normal outcome here
+			// (e.g. 406 while polling a draft invoice's payment status) —
+			// still recorded, just not under "error", so that log level
+			// stays a reliable signal that something needs attention.
+			Nota_Inv_Logger::debug( sprintf( 'API response %d (expected): %s', $status, $message ) );
+		} else {
+			Nota_Inv_Logger::error( sprintf( 'API error %d: %s', $status, $message ) );
+		}
 
 		return new WP_Error(
 			'nota_inv_api_error_' . $status,
