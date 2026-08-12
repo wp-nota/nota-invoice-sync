@@ -458,7 +458,7 @@ class Nota_Inv_Admin_Settings_Page {
 							<fieldset disabled="disabled" style="opacity:.55;">
 								<label>
 									<input type="checkbox" />
-									<?php esc_html_e( 'Attach the invoice PDF to WooCommerce order emails', 'nota-invoice-sync' ); ?>
+									<?php esc_html_e( 'Email the invoice PDF to the customer once it is finalised', 'nota-invoice-sync' ); ?>
 								</label>
 								<br />
 								<label>

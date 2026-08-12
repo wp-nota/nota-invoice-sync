@@ -461,10 +461,6 @@ msgstr "Bestell-Metafelder, die der Reihe nach auf eine USt-IdNr. geprüft werde
 msgid "PDF delivery"
 msgstr "PDF-Zustellung"
 
-#: admin/class-admin-settings-page.php:461
-msgid "Attach the invoice PDF to WooCommerce order emails"
-msgstr "Rechnungs-PDF an WooCommerce-Bestell-E-Mails anhängen"
-
 #: admin/class-admin-settings-page.php:466
 msgid "Let customers download the invoice PDF from My Account"
 msgstr "Kunden das Herunterladen der Rechnungs-PDF unter „Mein Konto“ erlauben"
@@ -802,3 +798,7 @@ msgstr "Kopieren fehlgeschlagen — bitte den Text unten markieren und manuell k
 #: admin/class-admin-settings-page.php:581
 msgid "Copies the plugin/WordPress/WooCommerce versions, every plugin setting (your API key is never included), the last few invoice errors and recent error-level log lines to your clipboard, ready to paste into a support email. Nothing is sent anywhere automatically — this only fills your clipboard, the same way selecting and copying text yourself would."
 msgstr "Kopiert die Plugin-/WordPress-/WooCommerce-Version, jede Plugin-Einstellung (Ihr API-Schlüssel wird nie einbezogen), die letzten Rechnungsfehler sowie aktuelle Fehler-Protokolleinträge in die Zwischenablage, bereit zum Einfügen in eine Support-E-Mail. Es wird nichts automatisch versendet — dies füllt nur Ihre Zwischenablage, genau wie das manuelle Markieren und Kopieren von Text."
+
+#: admin/class-admin-settings-page.php:461
+msgid "Email the invoice PDF to the customer once it is finalised"
+msgstr "Rechnungs-PDF nach Festschreibung per E-Mail an den Kunden senden"

@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.11
+Stable tag: 0.1.12
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -176,6 +176,9 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.12 =
+* Changed: updated the wording of the Pro "PDF delivery" preview on the settings page to match how Pro's invoice PDF delivery actually works now (a dedicated "Your invoice is ready" email rather than an attachment on existing order emails). No functional change in this (free) edition — the control was already just a disabled preview of a Pro feature.
 
 = 0.1.11 =
 * Fixed: the "Copy diagnostics for support" button (added in 0.1.10) could list order numbers with a blank error message — the query filtering for orders with a recorded error did not reliably work on every WooCommerce order storage setup.
