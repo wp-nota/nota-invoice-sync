@@ -2,7 +2,7 @@
 Contributors: wpnota
 Tags: lexware, lexoffice, invoice, woocommerce, accounting
 Requires at least: 6.0
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
 Stable tag: 0.1.12
