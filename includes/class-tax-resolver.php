@@ -206,6 +206,28 @@ class Nota_Inv_Tax_Resolver {
 	}
 
 	/**
+	 * Does this order's billing country fall outside the EU (and outside
+	 * the shop's own base country)? Mirrors the exact domestic/EU check
+	 * resolve() uses for its thirdPartyCountryDelivery branch, exposed
+	 * separately so callers that need just this verdict (contact sync's
+	 * allowTaxFreeInvoices flag — see class-contact-sync.php) don't have
+	 * to re-derive it from resolve()'s full return shape.
+	 *
+	 * @param WC_Order $order Order.
+	 * @return bool
+	 */
+	public function is_third_country_export( WC_Order $order ) {
+		$country = strtoupper( $order->get_billing_country() );
+		$base    = strtoupper( WC()->countries ? WC()->countries->get_base_country() : 'DE' );
+
+		if ( $country === $base ) {
+			return false;
+		}
+
+		return ! in_array( $country, self::EU_COUNTRIES, true );
+	}
+
+	/**
 	 * ORIGIN or DESTINATION, per the Lexware organisation profile.
 	 *
 	 * @return string

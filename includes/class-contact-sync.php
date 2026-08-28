@@ -319,18 +319,33 @@ class Nota_Inv_Contact_Sync {
 
 			$tax = new Nota_Inv_Tax_Resolver();
 			$vat = $tax->get_vat_id( $order );
+
 			if ( '' !== $vat ) {
 				$payload['company']['vatRegistrationId'] = $vat;
+			}
 
-				// allowTaxFreeInvoices is a persistent flag on the contact, not
-				// just this one order — only set it when the order itself
-				// actually qualifies as reverse charge (VAT-ID present AND zero
-				// tax collected). A domestic B2B customer who has a VAT-ID on
-				// file but was still charged normal VAT on this order must not
-				// have their contact flagged as tax-free.
-				if ( $tax->is_reverse_charge( $order ) ) {
-					$payload['company']['allowTaxFreeInvoices'] = true;
-				}
+			// allowTaxFreeInvoices is a persistent flag on the contact, not
+			// just this one order — only set it when the order genuinely
+			// needs a zero-tax invoice type that Lexware requires the
+			// contact to be flagged for. A domestic B2B customer who has a
+			// VAT-ID on file but was still charged normal VAT on this order
+			// must not have their contact flagged as tax-free.
+			//
+			// 30.08.2026 live finding (werbeduft.com): a Swiss (third-
+			// country, non-EU) customer's invoice was rejected by Lexware —
+			// "Invalid combination of tax type thirdPartyCountryDelivery
+			// ... and contact id ..." — because this flag was only ever set
+			// for the EU reverse-charge case above, gated behind a VAT-ID
+			// being present. A non-EU customer has no EU VAT-ID at all, so
+			// that condition never ran for them, and the zero-rated export
+			// tax type Tax_Resolver::resolve() correctly picked was
+			// rejected by Lexware without it. Extended to also cover
+			// third-country exports — deliberately NOT widened to the
+			// small-business (§19 UStG) zero-rated case too, since that
+			// path has never been live-tested and this fix's scope is the
+			// confirmed bug only.
+			if ( $tax->is_reverse_charge( $order ) || $tax->is_third_country_export( $order ) ) {
+				$payload['company']['allowTaxFreeInvoices'] = true;
 			}
 		} else {
 			$payload['person'] = array(

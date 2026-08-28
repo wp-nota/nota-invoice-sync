@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.12
+Stable tag: 0.1.13
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -176,6 +176,9 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.13 =
+* Fixed: invoices for customers outside the EU (e.g. Switzerland, UK, USA) could be rejected by Lexware Office with "Invalid combination of tax type thirdPartyCountryDelivery ... and contact id ...". The contact's "allow tax-free invoices" flag was only ever being set for EU reverse-charge customers; non-EU customers need it too for their zero-rated export invoice to be accepted, and it was never set for them. Fixed and confirmed live.
 
 = 0.1.12 =
 * Changed: updated the wording of the Pro "PDF delivery" preview on the settings page to match how Pro's invoice PDF delivery actually works now (a dedicated "Your invoice is ready" email rather than an attachment on existing order emails). No functional change in this (free) edition — the control was already just a disabled preview of a Pro feature.
