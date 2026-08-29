@@ -15,6 +15,20 @@ class Nota_Inv_Admin_Order_Metabox {
 	const ACTION = 'nota_inv_order_action';
 	const PAYMENT_ACTION = 'nota_inv_check_payment';
 	const REFRESH_ACTION = 'nota_inv_refresh_status';
+	const DISMISS_NUDGE_ACTION = 'nota_inv_dismiss_nudge';
+
+	/**
+	 * Rolling window the Pro-upsell nudge counts manual invoices over.
+	 */
+	const NUDGE_WINDOW = 7 * DAY_IN_SECONDS;
+
+	/**
+	 * How long the nudge stays quiet after being shown, or after being
+	 * explicitly dismissed — dismissing is a stronger "not now" signal, so
+	 * it buys a longer quiet period than simply having been shown once.
+	 */
+	const NUDGE_AUTO_SNOOZE  = 7 * DAY_IN_SECONDS;
+	const NUDGE_DISMISS_SNOOZE = 30 * DAY_IN_SECONDS;
 
 	/**
 	 * @var Nota_Inv_Admin_Order_Metabox|null
@@ -33,6 +47,7 @@ class Nota_Inv_Admin_Order_Metabox {
 		add_action( 'admin_post_' . self::ACTION, array( $this, 'handle_action' ) );
 		add_action( 'admin_post_' . self::PAYMENT_ACTION, array( $this, 'handle_payment_check' ) );
 		add_action( 'admin_post_' . self::REFRESH_ACTION, array( $this, 'handle_refresh_status' ) );
+		add_action( 'admin_post_' . self::DISMISS_NUDGE_ACTION, array( $this, 'handle_dismiss_nudge' ) );
 		add_action( 'admin_notices', array( $this, 'maybe_show_notice' ) );
 	}
 
@@ -422,6 +437,11 @@ class Nota_Inv_Admin_Order_Metabox {
 			$status = 'error';
 		} elseif ( ! empty( $result['test_mode'] ) ) {
 			$status = 'test';
+		} else {
+			// A genuine new invoice (the metabox button always passes
+			// $force = true, so a real "already invoiced" skip never
+			// reaches here — see Invoice_Service::create_for_order_locked()).
+			$this->record_manual_invoice();
 		}
 
 		wp_safe_redirect(
@@ -431,6 +451,144 @@ class Nota_Inv_Admin_Order_Metabox {
 				$order->get_edit_order_url()
 			)
 		);
+		exit;
+	}
+
+	/**
+	 * Record that a manual invoice was just created — feeds two independent,
+	 * free-edition-only nudges: the Pro-upsell notice below (rolling 7-day
+	 * count), and the one-time review request on the order list screen (see
+	 * class-admin-order-list.php — lifetime total). Nothing about the order
+	 * or customer is recorded, only a timestamp and a running count.
+	 *
+	 * @return void
+	 */
+	private function record_manual_invoice() {
+		$log = get_option( 'nota_inv_manual_invoice_log', array() );
+
+		if ( ! is_array( $log ) ) {
+			$log = array();
+		}
+
+		$log[] = time();
+
+		$cutoff = time() - self::NUDGE_WINDOW;
+		$log    = array_values(
+			array_filter(
+				$log,
+				static function ( $timestamp ) use ( $cutoff ) {
+					return (int) $timestamp >= $cutoff;
+				}
+			)
+		);
+
+		update_option( 'nota_inv_manual_invoice_log', $log, false );
+
+		$total = (int) get_option( 'nota_inv_total_manual_invoices', 0 );
+		update_option( 'nota_inv_total_manual_invoices', $total + 1, false );
+	}
+
+	/**
+	 * How many manual invoices were created in the last 7 days, or 0 if
+	 * that count doesn't clear the nudge threshold, or the nudge is
+	 * currently snoozed. 0 doubles as "don't show the nudge" throughout.
+	 *
+	 * @return int
+	 */
+	private function recent_manual_invoice_count() {
+		if ( time() < (int) get_option( 'nota_inv_nudge_suppressed_until', 0 ) ) {
+			return 0;
+		}
+
+		$log = get_option( 'nota_inv_manual_invoice_log', array() );
+
+		if ( ! is_array( $log ) ) {
+			return 0;
+		}
+
+		$cutoff = time() - self::NUDGE_WINDOW;
+		$count  = 0;
+
+		foreach ( $log as $timestamp ) {
+			if ( (int) $timestamp >= $cutoff ) {
+				$count++;
+			}
+		}
+
+		/**
+		 * Filter how many manual invoices in the last 7 days trigger the
+		 * Pro-upsell nudge on the order screen.
+		 *
+		 * @param int $threshold Default 10.
+		 */
+		$threshold = (int) apply_filters( 'nota_inv_manual_invoice_nudge_threshold', 10 );
+
+		return $count >= $threshold ? $count : 0;
+	}
+
+	/**
+	 * Pro-upsell nudge, shown right after a successful manual invoice
+	 * creation once the weekly count clears the threshold. Snoozes itself
+	 * for 7 days as soon as it is shown, or 30 days if explicitly
+	 * dismissed, so it surfaces at most a few times a month even for a
+	 * shop that keeps hitting the threshold every week. Free edition only
+	 * — no equivalent code exists in Pro.
+	 *
+	 * @return void
+	 */
+	private function maybe_show_pro_nudge() {
+		$count = $this->recent_manual_invoice_count();
+
+		if ( 0 === $count ) {
+			return;
+		}
+
+		update_option( 'nota_inv_nudge_suppressed_until', time() + self::NUDGE_AUTO_SNOOZE, false );
+
+		printf(
+			'<div class="notice notice-info"><p>%s <a href="%s" target="_blank" rel="noopener">%s</a> &middot; <a href="%s">%s</a></p></div>',
+			esc_html(
+				sprintf(
+					/* translators: %d: number of invoices created by hand in the last 7 days. */
+					_n(
+						"That's %d invoice you've created by hand this week.",
+						"That's %d invoices you've created by hand this week.",
+						$count,
+						'nota-invoice-sync'
+					),
+					$count
+				)
+			),
+			esc_url( 'https://www.wp-nota.com/lexware-invoice-sync' ),
+			esc_html__( 'Pro creates them automatically →', 'nota-invoice-sync' ),
+			esc_url(
+				wp_nonce_url(
+					admin_url( 'admin-post.php?action=' . self::DISMISS_NUDGE_ACTION ),
+					self::NONCE
+				)
+			),
+			esc_html__( 'Dismiss', 'nota-invoice-sync' )
+		);
+	}
+
+	/**
+	 * "Dismiss" on the Pro-upsell nudge — snoozes it for 30 days rather
+	 * than the usual 7, since an explicit dismissal is a stronger signal
+	 * than simply having seen it once.
+	 *
+	 * @return void
+	 */
+	public function handle_dismiss_nudge() {
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_die( esc_html__( 'You are not allowed to do this.', 'nota-invoice-sync' ) );
+		}
+
+		check_admin_referer( self::NONCE );
+
+		update_option( 'nota_inv_nudge_suppressed_until', time() + self::NUDGE_DISMISS_SNOOZE, false );
+
+		$referer = wp_get_referer();
+		wp_safe_redirect( $referer ? $referer : admin_url() );
 		exit;
 	}
 
@@ -452,6 +610,7 @@ class Nota_Inv_Admin_Order_Metabox {
 			echo '<div class="notice notice-success is-dismissible"><p>' .
 				esc_html__( 'Invoice created in Lexware Office.', 'nota-invoice-sync' ) .
 				'</p></div>';
+			$this->maybe_show_pro_nudge();
 			return;
 		}
 

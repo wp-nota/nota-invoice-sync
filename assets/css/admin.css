@@ -54,10 +54,6 @@
 	color: #50575e;
 }
 
-.nota-inv-status-line {
-	margin: 4px 0 16px;
-}
-
 .nota-inv-nav {
 	display: flex;
 	flex-wrap: wrap;

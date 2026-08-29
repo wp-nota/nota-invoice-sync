@@ -208,7 +208,6 @@ class Nota_Inv_Admin_Settings_Page {
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Nota Invoice Sync for Lexware Office', 'nota-invoice-sync' ); ?></h1>
-			<p class="nota-inv-status-line"><?php $this->render_status_badge(); ?></p>
 
 			<?php settings_errors( self::SLUG ); ?>
 			<?php $this->render_test_result(); ?>
@@ -258,6 +257,10 @@ class Nota_Inv_Admin_Settings_Page {
 								</p>
 							<?php endif; ?>
 						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'API status', 'nota-invoice-sync' ); ?></th>
+						<td><?php $this->render_status_badge(); ?></td>
 					</tr>
 				</table>
 				</div>
@@ -437,6 +440,29 @@ class Nota_Inv_Admin_Settings_Page {
 							</p>
 							<p class="description">
 								<?php esc_html_e( 'Order meta keys checked for a VAT-ID, in order (comma-separated). The list above already covers the most common VAT compliance plugins — edit it or add your own if a different plugin is in use; check Custom Fields on an order screen if you are not sure of the field name.', 'nota-invoice-sync' ); ?>
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Print layout', 'nota-invoice-sync' ); ?></th>
+						<td>
+							<?php
+							// Pro teaser only: disabled, no name attribute, so
+							// nothing is ever posted — no print-layout code
+							// exists anywhere in this edition.
+							?>
+							<select style="opacity:.55;" disabled="disabled">
+								<option><?php esc_html_e( '(Lexware Office default)', 'nota-invoice-sync' ); ?></option>
+							</select>
+							<p class="description">
+								<?php esc_html_e( 'Choose which of your Lexware Office print layouts (letterhead/design) new invoices use.', 'nota-invoice-sync' ); ?>
+							</p>
+							<p class="description">
+								<strong>
+									<a href="https://www.wp-nota.com/lexware-invoice-sync" target="_blank" rel="noopener">
+										<?php esc_html_e( 'Print layout selection is available in Nota Invoice Sync Pro', 'nota-invoice-sync' ); ?> →
+									</a>
+								</strong>
 							</p>
 						</td>
 					</tr>

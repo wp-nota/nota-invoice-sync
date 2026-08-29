@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.13
+Stable tag: 0.1.14
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -176,6 +176,13 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.14 =
+* Added: an occasional, dismissible reminder on the order screen if you've created 10+ invoices by hand in the last 7 days, pointing to Pro's automatic invoicing. Shown at most once a week even if you keep hitting that mark, and stays quiet for 30 days once dismissed.
+* Added: a one-time, dismissible note on the WooCommerce → Orders screen once you've created 20 invoices with this plugin, inviting a WordPress.org review. Shown only once, ever — never repeats after being dismissed or clicked.
+* Neither of these limits or changes what the plugin does — manual invoice creation remains completely unlimited, as always.
+* Added: a preview of Pro's upcoming print layout selection (choosing which of your Lexware Office print layouts/letterheads new invoices use) on the settings page. Disabled in this (free) edition — no functional code for it exists here.
+* Changed: the connection status badge now shows inside the Connection card, under a labelled "API status" row, instead of as an unlabelled line above the settings tabs.
 
 = 0.1.13 =
 * Fixed: invoices for customers outside the EU (e.g. Switzerland, UK, USA) could be rejected by Lexware Office with "Invalid combination of tax type thirdPartyCountryDelivery ... and contact id ...". The contact's "allow tax-free invoices" flag was only ever being set for EU reverse-charge customers; non-EU customers need it too for their zero-rated export invoice to be accepted, and it was never set for them. Fixed and confirmed live.

@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Nota_Inv_Admin_Order_List {
 
 	const BULK_ACTION = 'nota_inv_bulk_create';
+	const REVIEW_NONCE = 'nota_inv_review_notice';
 
 	/**
 	 * @var Nota_Inv_Admin_Order_List|null
@@ -48,6 +49,9 @@ class Nota_Inv_Admin_Order_List {
 		add_filter( 'handle_bulk_actions-woocommerce_page_wc-orders', array( $this, 'handle_bulk_action' ), 10, 3 );
 
 		add_action( 'admin_notices', array( $this, 'maybe_show_bulk_notice' ) );
+		add_action( 'admin_notices', array( $this, 'maybe_show_review_request' ) );
+		add_action( 'admin_post_nota_inv_review_click', array( $this, 'handle_review_click' ) );
+		add_action( 'admin_post_nota_inv_dismiss_review_request', array( $this, 'handle_dismiss_review_request' ) );
 	}
 
 	/**
@@ -198,5 +202,107 @@ class Nota_Inv_Admin_Order_List {
 		echo ' <a href="https://www.wp-nota.com/lexware-invoice-sync" target="_blank" rel="noopener">';
 		esc_html_e( 'Learn more', 'nota-invoice-sync' );
 		echo ' &rarr;</a></p></div>';
+	}
+
+	/**
+	 * One-time "would you leave us a review" nudge, shown on the order list
+	 * screen only (not site-wide) once the shop has created a meaningful
+	 * number of invoices through this plugin. Unlike the Pro-upsell nudge
+	 * in class-admin-order-metabox.php, this never repeats — once shown and
+	 * either dismissed or clicked through, the "asked" flag is permanent.
+	 * Free edition only; no equivalent exists in Pro.
+	 *
+	 * @return void
+	 */
+	public function maybe_show_review_request() {
+		$screen = get_current_screen();
+
+		if ( ! $screen || ! in_array( $screen->id, array( 'edit-shop_order', 'woocommerce_page_wc-orders' ), true ) ) {
+			return;
+		}
+
+		if ( 'yes' === get_option( 'nota_inv_review_asked', 'no' ) ) {
+			return;
+		}
+
+		$total = (int) get_option( 'nota_inv_total_manual_invoices', 0 );
+
+		/**
+		 * Filter the lifetime manual-invoice count that triggers the
+		 * one-time review request.
+		 *
+		 * @param int $threshold Default 20.
+		 */
+		$threshold = (int) apply_filters( 'nota_inv_review_request_threshold', 20 );
+
+		if ( $total < $threshold ) {
+			return;
+		}
+
+		printf(
+			'<div class="notice notice-info"><p>%s <a href="%s">%s</a> &middot; <a href="%s">%s</a></p></div>',
+			esc_html(
+				sprintf(
+					/* translators: %d: number of invoices created with the plugin. */
+					__( "You've created %d invoices with Nota Invoice Sync. If it's been useful, a review would mean a lot.", 'nota-invoice-sync' ),
+					$total
+				)
+			),
+			esc_url(
+				wp_nonce_url(
+					admin_url( 'admin-post.php?action=nota_inv_review_click' ),
+					self::REVIEW_NONCE
+				)
+			),
+			esc_html__( 'Leave a review →', 'nota-invoice-sync' ),
+			esc_url(
+				wp_nonce_url(
+					admin_url( 'admin-post.php?action=nota_inv_dismiss_review_request' ),
+					self::REVIEW_NONCE
+				)
+			),
+			esc_html__( 'Dismiss', 'nota-invoice-sync' )
+		);
+	}
+
+	/**
+	 * "Leave a review" was clicked — mark as asked (so this never shows
+	 * again) and forward on to the WordPress.org review form.
+	 *
+	 * @return void
+	 */
+	public function handle_review_click() {
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_die( esc_html__( 'You are not allowed to do this.', 'nota-invoice-sync' ) );
+		}
+
+		check_admin_referer( self::REVIEW_NONCE );
+
+		update_option( 'nota_inv_review_asked', 'yes', false );
+
+		// phpcs:ignore WordPress.Security.SafeRedirect -- deliberate external destination (WordPress.org), not derived from user input.
+		wp_redirect( 'https://wordpress.org/support/plugin/nota-invoice-sync/reviews/#new-post' );
+		exit;
+	}
+
+	/**
+	 * "Dismiss" on the review-request notice — also permanent, same as
+	 * clicking through, since the point is to ask once and then leave the
+	 * shop owner alone either way.
+	 *
+	 * @return void
+	 */
+	public function handle_dismiss_review_request() {
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_die( esc_html__( 'You are not allowed to do this.', 'nota-invoice-sync' ) );
+		}
+
+		check_admin_referer( self::REVIEW_NONCE );
+
+		update_option( 'nota_inv_review_asked', 'yes', false );
+
+		$referer = wp_get_referer();
+		wp_safe_redirect( $referer ? $referer : admin_url() );
+		exit;
 	}
 }

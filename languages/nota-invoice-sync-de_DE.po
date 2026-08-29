@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.5\n"
+"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.14\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/nota-invoice-sync\n"
 "Last-Translator: wp-nota.com <support@wp-nota.com>\n"
 "Language-Team: Deutsch <support@wp-nota.com>\n"
@@ -37,161 +37,164 @@ msgstr "Erstellt Rechnungen direkt in Lexware Office aus WooCommerce-Bestellunge
 msgid "wp-nota.com"
 msgstr "wp-nota.com"
 
-#: admin/class-admin-order-list.php:66
-#: admin/class-admin-order-list.php:71
+#: admin/class-admin-order-list.php:70
+#: admin/class-admin-order-list.php:75
 msgid "Lexware invoice"
 msgstr "Lexware-Rechnung"
 
-#: admin/class-admin-order-list.php:126
+#: admin/class-admin-order-list.php:130
 msgid "(draft)"
 msgstr "(Entwurf)"
 
-#: admin/class-admin-order-list.php:142
+#: admin/class-admin-order-list.php:146
 msgid "Error"
 msgstr "Fehler"
 
-#: admin/class-admin-order-list.php:163
+#: admin/class-admin-order-list.php:167
 msgid "Create Lexware invoice (Pro)"
 msgstr "Lexware-Rechnung erstellen (Pro)"
 
-#: admin/class-admin-order-list.php:197
+#: admin/class-admin-order-list.php:201
 msgid "Bulk invoice creation is available in Nota Invoice Sync Pro."
 msgstr "Die Rechnungserstellung für mehrere Bestellungen gleichzeitig ist in Nota Invoice Sync Pro verfügbar."
 
-#: admin/class-admin-order-list.php:199
+#: admin/class-admin-order-list.php:203
 msgid "Learn more"
 msgstr "Mehr erfahren"
 
-#: admin/class-admin-order-metabox.php:55
+#: admin/class-admin-order-metabox.php:70
 msgid "Lexware Office invoice"
 msgstr "Lexware Office-Rechnung"
 
-#: admin/class-admin-order-metabox.php:91
+#: admin/class-admin-order-metabox.php:106
 msgid "Draft"
 msgstr "Entwurf"
 
-#: admin/class-admin-order-metabox.php:92
+#: admin/class-admin-order-metabox.php:107
 msgid "Editable and removable in Lexware Office. Not booked, no e-invoice yet."
 msgstr "In Lexware Office bearbeitbar und löschbar. Noch nicht gebucht, noch keine E-Rechnung."
 
 #. translators: %s: voucher status such as open or paid.
-#: admin/class-admin-order-metabox.php:99
+#: admin/class-admin-order-metabox.php:114
 #, php-format
 msgid "Finalised (%s)"
 msgstr "Festgeschrieben (%s)"
 
-#: admin/class-admin-order-metabox.php:104
+#: admin/class-admin-order-metabox.php:119
 msgid "Permanent, can only be reversed with a credit note."
 msgstr "Dauerhaft, kann nur mit einer Gutschrift storniert werden."
 
-#: admin/class-admin-order-metabox.php:121
+#: admin/class-admin-order-metabox.php:136
 msgid "Open in Lexware Office"
 msgstr "In Lexware Office öffnen"
 
-#: admin/class-admin-order-metabox.php:132
+#: admin/class-admin-order-metabox.php:147
 msgid "Refresh invoice status"
 msgstr "Rechnungsstatus aktualisieren"
 
-#: admin/class-admin-order-metabox.php:143
+#: admin/class-admin-order-metabox.php:158
 msgid "Check payment status"
 msgstr "Zahlungsstatus prüfen"
 
-#: admin/class-admin-order-metabox.php:154
+#: admin/class-admin-order-metabox.php:169
 msgid "Download PDF"
 msgstr "PDF herunterladen"
 
-#: admin/class-admin-order-metabox.php:156
+#: admin/class-admin-order-metabox.php:171
 msgid "Pro"
 msgstr "Pro"
 
-#: admin/class-admin-order-metabox.php:164
+#: admin/class-admin-order-metabox.php:179
 msgid "Lexware payment status:"
 msgstr "Lexware-Zahlungsstatus:"
 
-#: admin/class-admin-order-metabox.php:169
+#: admin/class-admin-order-metabox.php:184
 msgid "No invoice has been created for this order yet."
 msgstr "Für diese Bestellung wurde noch keine Rechnung erstellt."
 
-#: admin/class-admin-order-metabox.php:173
+#: admin/class-admin-order-metabox.php:188
 msgid "Last error:"
 msgstr "Letzter Fehler:"
 
-#: admin/class-admin-order-metabox.php:178
+#: admin/class-admin-order-metabox.php:193
 msgid "Test mode is on — payloads are logged, nothing is sent."
 msgstr "Testmodus ist aktiv – die Daten werden protokolliert, aber nicht gesendet."
 
-#: admin/class-admin-order-metabox.php:182
+#: admin/class-admin-order-metabox.php:197
 msgid "Create again"
 msgstr "Erneut erstellen"
 
-#: admin/class-admin-order-metabox.php:183
+#: admin/class-admin-order-metabox.php:198
 msgid "Create invoice now"
 msgstr "Rechnung jetzt erstellen"
 
-#: admin/class-admin-order-metabox.php:198
+#: admin/class-admin-order-metabox.php:213
 msgid "Creating again produces a second document in Lexware Office. The old one is not removed."
 msgstr "Beim erneuten Erstellen entsteht ein zweites Dokument in Lexware Office. Das alte wird nicht entfernt."
 
-#: admin/class-admin-order-metabox.php:218
+#: admin/class-admin-order-metabox.php:233
 msgid "Credit note"
 msgstr "Gutschrift"
 
-#: admin/class-admin-order-metabox.php:219
+#: admin/class-admin-order-metabox.php:234
 msgid "Create credit note (full amount)"
 msgstr "Gutschrift erstellen (voller Betrag)"
 
-#: admin/class-admin-order-metabox.php:223
+#: admin/class-admin-order-metabox.php:238
 msgid "Credit notes (Gutschrift) are available in Nota Invoice Sync Pro"
 msgstr "Gutschriften sind in Nota Invoice Sync Pro verfügbar"
 
-#: admin/class-admin-order-metabox.php:241
-#: admin/class-admin-order-metabox.php:320
-#: admin/class-admin-order-metabox.php:404
+#: admin/class-admin-order-list.php:276
+#: admin/class-admin-order-list.php:297
+#: admin/class-admin-order-metabox.php:256
+#: admin/class-admin-order-metabox.php:335
+#: admin/class-admin-order-metabox.php:419
+#: admin/class-admin-order-metabox.php:583
 msgid "You are not allowed to do this."
 msgstr "Sie sind nicht berechtigt, diese Aktion auszuführen."
 
-#: admin/class-admin-order-metabox.php:250
-#: admin/class-admin-order-metabox.php:329
-#: admin/class-admin-order-metabox.php:413
+#: admin/class-admin-order-metabox.php:265
+#: admin/class-admin-order-metabox.php:344
+#: admin/class-admin-order-metabox.php:428
 msgid "Order not found."
 msgstr "Bestellung nicht gefunden."
 
-#: admin/class-admin-order-metabox.php:343
-#: admin/class-admin-order-metabox.php:481
+#: admin/class-admin-order-metabox.php:358
+#: admin/class-admin-order-metabox.php:640
 msgid "Test mode is on — no API request was sent to Lexware Office."
 msgstr "Testmodus ist aktiv – es wurde keine API-Anfrage an Lexware Office gesendet."
 
 #. translators: %s: error message.
-#: admin/class-admin-order-metabox.php:357
+#: admin/class-admin-order-metabox.php:372
 #, php-format
 msgid "Not available: %s"
 msgstr "Nicht verfügbar: %s"
 
-#: admin/class-admin-order-metabox.php:387
+#: admin/class-admin-order-metabox.php:402
 msgid "Response received — see the log for details."
 msgstr "Antwort erhalten – Details siehe Protokoll."
 
-#: admin/class-admin-order-metabox.php:453
+#: admin/class-admin-order-metabox.php:611
 msgid "Invoice created in Lexware Office."
 msgstr "Rechnung in Lexware Office erstellt."
 
-#: admin/class-admin-order-metabox.php:460
+#: admin/class-admin-order-metabox.php:619
 msgid "Test mode: the invoice payload was written to the log but nothing was sent to Lexware Office."
 msgstr "Testmodus: Die Rechnungsdaten wurden protokolliert, aber nicht an Lexware Office gesendet."
 
-#: admin/class-admin-order-metabox.php:467
+#: admin/class-admin-order-metabox.php:626
 msgid "Invoice status refreshed from Lexware Office."
 msgstr "Rechnungsstatus von Lexware Office aktualisiert."
 
-#: admin/class-admin-order-metabox.php:474
+#: admin/class-admin-order-metabox.php:633
 msgid "Checked Lexware Office — the invoice status is unchanged."
 msgstr "Lexware Office geprüft – der Rechnungsstatus ist unverändert."
 
-#: admin/class-admin-order-metabox.php:488
+#: admin/class-admin-order-metabox.php:647
 msgid "Could not refresh the invoice status. Check the log for details."
 msgstr "Der Rechnungsstatus konnte nicht aktualisiert werden. Details siehe Protokoll."
 
-#: admin/class-admin-order-metabox.php:494
+#: admin/class-admin-order-metabox.php:653
 msgid "The invoice could not be created. See the panel on the order for details."
 msgstr "Die Rechnung konnte nicht erstellt werden. Details siehe Kasten auf der Bestellseite."
 
@@ -206,7 +209,7 @@ msgstr "Lexware-Leistungsdatum (Tage)"
 
 #: admin/class-admin-product-fields.php:71
 #: admin/class-admin-product-fields.php:105
-#: admin/class-admin-settings-page.php:620
+#: admin/class-admin-settings-page.php:646
 msgid "to"
 msgstr "bis"
 
@@ -253,378 +256,378 @@ msgstr "Verbunden"
 msgid "Connection failing"
 msgstr "Verbindung fehlgeschlagen"
 
-#: admin/class-admin-settings-page.php:217
-#: admin/class-admin-settings-page.php:228
+#: admin/class-admin-settings-page.php:216
+#: admin/class-admin-settings-page.php:227
 msgid "Connection"
 msgstr "Verbindung"
 
-#: admin/class-admin-settings-page.php:218
-#: admin/class-admin-settings-page.php:266
+#: admin/class-admin-settings-page.php:217
+#: admin/class-admin-settings-page.php:269
 msgid "When to create invoices"
 msgstr "Wann Rechnungen erstellt werden"
 
-#: admin/class-admin-settings-page.php:219
-#: admin/class-admin-settings-page.php:316
+#: admin/class-admin-settings-page.php:218
+#: admin/class-admin-settings-page.php:319
 msgid "Invoice content"
 msgstr "Rechnungsinhalt"
 
-#: admin/class-admin-settings-page.php:220
-#: admin/class-admin-settings-page.php:453
+#: admin/class-admin-settings-page.php:219
+#: admin/class-admin-settings-page.php:479
 msgid "Automation"
 msgstr "Automatisierung"
 
-#: admin/class-admin-settings-page.php:221
-#: admin/class-admin-settings-page.php:521
+#: admin/class-admin-settings-page.php:220
+#: admin/class-admin-settings-page.php:547
 msgid "Diagnostics"
 msgstr "Diagnose"
 
-#: admin/class-admin-settings-page.php:230
+#: admin/class-admin-settings-page.php:229
 msgid "When an invoice is created, the customer's name, address, email and order contents are sent to Lexware Office (Haufe-Lexware GmbH & Co. KG), where they are stored under Lexware's own privacy policy and, once finalised, retained for ten years as required by German accounting law (GoBD)."
 msgstr "Beim Erstellen einer Rechnung werden Name, Adresse, E-Mail-Adresse und Bestellinhalt des Kunden an Lexware Office (Haufe-Lexware GmbH & Co. KG) übermittelt. Dort werden die Daten gemäß der Datenschutzerklärung von Lexware gespeichert und nach der Festschreibung gemäß der gesetzlichen Aufbewahrungspflicht (GoBD) zehn Jahre lang aufbewahrt."
 
-#: admin/class-admin-settings-page.php:235
+#: admin/class-admin-settings-page.php:234
 msgid "API key"
 msgstr "API-Schlüssel"
 
-#: admin/class-admin-settings-page.php:239
+#: admin/class-admin-settings-page.php:238
 msgid "is defined in wp-config.php and takes precedence over this field."
 msgstr "ist in der wp-config.php definiert und hat Vorrang vor diesem Feld."
 
-#: admin/class-admin-settings-page.php:248
+#: admin/class-admin-settings-page.php:247
 msgid "A key is stored — leave blank to keep it"
 msgstr "Es ist bereits ein Schlüssel gespeichert – leer lassen, um ihn beizubehalten"
 
-#: admin/class-admin-settings-page.php:248
+#: admin/class-admin-settings-page.php:247
 msgid "Paste your key here"
 msgstr "Schlüssel hier einfügen"
 
 #. translators: %s: link to the Lexware public API page.
-#: admin/class-admin-settings-page.php:254
+#: admin/class-admin-settings-page.php:253
 #, php-format
 msgid "Create a personal key at %s. It is only visible once, so copy it straight away."
 msgstr "Erstellen Sie einen persönlichen Schlüssel unter %s. Er wird nur einmal angezeigt, kopieren Sie ihn also sofort."
 
-#: admin/class-admin-settings-page.php:269
+#: admin/class-admin-settings-page.php:272
 msgid "Create an invoice when an order reaches"
 msgstr "Rechnung erstellen, sobald eine Bestellung folgenden Status erreicht"
 
-#: admin/class-admin-settings-page.php:273
+#: admin/class-admin-settings-page.php:276
 msgid "Processing — payment received"
 msgstr "In Bearbeitung – Zahlung erhalten"
 
-#: admin/class-admin-settings-page.php:276
+#: admin/class-admin-settings-page.php:279
 msgid "On hold — awaiting bank transfer"
 msgstr "Wartend – Überweisung ausstehend"
 
-#: admin/class-admin-settings-page.php:279
+#: admin/class-admin-settings-page.php:282
 msgid "Completed"
 msgstr "Abgeschlossen"
 
-#: admin/class-admin-settings-page.php:282
+#: admin/class-admin-settings-page.php:285
 msgid "Pending payment — includes pay-on-invoice orders"
 msgstr "Zahlung ausstehend – schließt Kauf-auf-Rechnung-Bestellungen ein"
 
-#: admin/class-admin-settings-page.php:286
+#: admin/class-admin-settings-page.php:289
 msgid "This version creates invoices only by hand, from the button on the order screen."
 msgstr "Diese Version erstellt Rechnungen nur manuell über die Schaltfläche auf der Bestellseite."
 
-#: admin/class-admin-settings-page.php:291
+#: admin/class-admin-settings-page.php:294
 msgid "Automatic invoicing on order status is available in Nota Invoice Sync Pro"
 msgstr "Die automatische Rechnungserstellung anhand des Bestellstatus ist in Nota Invoice Sync Pro verfügbar"
 
-#: admin/class-admin-settings-page.php:298
+#: admin/class-admin-settings-page.php:301
 msgid "Document mode"
 msgstr "Belegmodus"
 
-#: admin/class-admin-settings-page.php:302
+#: admin/class-admin-settings-page.php:305
 msgid "Finalise invoices immediately"
 msgstr "Rechnungen sofort festschreiben"
 
-#: admin/class-admin-settings-page.php:305
+#: admin/class-admin-settings-page.php:308
 msgid "Unchecked, invoices arrive in Lexware Office as drafts (\"Entwurf\") — they can still be edited or deleted there, are not booked, and carry no e-invoice document. Checked, Lexware finalises them straight away: the document becomes permanent, is recorded for GoBD, and the e-invoice (ZUGFeRD) is generated. A finalised invoice can only be reversed with a credit note."
 msgstr "Ohne Häkchen gehen Rechnungen als Entwurf („Entwurf“) in Lexware Office ein – sie können dort noch bearbeitet oder gelöscht werden, sind nicht gebucht und enthalten kein E-Rechnungsdokument. Mit Häkchen schreibt Lexware sie sofort fest: Das Dokument wird endgültig, für die GoBD erfasst, und die E-Rechnung (ZUGFeRD) wird erzeugt. Eine festgeschriebene Rechnung kann nur mit einer Gutschrift storniert werden."
 
-#: admin/class-admin-settings-page.php:308
+#: admin/class-admin-settings-page.php:311
 msgid "A finalised invoice only becomes a real e-invoice (required for B2B from 2027) when two things are both true: your own Lexware Office account has \"E-Rechnung erstellen\" turned on under its own Settings — this plugin cannot turn that on for you — and the order has a billing company name, which this plugin already uses to create a \"Firma\" contact rather than a private one in Lexware. A private customer's invoice stays a plain PDF, which is correct for most B2C orders."
 msgstr "Eine festgeschriebene Rechnung wird nur dann zu einer echten E-Rechnung (ab 2027 für B2B vorgeschrieben), wenn beides zutrifft: In Ihrem eigenen Lexware-Office-Konto ist unter den eigenen Einstellungen „E-Rechnung erstellen“ aktiviert – das kann dieses Plugin nicht für Sie einschalten – und die Bestellung hat einen Firmennamen bei der Rechnungsadresse, wofür dieses Plugin bereits einen „Firma“-Kontakt statt eines privaten in Lexware anlegt. Die Rechnung eines Privatkunden bleibt ein einfaches PDF, was für die meisten B2C-Bestellungen korrekt ist."
 
-#: admin/class-admin-settings-page.php:319
+#: admin/class-admin-settings-page.php:322
 msgid "Language"
 msgstr "Sprache"
 
-#: admin/class-admin-settings-page.php:322
+#: admin/class-admin-settings-page.php:325
 msgid "German"
 msgstr "Deutsch"
 
-#: admin/class-admin-settings-page.php:323
+#: admin/class-admin-settings-page.php:326
 msgid "English"
 msgstr "Englisch"
 
-#: admin/class-admin-settings-page.php:326
+#: admin/class-admin-settings-page.php:329
 msgid "Used as-is, unless order-language matching below is on and detects something different."
 msgstr "Wird unverändert übernommen, sofern die Spracherkennung unten nicht aktiviert ist und etwas anderes erkennt."
 
-#: admin/class-admin-settings-page.php:331
+#: admin/class-admin-settings-page.php:334
 msgid "Multilingual shops"
 msgstr "Mehrsprachige Shops"
 
-#: admin/class-admin-settings-page.php:335
+#: admin/class-admin-settings-page.php:338
 msgid "Match the invoice language to the order's language (WPML or Polylang)"
 msgstr "Rechnungssprache an die Bestellsprache anpassen (WPML oder Polylang)"
 
-#: admin/class-admin-settings-page.php:338
+#: admin/class-admin-settings-page.php:341
 msgid "Only German and English invoice text exist in this plugin; any other detected language falls back to the setting above. Detection depends on how your multilingual plugin stores the order language, which can vary — if it doesn't pick up correctly, the \"nota_inv_detected_order_language\" filter can supply it directly."
 msgstr "In diesem Plugin existieren Rechnungstexte nur auf Deutsch und Englisch; jede andere erkannte Sprache fällt auf die obige Einstellung zurück. Die Erkennung hängt davon ab, wie Ihr Mehrsprachigkeits-Plugin die Bestellsprache speichert, was variieren kann – falls sie nicht korrekt erkannt wird, kann der Filter „nota_inv_detected_order_language“ sie direkt liefern."
 
-#: admin/class-admin-settings-page.php:344
+#: admin/class-admin-settings-page.php:347
 msgid "Payment term (days)"
 msgstr "Zahlungsziel (Tage)"
 
-#: admin/class-admin-settings-page.php:349
+#: admin/class-admin-settings-page.php:352
 msgid "Leave empty to use the default configured in Lexware Office."
 msgstr "Leer lassen, um die in Lexware Office hinterlegte Standardeinstellung zu verwenden."
 
-#: admin/class-admin-settings-page.php:354
+#: admin/class-admin-settings-page.php:357
 msgid "Supply date (Leistungsdatum)"
 msgstr "Leistungsdatum"
 
-#: admin/class-admin-settings-page.php:359
+#: admin/class-admin-settings-page.php:362
 msgid "days after the order/payment date"
 msgstr "Tage nach Bestell-/Zahlungsdatum"
 
-#: admin/class-admin-settings-page.php:361
+#: admin/class-admin-settings-page.php:364
 msgid "0 means the supply date matches the order (or payment) date — correct for most shops. If your goods are produced to order and delivered weeks later, set the typical lead time here; the invoice date itself is never affected, only the delivery/service date shown on the document."
 msgstr "0 bedeutet, dass das Leistungsdatum dem Bestell- (bzw. Zahlungs-)Datum entspricht – für die meisten Shops korrekt. Wenn Ihre Ware auf Bestellung gefertigt und erst Wochen später geliefert wird, tragen Sie hier die übliche Vorlaufzeit ein; das Rechnungsdatum selbst wird nie verschoben, nur das auf dem Dokument angezeigte Liefer-/Leistungsdatum."
 
-#: admin/class-admin-settings-page.php:367
+#: admin/class-admin-settings-page.php:370
 msgid "Delivery range end (optional)"
 msgstr "Ende des Lieferzeitraums (optional)"
 
-#: admin/class-admin-settings-page.php:372
+#: admin/class-admin-settings-page.php:375
 msgid "days after the order date"
 msgstr "Tage nach dem Bestelldatum"
 
-#: admin/class-admin-settings-page.php:374
+#: admin/class-admin-settings-page.php:377
 msgid "Leave empty to show a single supply date. Set a value to show a delivery window instead (e.g. \"06.07.2026 bis 14.07.2026\"), from the date above to this one."
 msgstr "Leer lassen, um ein einzelnes Leistungsdatum anzuzeigen. Einen Wert eintragen, um stattdessen einen Lieferzeitraum anzuzeigen (z. B. „06.07.2026 bis 14.07.2026“), vom obigen Datum bis zu diesem."
 
-#: admin/class-admin-settings-page.php:379
+#: admin/class-admin-settings-page.php:382
 #: includes/class-invoice-builder.php:242
 msgid "Shipping"
 msgstr "Versand"
 
-#: admin/class-admin-settings-page.php:383
+#: admin/class-admin-settings-page.php:386
 msgid "Show shipping cost as its own line item"
 msgstr "Versandkosten als eigene Position anzeigen"
 
-#: admin/class-admin-settings-page.php:389
+#: admin/class-admin-settings-page.php:392
 msgid "Title"
 msgstr "Titel"
 
-#: admin/class-admin-settings-page.php:394
+#: admin/class-admin-settings-page.php:397
 msgid "Leave empty to use the Lexware Office default."
 msgstr "Leer lassen, um die Lexware-Office-Standardeinstellung zu verwenden."
 
-#: admin/class-admin-settings-page.php:399
+#: admin/class-admin-settings-page.php:402
 msgid "Introduction"
 msgstr "Einleitungstext"
 
-#: admin/class-admin-settings-page.php:405
+#: admin/class-admin-settings-page.php:408
 msgid "Leave empty to reference the order number automatically."
 msgstr "Leer lassen, um die Bestellnummer automatisch zu nennen."
 
-#: admin/class-admin-settings-page.php:406
+#: admin/class-admin-settings-page.php:409
 msgid "Placeholders:"
 msgstr "Platzhalter:"
 
-#: admin/class-admin-settings-page.php:413
+#: admin/class-admin-settings-page.php:416
 msgid "Closing remark"
 msgstr "Schlusstext"
 
-#: admin/class-admin-settings-page.php:419
+#: admin/class-admin-settings-page.php:422
 msgid "Leave empty to record the payment method automatically. The same placeholders apply."
 msgstr "Leer lassen, um die Zahlungsart automatisch zu vermerken. Dieselben Platzhalter gelten auch hier."
 
-#: admin/class-admin-settings-page.php:425
+#: admin/class-admin-settings-page.php:428
 msgid "VAT-ID meta keys"
 msgstr "USt-IdNr.-Metafelder"
 
-#: admin/class-admin-settings-page.php:436
+#: admin/class-admin-settings-page.php:439
 msgid "This plugin does not validate EU VAT numbers against VIES. It reads whatever VAT-ID a dedicated VAT compliance plugin has already saved on the order to determine reverse-charge treatment. If your shop needs live VAT-ID validation or automatic tax exemption at checkout, use a plugin built for that."
 msgstr "Dieses Plugin validiert EU-USt-IdNrn nicht gegen VIES. Es liest die USt-IdNr., die ein spezialisiertes VAT-Plugin bereits in der Bestellung gespeichert hat, um die Reverse-Charge-Behandlung zu bestimmen. Falls Ihr Shop eine Live-Validierung der USt-IdNr. oder eine automatische Steuerbefreiung im Checkout benötigt, verwenden Sie ein dafür entwickeltes Plugin."
 
-#: admin/class-admin-settings-page.php:439
+#: admin/class-admin-settings-page.php:442
 msgid "Order meta keys checked for a VAT-ID, in order (comma-separated). The list above already covers the most common VAT compliance plugins — edit it or add your own if a different plugin is in use; check Custom Fields on an order screen if you are not sure of the field name."
 msgstr "Bestell-Metafelder, die der Reihe nach auf eine USt-IdNr. geprüft werden (durch Komma getrennt). Die obige Liste deckt bereits die gängigsten VAT-Compliance-Plugins ab – bearbeiten Sie sie oder fügen Sie ein eigenes Feld hinzu, falls ein anderes Plugin verwendet wird; im Zweifel finden Sie den Feldnamen unter „Custom Fields“ auf einer Bestellseite."
 
-#: admin/class-admin-settings-page.php:456
+#: admin/class-admin-settings-page.php:482
 msgid "PDF delivery"
 msgstr "PDF-Zustellung"
 
-#: admin/class-admin-settings-page.php:466
+#: admin/class-admin-settings-page.php:492
 msgid "Let customers download the invoice PDF from My Account"
 msgstr "Kunden das Herunterladen der Rechnungs-PDF unter „Mein Konto“ erlauben"
 
-#: admin/class-admin-settings-page.php:472
+#: admin/class-admin-settings-page.php:498
 msgid "Payment reminders"
 msgstr "Zahlungserinnerungen"
 
-#: admin/class-admin-settings-page.php:477
+#: admin/class-admin-settings-page.php:503
 msgid "Automatically send payment reminders for overdue finalised invoices"
 msgstr "Automatisch Zahlungserinnerungen für überfällige, festgeschriebene Rechnungen senden"
 
-#: admin/class-admin-settings-page.php:481
+#: admin/class-admin-settings-page.php:507
 msgid "Stage 1 after"
 msgstr "Stufe 1 nach"
 
-#: admin/class-admin-settings-page.php:483
+#: admin/class-admin-settings-page.php:509
 msgid "days overdue"
 msgstr "Tagen Verzug"
 
-#: admin/class-admin-settings-page.php:486
+#: admin/class-admin-settings-page.php:512
 msgid "Stage 2 after"
 msgstr "Stufe 2 nach"
 
-#: admin/class-admin-settings-page.php:488
-#: admin/class-admin-settings-page.php:493
+#: admin/class-admin-settings-page.php:514
+#: admin/class-admin-settings-page.php:519
 msgid "days"
 msgstr "Tagen"
 
-#: admin/class-admin-settings-page.php:491
+#: admin/class-admin-settings-page.php:517
 msgid "Stage 3 after"
 msgstr "Stufe 3 nach"
 
-#: admin/class-admin-settings-page.php:500
+#: admin/class-admin-settings-page.php:526
 msgid "Payment status sync"
 msgstr "Zahlungsstatus-Abgleich"
 
-#: admin/class-admin-settings-page.php:505
+#: admin/class-admin-settings-page.php:531
 msgid "Check twice daily whether Lexware Office already shows an invoice as paid"
 msgstr "Zweimal täglich prüfen, ob Lexware Office eine Rechnung bereits als bezahlt anzeigt"
 
-#: admin/class-admin-settings-page.php:514
+#: admin/class-admin-settings-page.php:540
 msgid "These automation features are available in Nota Invoice Sync Pro"
 msgstr "Diese Automatisierungsfunktionen sind in Nota Invoice Sync Pro verfügbar"
 
-#: admin/class-admin-settings-page.php:524
+#: admin/class-admin-settings-page.php:550
 msgid "Order notes"
 msgstr "Bestellnotizen"
 
-#: admin/class-admin-settings-page.php:528
+#: admin/class-admin-settings-page.php:554
 msgid "Add the invoice number as an order note"
 msgstr "Rechnungsnummer als Bestellnotiz hinzufügen"
 
-#: admin/class-admin-settings-page.php:533
+#: admin/class-admin-settings-page.php:559
 msgid "Test mode"
 msgstr "Testmodus"
 
-#: admin/class-admin-settings-page.php:537
+#: admin/class-admin-settings-page.php:563
 msgid "Build the invoice payload and write it to the log, but do not send it"
 msgstr "Rechnungsdaten erstellen und protokollieren, aber nicht senden"
 
-#: admin/class-admin-settings-page.php:542
+#: admin/class-admin-settings-page.php:568
 msgid "Logging"
 msgstr "Protokollierung"
 
-#: admin/class-admin-settings-page.php:545
+#: admin/class-admin-settings-page.php:571
 msgid "Off"
 msgstr "Aus"
 
-#: admin/class-admin-settings-page.php:546
+#: admin/class-admin-settings-page.php:572
 msgid "Errors only"
 msgstr "Nur Fehler"
 
-#: admin/class-admin-settings-page.php:547
+#: admin/class-admin-settings-page.php:573
 msgid "Everything (debug)"
 msgstr "Alles (Debug)"
 
-#: admin/class-admin-settings-page.php:550
+#: admin/class-admin-settings-page.php:576
 msgid "Logs appear under WooCommerce → Status → Logs, source \"nota-invoice-sync\"."
 msgstr "Protokolle finden Sie unter WooCommerce → Status → Protokolle, Quelle „nota-invoice-sync“."
 
-#: admin/class-admin-settings-page.php:551
+#: admin/class-admin-settings-page.php:577
 msgid "Debug logging includes customer names, addresses and invoice contents in plain text — turn it off once things are working."
 msgstr "Die Debug-Protokollierung enthält Kundennamen, Adressen und Rechnungsinhalte im Klartext – schalten Sie sie ab, sobald alles funktioniert."
 
-#: admin/class-admin-settings-page.php:556
+#: admin/class-admin-settings-page.php:582
 msgid "On uninstall"
 msgstr "Bei Deinstallation"
 
-#: admin/class-admin-settings-page.php:560
+#: admin/class-admin-settings-page.php:586
 msgid "Remove all plugin data, including the order ↔ invoice references"
 msgstr "Alle Plugin-Daten entfernen, einschließlich der Zuordnung Bestellung ↔ Rechnung"
 
-#: admin/class-admin-settings-page.php:563
+#: admin/class-admin-settings-page.php:589
 msgid "By default, deleting the plugin only removes its settings — the record of which order maps to which Lexware invoice number is kept, so that history is not lost if the plugin is reinstalled later. Enable this only if you want a completely clean uninstall."
 msgstr "Standardmäßig werden beim Löschen des Plugins nur die Einstellungen entfernt – die Zuordnung, welche Bestellung zu welcher Lexware-Rechnungsnummer gehört, bleibt erhalten, damit diese Historie bei einer erneuten Installation nicht verloren geht. Aktivieren Sie dies nur, wenn Sie eine vollständig saubere Deinstallation wünschen."
 
-#: admin/class-admin-settings-page.php:565
+#: admin/class-admin-settings-page.php:591
 msgid "Either way, nothing is ever changed or deleted in Lexware Office itself."
 msgstr "In beiden Fällen wird in Lexware Office selbst niemals etwas geändert oder gelöscht."
 
-#: admin/class-admin-settings-page.php:597
+#: admin/class-admin-settings-page.php:623
 msgid "Save changes"
 msgstr "Änderungen speichern"
 
-#: admin/class-admin-settings-page.php:600
+#: admin/class-admin-settings-page.php:626
 msgid "Save and test connection"
 msgstr "Speichern und Verbindung testen"
 
-#: admin/class-admin-settings-page.php:611
+#: admin/class-admin-settings-page.php:637
 msgid "Compliance export"
 msgstr "Compliance-Export"
 
-#: admin/class-admin-settings-page.php:613
+#: admin/class-admin-settings-page.php:639
 msgid "A CSV listing every order with a finalised Lexware Office invoice — invoice number, status, e-invoice format, amounts, payment date and any credit notes, ready to hand to your Steuerberater or keep as a GoBD audit reference."
 msgstr "Eine CSV-Datei mit jeder Bestellung, die eine festgeschriebene Lexware-Office-Rechnung hat – Rechnungsnummer, Status, E-Rechnungsformat, Beträge, Zahlungsdatum und etwaige Gutschriften, bereit für Ihren Steuerberater oder als GoBD-Prüfnachweis."
 
-#: admin/class-admin-settings-page.php:617
+#: admin/class-admin-settings-page.php:643
 msgid "Order date range"
 msgstr "Bestellzeitraum"
 
-#: admin/class-admin-settings-page.php:626
+#: admin/class-admin-settings-page.php:652
 msgid "Export compliance report"
 msgstr "Prüfbericht exportieren"
 
-#: admin/class-admin-settings-page.php:631
+#: admin/class-admin-settings-page.php:657
 msgid "The compliance export is available in Nota Invoice Sync Pro"
 msgstr "Der Compliance-Export ist in Nota Invoice Sync Pro verfügbar"
 
-#: admin/class-admin-settings-page.php:881
+#: admin/class-admin-settings-page.php:907
 msgid "Connection failed:"
 msgstr "Verbindung fehlgeschlagen:"
 
-#: admin/class-admin-settings-page.php:892
+#: admin/class-admin-settings-page.php:918
 msgid "Connected to Lexware Office."
 msgstr "Mit Lexware Office verbunden."
 
 #. translators: %s: Lexware organisation name.
-#: admin/class-admin-settings-page.php:898
+#: admin/class-admin-settings-page.php:924
 #, php-format
 msgid "Organisation: %s"
 msgstr "Unternehmen: %s"
 
-#: admin/class-admin-settings-page.php:906
+#: admin/class-admin-settings-page.php:932
 msgid "This organisation is flagged as a small business (Kleinunternehmer, §19 UStG). Invoices will be created without VAT."
 msgstr "Dieses Unternehmen ist als Kleinunternehmer (§19 UStG) gekennzeichnet. Rechnungen werden ohne Umsatzsteuer erstellt."
 
-#: admin/class-admin-settings-page.php:933
+#: admin/class-admin-settings-page.php:959
 msgid "Lexware Office is set to destination-country VAT (One Stop Shop). Cross-border B2C orders will be sent with the destination country's tax rate."
 msgstr "Lexware Office ist auf Bestimmungsland-Umsatzsteuer (One Stop Shop) eingestellt. Grenzüberschreitende B2C-Bestellungen werden mit dem Steuersatz des Bestimmungslands übermittelt."
 
-#: admin/class-admin-settings-page.php:941
+#: admin/class-admin-settings-page.php:967
 msgid "Tax setup mismatch"
 msgstr "Steuerkonfiguration stimmt nicht überein"
 
-#: admin/class-admin-settings-page.php:943
+#: admin/class-admin-settings-page.php:969
 msgid "Your shop applies destination-country VAT to EU orders (One Stop Shop), but your Lexware Office account is set to German VAT (\"Deutsche Umsatzsteuer\"). Cross-border B2C orders cannot be invoiced correctly while these two disagree — Lexware will reject the foreign tax rate."
 msgstr "Ihr Shop wendet für EU-Bestellungen die Umsatzsteuer des Bestimmungslands an (One Stop Shop), Ihr Lexware-Office-Konto ist jedoch auf deutsche Umsatzsteuer eingestellt. Solange diese beiden nicht übereinstimmen, können grenzüberschreitende B2C-Bestellungen nicht korrekt fakturiert werden – Lexware wird den ausländischen Steuersatz ablehnen."
 
-#: admin/class-admin-settings-page.php:945
+#: admin/class-admin-settings-page.php:971
 msgid "Either switch Lexware Office to destination-country VAT, or stop charging destination VAT in WooCommerce. Please discuss this with your tax adviser before changing anything. Domestic orders are unaffected."
 msgstr "Stellen Sie entweder Lexware Office auf Bestimmungsland-Umsatzsteuer um, oder deaktivieren Sie die Bestimmungsland-Umsatzsteuer in WooCommerce. Bitte besprechen Sie dies vor jeder Änderung mit Ihrem Steuerberater. Inlandsbestellungen sind davon nicht betroffen."
 
-#: admin/class-admin-settings-page.php:951
+#: admin/class-admin-settings-page.php:977
 msgid "Lexware Office is set to German VAT for EU distance sales. This matches your current shop configuration."
 msgstr "Lexware Office ist für EU-Fernverkäufe auf deutsche Umsatzsteuer eingestellt. Das stimmt mit Ihrer aktuellen Shop-Konfiguration überein."
 
@@ -651,12 +654,12 @@ msgstr "Es wurde noch kein Lexware-Office-API-Schlüssel hinterlegt."
 msgid "Lexware Office did not return an id for the new contact."
 msgstr "Lexware Office hat für den neuen Kontakt keine ID zurückgegeben."
 
-#: includes/class-contact-sync.php:337
+#: includes/class-contact-sync.php:352
 msgid "Customer"
 msgstr "Kunde"
 
 #. translators: %s: order number.
-#: includes/class-contact-sync.php:361
+#: includes/class-contact-sync.php:376
 #, php-format
 msgid "Created automatically from WooCommerce order %s."
 msgstr "Automatisch aus WooCommerce-Bestellung %s erstellt."
@@ -779,26 +782,73 @@ msgstr "Bestellung %s hat eine festgeschriebene Lexware-Office-Rechnung. Das deu
 msgid "Nota Invoice Sync for Lexware Office requires WooCommerce to be installed and active."
 msgstr "Nota Invoice Sync for Lexware Office erfordert, dass WooCommerce installiert und aktiv ist."
 
-#: admin/class-admin-settings-page.php:570
+#: admin/class-admin-settings-page.php:596
 msgid "Support"
 msgstr "Support"
 
-#: admin/class-admin-settings-page.php:573
+#: admin/class-admin-settings-page.php:599
 msgid "Copy diagnostics for support"
 msgstr "Diagnosedaten für den Support kopieren"
 
-#: admin/class-admin-settings-page.php:577
+#: admin/class-admin-settings-page.php:603
 msgid "Copied!"
 msgstr "Kopiert!"
 
-#: admin/class-admin-settings-page.php:578
+#: admin/class-admin-settings-page.php:604
 msgid "Could not copy — select the text below and copy it manually."
 msgstr "Kopieren fehlgeschlagen — bitte den Text unten markieren und manuell kopieren."
 
-#: admin/class-admin-settings-page.php:581
+#: admin/class-admin-settings-page.php:607
 msgid "Copies the plugin/WordPress/WooCommerce versions, every plugin setting (your API key is never included), the last few invoice errors and recent error-level log lines to your clipboard, ready to paste into a support email. Nothing is sent anywhere automatically — this only fills your clipboard, the same way selecting and copying text yourself would."
 msgstr "Kopiert die Plugin-/WordPress-/WooCommerce-Version, jede Plugin-Einstellung (Ihr API-Schlüssel wird nie einbezogen), die letzten Rechnungsfehler sowie aktuelle Fehler-Protokolleinträge in die Zwischenablage, bereit zum Einfügen in eine Support-E-Mail. Es wird nichts automatisch versendet — dies füllt nur Ihre Zwischenablage, genau wie das manuelle Markieren und Kopieren von Text."
 
-#: admin/class-admin-settings-page.php:461
+#: admin/class-admin-settings-page.php:487
 msgid "Email the invoice PDF to the customer once it is finalised"
 msgstr "Rechnungs-PDF nach Festschreibung per E-Mail an den Kunden senden"
+
+#. translators: %d: number of invoices created with the plugin.
+#: admin/class-admin-order-list.php:247
+#, php-format
+msgid "You've created %d invoices with Nota Invoice Sync. If it's been useful, a review would mean a lot."
+msgstr "Sie haben %d Rechnungen mit Nota Invoice Sync erstellt. Wenn es Ihnen geholfen hat, würde uns eine Bewertung sehr freuen."
+
+#: admin/class-admin-order-list.php:257
+msgid "Leave a review →"
+msgstr "Bewertung abgeben →"
+
+#: admin/class-admin-order-list.php:264
+#: admin/class-admin-order-metabox.php:570
+msgid "Dismiss"
+msgstr "Ausblenden"
+
+#. translators: %d: number of invoices created by hand in the last 7 days.
+#: admin/class-admin-order-metabox.php:553
+#, php-format
+msgid "That's %d invoice you've created by hand this week."
+msgid_plural "That's %d invoices you've created by hand this week."
+msgstr[0] "Das ist die %d. Rechnung, die Sie diese Woche von Hand erstellt haben."
+msgstr[1] "Das sind %d Rechnungen, die Sie diese Woche von Hand erstellt haben."
+
+#: admin/class-admin-order-metabox.php:563
+msgid "Pro creates them automatically →"
+msgstr "Pro erstellt sie automatisch →"
+
+#: admin/class-admin-settings-page.php:447
+msgid "Print layout"
+msgstr "Druckvorlage"
+
+#: admin/class-admin-settings-page.php:455
+msgid "(Lexware Office default)"
+msgstr "(Lexware-Office-Standard)"
+
+#: admin/class-admin-settings-page.php:458
+msgid "Choose which of your Lexware Office print layouts (letterhead/design) new invoices use."
+msgstr "Wählen Sie, welche Ihrer Lexware-Office-Druckvorlagen (Briefkopf/Design) für neue Rechnungen verwendet wird."
+
+#: admin/class-admin-settings-page.php:463
+msgid "Print layout selection is available in Nota Invoice Sync Pro"
+msgstr "Die Auswahl der Druckvorlage ist in Nota Invoice Sync Pro verfügbar"
+
+#: admin/class-admin-settings-page.php:262
+msgid "API status"
+msgstr "API-Status"
