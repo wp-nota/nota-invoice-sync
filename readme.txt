@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.14
+Stable tag: 0.1.15
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,8 +42,9 @@ computes every tax amount and total — there is no second calculation to disagr
 **Requirements**
 
 * WooCommerce, installed and active.
-* A Lexware Office account with access to the Public API (a personal API key, created in
-  Lexware Office under the Public API settings).
+* A Lexware Office account on the **XL** plan or higher — the Public API (the personal API
+  key this plugin uses) is not available on lower plans. Create the key in Lexware Office
+  under the Public API settings.
 * Shop currency EUR — Lexware Office invoicing supports only EUR, so orders in any other
   currency are skipped and the reason is logged.
 
@@ -123,8 +124,9 @@ api.lexware.io gateway.
 
 = Does this work with a free Lexware Office account? =
 
-You need a Lexware Office account with API access enabled under the Public API settings.
-Whether your plan includes this depends on your Lexware Office subscription.
+No. The Public API (the personal API key this plugin uses) is only available from the
+**Lexware Office XL** plan — lower plans do not expose the Public API settings page at all.
+Check under Settings → My Contract in Lexware Office to see your current plan.
 
 = Which currencies are supported? =
 
@@ -176,6 +178,10 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.15 =
+* Changed: clarified that the Public API requires a Lexware Office XL plan or higher, in the readme and Requirements section.
+* Added: a note by the API key field that Lexware Office API keys are valid for up to 24 months and need to be renewed under Lexware Office → Public API settings.
 
 = 0.1.14 =
 * Added: an occasional, dismissible reminder on the order screen if you've created 10+ invoices by hand in the last 7 days, pointing to Pro's automatic invoicing. Shown at most once a week even if you keep hitting that mark, and stays quiet for 30 days once dismissed.

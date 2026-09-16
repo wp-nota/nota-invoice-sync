@@ -255,6 +255,9 @@ class Nota_Inv_Admin_Settings_Page {
 									);
 									?>
 								</p>
+								<p class="description">
+									<?php esc_html_e( 'Lexware Office API keys are valid for up to 24 months. When yours is close to expiring, renew or replace it under Lexware Office → Public API settings — otherwise invoicing will stop working without warning.', 'nota-invoice-sync' ); ?>
+								</p>
 							<?php endif; ?>
 						</td>
 					</tr>
