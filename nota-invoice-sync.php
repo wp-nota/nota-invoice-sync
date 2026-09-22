@@ -3,7 +3,7 @@
  * Plugin Name:       Nota Invoice Sync for Lexware Office
  * Plugin URI:        https://www.wp-nota.com/lexware-invoice-sync/
  * Description:       Creates invoices in Lexware Office directly from WooCommerce orders — no third-party middleware. Tax amounts are calculated by Lexware itself, which avoids rounding mismatches.
- * Version:           0.1.15
+ * Version:           0.1.16
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
@@ -34,7 +34,7 @@ if ( defined( 'NOTA_INV_VERSION' ) ) {
 	return;
 }
 
-define( 'NOTA_INV_VERSION', '0.1.15' );
+define( 'NOTA_INV_VERSION', '0.1.16' );
 define( 'NOTA_INV_FILE', __FILE__ );
 define( 'NOTA_INV_PATH', plugin_dir_path( __FILE__ ) );
 define( 'NOTA_INV_URL', plugin_dir_url( __FILE__ ) );

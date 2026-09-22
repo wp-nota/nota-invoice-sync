@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.15
+Stable tag: 0.1.16
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -178,6 +178,9 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.16 =
+* Fixed: an order whose VAT-ID field actually contained unrelated data (e.g. a phone number typed into the wrong checkout field) could fail invoicing entirely with a confusing "country code must be uppercase" error from Lexware Office. A value that doesn't start with a two-letter country code is no longer sent as a VAT-ID — the order is now invoiced normally, as if the field had been empty.
 
 = 0.1.15 =
 * Changed: clarified that the Public API requires a Lexware Office XL plan or higher, in the readme and Requirements section.

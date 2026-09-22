@@ -197,9 +197,29 @@ class Nota_Inv_Tax_Resolver {
 
 		foreach ( $keys as $key ) {
 			$value = $order->get_meta( $key );
-			if ( is_string( $value ) && '' !== trim( $value ) ) {
-				return strtoupper( preg_replace( '/\s+/', '', trim( $value ) ) );
+			if ( ! is_string( $value ) || '' === trim( $value ) ) {
+				continue;
 			}
+
+			$normalised = strtoupper( preg_replace( '/\s+/', '', trim( $value ) ) );
+
+			// A real VAT-ID always starts with a two-letter country code
+			// (DE, AT, FR, ...). Some checkout fields get filled with
+			// unrelated data by mistake (a phone number, a customer number)
+			// — sending that to Lexware as-is fails the whole invoice with
+			// a confusing "country code must be uppercase" error, when the
+			// real problem is that there is no country code at all. Treat
+			// anything that doesn't even look like a VAT-ID as absent,
+			// same as if the field had been empty, and keep checking the
+			// remaining configured meta keys.
+			if ( ! preg_match( '/^[A-Z]{2}[A-Z0-9]+$/', $normalised ) ) {
+				Nota_Inv_Logger::debug(
+					sprintf( 'Ignoring value in VAT-ID field "%s" for order %d — does not look like a VAT-ID (no two-letter country code): %s', $key, $order->get_id(), $normalised )
+				);
+				continue;
+			}
+
+			return $normalised;
 		}
 
 		return '';
