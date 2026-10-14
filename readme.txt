@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.16
+Stable tag: 0.1.17
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -178,6 +178,9 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.17 =
+* Fixed: orders with WooCommerce coupons were discounted twice on the Lexware Office invoice — the line prices already contained the coupon discount, and the same discount was deducted again as an invoice-wide discount, so the invoice total came out too low. Line prices still carry the discount (exactly as WooCommerce distributed it, so product-specific coupons, multiple coupons and mixed tax rates stay correct), the extra invoice-wide discount is gone, and each discounted line now names its discount and coupon code in its description.
 
 = 0.1.16 =
 * Fixed: an order whose VAT-ID field actually contained unrelated data (e.g. a phone number typed into the wrong checkout field) could fail invoicing entirely with a confusing "country code must be uppercase" error from Lexware Office. A value that doesn't start with a two-letter country code is no longer sent as a VAT-ID — the order is now invoiced normally, as if the field had been empty.

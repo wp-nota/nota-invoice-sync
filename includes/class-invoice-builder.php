@@ -88,10 +88,14 @@ class Nota_Inv_Invoice_Builder {
 			'language'           => $this->resolve_language( $order ),
 		);
 
-		$discount = $this->discount_total( $order );
-		if ( $discount > 0 ) {
-			$payload['totalPrice']['totalDiscountAbsolute'] = $discount;
-		}
+		// Coupon discounts are deliberately NOT sent as totalDiscountAbsolute:
+		// every line item's net amount below already comes from
+		// $item->get_total(), i.e. after WooCommerce has distributed all
+		// coupons across the lines. Sending the order's discount total on top
+		// of that deducted it a second time (customer report 14.10.2026:
+		// 19,90 € − 1,99 € coupon invoiced as 15,92 € instead of 17,91 €).
+		// Each discounted line names its discount in its description instead,
+		// see discount_note().
 
 		// Lexware Office fills this field in with a contact/organisation
 		// default whenever it is left out of the payload entirely — that
@@ -185,6 +189,12 @@ class Nota_Inv_Invoice_Builder {
 			);
 
 			$description = $this->item_description( $item );
+
+			$discount_note = $this->discount_note( $item, $order );
+			if ( '' !== $discount_note ) {
+				$description = $this->clean( '' !== $description ? $description . "\n" . $discount_note : $discount_note, 1000 );
+			}
+
 			if ( '' !== $description ) {
 				$line['description'] = $description;
 			}
@@ -367,14 +377,34 @@ class Nota_Inv_Invoice_Builder {
 	}
 
 	/**
-	 * Total order-level discount, as a positive number.
+	 * Line description note naming the coupon discount already contained in
+	 * this line's (discounted) net price, in the language of the DOCUMENT —
+	 * same reasoning as payment_term_label() for not using __().
 	 *
-	 * @param WC_Order $order Order.
-	 * @return float
+	 * WooCommerce does not record which coupon reduced which line, so when
+	 * several coupons were used all codes are listed; the amount itself is
+	 * exact (line subtotal minus line total, both net).
+	 *
+	 * @param WC_Order_Item_Product $item  Line item.
+	 * @param WC_Order              $order Order.
+	 * @return string Empty when the line was not discounted.
 	 */
-	private function discount_total( WC_Order $order ) {
-		$discount = (float) $order->get_discount_total();
-		return $discount > 0 ? round( $discount, 2 ) : 0.0;
+	private function discount_note( $item, WC_Order $order ) {
+		$discount = round( (float) $item->get_subtotal() - (float) $item->get_total(), 2 );
+
+		if ( $discount < 0.01 ) {
+			return '';
+		}
+
+		$codes = implode( ', ', array_filter( array_map( 'strval', $order->get_coupon_codes() ) ) );
+
+		if ( 'en' === $this->resolve_language( $order ) ) {
+			$note = sprintf( 'Discount: -%s €', number_format( $discount, 2, '.', ',' ) );
+			return '' !== $codes ? sprintf( '%s (Coupon: %s)', $note, $codes ) : $note;
+		}
+
+		$note = sprintf( 'Rabatt: -%s €', number_format( $discount, 2, ',', '.' ) );
+		return '' !== $codes ? sprintf( '%s (Gutschein: %s)', $note, $codes ) : $note;
 	}
 
 	/**
