@@ -214,6 +214,7 @@ class Nota_Inv_Admin_Order_Metabox {
 		}
 
 		$this->render_credit_note_teaser( $invoice_id );
+		$this->render_delivery_note_teaser( $order );
 	}
 
 	/**
@@ -231,11 +232,35 @@ class Nota_Inv_Admin_Order_Metabox {
 
 		echo '<div class="nota-inv-subcard">';
 		echo '<p><strong>' . esc_html__( 'Credit note', 'nota-invoice-sync' ) . '</strong></p>';
-		echo '<p><button type="button" class="button button-small" disabled="disabled">' . esc_html__( 'Create credit note (full amount)', 'nota-invoice-sync' ) . '</button></p>';
+		echo '<p><button type="button" class="button button-small" disabled="disabled">' . esc_html__( 'Create credit note for a refund', 'nota-invoice-sync' ) . '</button></p>';
 		printf(
 			'<p class="description"><strong><a href="%s" target="_blank" rel="noopener">%s →</a></strong></p>',
 			esc_url( 'https://www.wp-nota.com/lexware-invoice-sync' ),
-			esc_html__( 'Credit notes (Gutschrift) are available in Nota Invoice Sync Pro', 'nota-invoice-sync' )
+			esc_html__( 'Credit notes (Gutschrift) for refunds — itemised with the right tax rates and emailed to the customer — are available in Nota Invoice Sync Pro', 'nota-invoice-sync' )
+		);
+		echo '</div>';
+	}
+
+	/**
+	 * Pro teaser: shown where the Pro edition renders its delivery note
+	 * (Lieferschein) section. Purely visual, like the credit note teaser —
+	 * no delivery note code exists in this edition.
+	 *
+	 * @param WC_Order $order Order.
+	 * @return void
+	 */
+	private function render_delivery_note_teaser( WC_Order $order ) {
+		if ( 0 === count( $order->get_items( 'line_item' ) ) ) {
+			return;
+		}
+
+		echo '<div class="nota-inv-subcard">';
+		echo '<p><strong>' . esc_html__( 'Delivery note', 'nota-invoice-sync' ) . '</strong></p>';
+		echo '<p><button type="button" class="button button-small" disabled="disabled">' . esc_html__( 'Create delivery note (PDF)', 'nota-invoice-sync' ) . '</button></p>';
+		printf(
+			'<p class="description"><strong><a href="%s" target="_blank" rel="noopener">%s →</a></strong></p>',
+			esc_url( 'https://www.wp-nota.com/lexware-invoice-sync' ),
+			esc_html__( 'Delivery notes (Lieferschein) from Lexware Office, also bulk-printed as one PDF, are available in Nota Invoice Sync Pro', 'nota-invoice-sync' )
 		);
 		echo '</div>';
 	}

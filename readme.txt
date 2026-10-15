@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.17
+Stable tag: 0.1.18
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,7 +75,8 @@ Lexware privacy information: [Datenschutz & Datensicherheit](https://www.lexware
 
 Invoices in this version are created by hand, from a button on the order screen. Automatic
 invoicing on order status, bulk invoice creation, payment status sync, automatic PDF delivery,
-payment reminders and large-scale bulk import are part of
+payment reminders emailed to the customer, credit notes for refunds, delivery notes (Lieferschein)
+with bulk printing, and large-scale bulk import are part of
 [Nota Invoice Sync Pro](https://www.wp-nota.com/lexware-invoice-sync).
 
 == Privacy ==
@@ -178,6 +179,9 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.18 =
+* Changed: the order screen, order list and settings page now also show which document features are part of Nota Invoice Sync Pro — delivery notes (Lieferschein) with bulk printing, credit notes for refunds, and payment reminders emailed to the customer. Nothing changes in how this version creates invoices.
 
 = 0.1.17 =
 * Fixed: orders with WooCommerce coupons were discounted twice on the Lexware Office invoice — the line prices already contained the coupon discount, and the same discount was deducted again as an invoice-wide discount, so the invoice total came out too low. Line prices still carry the discount (exactly as WooCommerce distributed it, so product-specific coupons, multiple coupons and mixed tax rates stay correct), the extra invoice-wide discount is gone, and each discounted line now names its discount and coupon code in its description.

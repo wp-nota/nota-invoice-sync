@@ -522,6 +522,9 @@ class Nota_Inv_Admin_Settings_Page {
 										<?php esc_html_e( 'days', 'nota-invoice-sync' ); ?>
 									</label>
 								</p>
+								<p class="description">
+									<?php esc_html_e( 'Zahlungserinnerung, Mahnung, Letzte Mahnung — each created in Lexware Office and emailed to the customer with its PDF attached, counted from the due date on the invoice.', 'nota-invoice-sync' ); ?>
+								</p>
 							</fieldset>
 						</td>
 					</tr>
@@ -532,6 +535,28 @@ class Nota_Inv_Admin_Settings_Page {
 								<label>
 									<input type="checkbox" />
 									<?php esc_html_e( 'Check twice daily whether Lexware Office already shows an invoice as paid', 'nota-invoice-sync' ); ?>
+								</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Refunds', 'nota-invoice-sync' ); ?></th>
+						<td>
+							<fieldset disabled="disabled" style="opacity:.55;">
+								<label>
+									<input type="checkbox" />
+									<?php esc_html_e( 'Automatically create a credit note when an order is refunded', 'nota-invoice-sync' ); ?>
+								</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Delivery notes', 'nota-invoice-sync' ); ?></th>
+						<td>
+							<fieldset disabled="disabled" style="opacity:.55;">
+								<label>
+									<input type="checkbox" />
+									<?php esc_html_e( 'Create a delivery note automatically when an order changes to Processing', 'nota-invoice-sync' ); ?>
 								</label>
 							</fieldset>
 						</td>

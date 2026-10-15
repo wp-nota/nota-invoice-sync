@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Nota_Inv_Admin_Order_List {
 
 	const BULK_ACTION = 'nota_inv_bulk_create';
+	const DELIVERY_NOTES_ACTION = 'nota_inv_print_delivery_notes';
 	const REVIEW_NONCE = 'nota_inv_review_notice';
 
 	/**
@@ -164,7 +165,8 @@ class Nota_Inv_Admin_Order_List {
 	 * @return array
 	 */
 	public function add_bulk_action( $actions ) {
-		$actions[ self::BULK_ACTION ] = __( 'Create Lexware invoice (Pro)', 'nota-invoice-sync' );
+		$actions[ self::BULK_ACTION ]           = __( 'Create Lexware invoice (Pro)', 'nota-invoice-sync' );
+		$actions[ self::DELIVERY_NOTES_ACTION ] = __( 'Print delivery notes (Lexware) (Pro)', 'nota-invoice-sync' );
 		return $actions;
 	}
 
@@ -179,6 +181,10 @@ class Nota_Inv_Admin_Order_List {
 	 * @return string
 	 */
 	public function handle_bulk_action( $redirect_to, $action, $order_ids ) {
+		if ( self::DELIVERY_NOTES_ACTION === $action ) {
+			return add_query_arg( 'nota_inv_bulk_pro_notice', 'delivery_notes', $redirect_to );
+		}
+
 		if ( self::BULK_ACTION !== $action ) {
 			return $redirect_to;
 		}
@@ -198,7 +204,14 @@ class Nota_Inv_Admin_Order_List {
 		}
 
 		echo '<div class="notice notice-info is-dismissible"><p>';
-		esc_html_e( 'Bulk invoice creation is available in Nota Invoice Sync Pro.', 'nota-invoice-sync' );
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- see above.
+		if ( 'delivery_notes' === sanitize_key( wp_unslash( $_GET['nota_inv_bulk_pro_notice'] ) ) ) {
+			esc_html_e( 'Delivery notes (Lieferschein) — created in Lexware Office and printed for all selected orders as one PDF — are available in Nota Invoice Sync Pro.', 'nota-invoice-sync' );
+		} else {
+			esc_html_e( 'Bulk invoice creation is available in Nota Invoice Sync Pro.', 'nota-invoice-sync' );
+		}
+
 		echo ' <a href="https://www.wp-nota.com/lexware-invoice-sync" target="_blank" rel="noopener">';
 		esc_html_e( 'Learn more', 'nota-invoice-sync' );
 		echo ' &rarr;</a></p></div>';
