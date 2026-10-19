@@ -1,12 +1,15 @@
 <?php
 /**
- * Hooks into WooCommerce's Personal Data (GDPR) export/erase tools.
+ * Privacy integration: WooCommerce's Personal Data (GDPR) export/erase
+ * tools and a suggested text for the shop's privacy policy.
  *
  * The plugin itself stores no personal data in WordPress beyond reference
  * ids (Lexware contact id, invoice id) — the actual name/address/email
- * lives in Lexware Office. But a finalised invoice there is a GoBD
- * accounting record and by German law must be kept for ten years, so it
- * cannot be erased on request the way WooCommerce's own order data can.
+ * lives in Lexware Office. But a finalised invoice there is an accounting
+ * record that German law requires to be kept for eight years (§ 147 AO,
+ * § 14b UStG — ten years until the Viertes Bürokratieentlastungsgesetz
+ * shortened it on 1 January 2025), so it cannot be erased on request the
+ * way WooCommerce's own order data can.
  *
  * Without this, a shop owner running WooCommerce's "Erase Personal Data"
  * tool would have no way of knowing that a Lexware invoice for that
@@ -37,6 +40,30 @@ class Nota_Inv_Privacy {
 	private function __construct() {
 		add_filter( 'wp_privacy_personal_data_exporters', array( $this, 'register_exporter' ) );
 		add_filter( 'wp_privacy_personal_data_erasers', array( $this, 'register_eraser' ) );
+		add_action( 'admin_init', array( $this, 'add_policy_content' ) );
+	}
+
+	/**
+	 * Suggest text for the shop's privacy policy (Settings → Privacy →
+	 * Policy Guide).
+	 *
+	 * @return void
+	 */
+	public function add_policy_content() {
+		if ( ! function_exists( 'wp_add_privacy_policy_content' ) ) {
+			return;
+		}
+
+		$content  = '<p class="privacy-policy-tutorial">' . esc_html__( 'Nota Invoice Sync creates invoices for your WooCommerce orders in your own Lexware Office account. The text below is a suggestion: adapt it to your shop, add Haufe-Lexware\'s full postal address, and make sure a data processing agreement (Auftragsverarbeitungsvertrag) with Haufe-Lexware is in place for your Lexware Office account.', 'nota-invoice-sync' ) . '</p>';
+		$content .= '<strong class="privacy-policy-tutorial">' . esc_html__( 'Suggested text:', 'nota-invoice-sync' ) . ' </strong>';
+		$content .= '<p>' . esc_html__( 'We create our invoices with Lexware Office, an accounting service of Haufe-Lexware GmbH & Co. KG, Germany. When we create an invoice for your order, we transmit your name, billing address, email address, the ordered items with prices and tax rates, shipping costs, the order number and the order and delivery dates to Lexware Office. Lexware Office processes this data on our behalf as a processor (Art. 28 GDPR).', 'nota-invoice-sync' ) . '</p>';
+		$content .= '<p>' . esc_html__( 'Legal basis: Art. 6(1)(b) GDPR (performance of the contract) and Art. 6(1)(c) GDPR (our legal obligation to issue invoices and keep accounting records).', 'nota-invoice-sync' ) . '</p>';
+		$content .= '<p>' . esc_html__( 'Invoices, credit notes and other accounting records are kept for eight years as required by German tax and commercial law (§ 147 AO, § 14b UStG, § 257 HGB) and cannot be deleted before this period ends.', 'nota-invoice-sync' ) . '</p>';
+
+		wp_add_privacy_policy_content(
+			__( 'Nota Invoice Sync for Lexware Office', 'nota-invoice-sync' ),
+			wp_kses_post( $content )
+		);
 	}
 
 	/**
@@ -120,8 +147,8 @@ class Nota_Inv_Privacy {
 
 	/**
 	 * Explain, rather than perform, erasure for orders with a Lexware
-	 * invoice — a finalised invoice is a GoBD accounting record and must
-	 * be retained for ten years regardless of an erasure request.
+	 * invoice — a finalised invoice is an accounting record and must be
+	 * retained for eight years regardless of an erasure request.
 	 *
 	 * WooCommerce's own eraser still runs and anonymises what it can in
 	 * WordPress; this only prevents a false impression that the Lexware
@@ -149,7 +176,7 @@ class Nota_Inv_Privacy {
 			if ( 'draft' !== $status ) {
 				$messages[] = sprintf(
 					/* translators: %s: order number. */
-					__( 'Order %s has a finalised Lexware Office invoice. German law (GoBD) requires accounting records to be kept for ten years, so it was not erased.', 'nota-invoice-sync' ),
+					__( 'Order %s has a finalised Lexware Office invoice. German law requires accounting records to be kept for eight years (§ 147 AO, § 14b UStG), so it was not erased.', 'nota-invoice-sync' ),
 					$order->get_order_number()
 				);
 			}

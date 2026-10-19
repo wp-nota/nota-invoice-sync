@@ -17,8 +17,9 @@ msgstr ""
 #. Plugin Name of the plugin
 #: nota-invoice-sync.php
 #: admin/class-admin-settings-page.php:210
-#: includes/class-privacy.php:50
 #: includes/class-privacy.php:64
+#: includes/class-privacy.php:77
+#: includes/class-privacy.php:91
 msgid "Nota Invoice Sync for Lexware Office"
 msgstr "Nota Invoice Sync for Lexware Office"
 
@@ -272,10 +273,6 @@ msgstr "Automatisierung"
 #: admin/class-admin-settings-page.php:575
 msgid "Diagnostics"
 msgstr "Diagnose"
-
-#: admin/class-admin-settings-page.php:229
-msgid "When an invoice is created, the customer's name, address, email and order contents are sent to Lexware Office (Haufe-Lexware GmbH & Co. KG), where they are stored under Lexware's own privacy policy and, once finalised, retained for ten years as required by German accounting law (GoBD)."
-msgstr "Beim Erstellen einer Rechnung werden Name, Adresse, E-Mail-Adresse und Bestellinhalt des Kunden an Lexware Office (Haufe-Lexware GmbH & Co. KG) übermittelt. Dort werden die Daten gemäß der Datenschutzerklärung von Lexware gespeichert und nach der Festschreibung gemäß der gesetzlichen Aufbewahrungspflicht (GoBD) zehn Jahre lang aufbewahrt."
 
 #: admin/class-admin-settings-page.php:234
 msgid "API key"
@@ -740,35 +737,29 @@ msgstr "Lexware-Office-Rechnung erstellt: %s"
 msgid "Lexware Office invoice created."
 msgstr "Lexware-Office-Rechnung erstellt."
 
-#: includes/class-privacy.php:96
+#: includes/class-privacy.php:123
 msgid "Lexware Office invoices"
 msgstr "Lexware-Office-Rechnungen"
 
-#: includes/class-privacy.php:100
+#: includes/class-privacy.php:127
 msgid "Order"
 msgstr "Bestellung"
 
-#: includes/class-privacy.php:104
+#: includes/class-privacy.php:131
 msgid "Lexware invoice number"
 msgstr "Lexware-Rechnungsnummer"
 
-#: includes/class-privacy.php:105
+#: includes/class-privacy.php:132
 msgid "(draft, not yet numbered)"
 msgstr "(Entwurf, noch nicht nummeriert)"
 
-#: includes/class-privacy.php:108
+#: includes/class-privacy.php:135
 msgid "Note"
 msgstr "Hinweis"
 
-#: includes/class-privacy.php:109
+#: includes/class-privacy.php:136
 msgid "The full invoice (name, address, line items) is stored in Lexware Office, not in WordPress. Request an export directly from Lexware Office if needed."
 msgstr "Die vollständige Rechnung (Name, Adresse, Positionen) wird in Lexware Office gespeichert, nicht in WordPress. Fordern Sie bei Bedarf einen Export direkt bei Lexware Office an."
-
-#. translators: %s: order number.
-#: includes/class-privacy.php:152
-#, php-format
-msgid "Order %s has a finalised Lexware Office invoice. German law (GoBD) requires accounting records to be kept for ten years, so it was not erased."
-msgstr "Bestellung %s hat eine festgeschriebene Lexware-Office-Rechnung. Das deutsche Recht (GoBD) schreibt eine zehnjährige Aufbewahrungspflicht für Buchführungsunterlagen vor, daher wurde sie nicht gelöscht."
 
 #: nota-invoice-sync.php:98
 msgid "Nota Invoice Sync for Lexware Office requires WooCommerce to be installed and active."
@@ -896,3 +887,33 @@ msgstr "Lieferscheine"
 #: admin/class-admin-settings-page.php:559
 msgid "Create a delivery note automatically when an order changes to Processing"
 msgstr "Lieferschein automatisch erstellen, wenn eine Bestellung auf „In Bearbeitung“ wechselt"
+
+#: admin/class-admin-settings-page.php:229
+msgid "When an invoice is created, the customer's name, address, email and order contents are sent to Lexware Office (Haufe-Lexware GmbH & Co. KG), where they are stored under Lexware's own privacy policy and, once finalised, retained for eight years as required by German tax law (§ 147 AO, § 14b UStG). A suggested text for your privacy policy is available under Settings → Privacy → Policy Guide."
+msgstr "Beim Erstellen einer Rechnung werden Name, Adresse, E-Mail-Adresse und Bestellinhalt des Kunden an Lexware Office (Haufe-Lexware GmbH & Co. KG) übermittelt. Dort werden die Daten gemäß der Datenschutzerklärung von Lexware gespeichert und nach der Festschreibung gemäß der gesetzlichen Aufbewahrungspflicht (§ 147 AO, § 14b UStG) acht Jahre lang aufbewahrt. Einen Textvorschlag für Ihre Datenschutzerklärung finden Sie unter Einstellungen → Datenschutz → Leitfaden zur Datenschutzerklärung."
+
+#: includes/class-privacy.php:57
+msgid "Nota Invoice Sync creates invoices for your WooCommerce orders in your own Lexware Office account. The text below is a suggestion: adapt it to your shop, add Haufe-Lexware's full postal address, and make sure a data processing agreement (Auftragsverarbeitungsvertrag) with Haufe-Lexware is in place for your Lexware Office account."
+msgstr "Nota Invoice Sync erstellt Rechnungen für Ihre WooCommerce-Bestellungen in Ihrem eigenen Lexware-Office-Konto. Der folgende Text ist ein Vorschlag: Passen Sie ihn an Ihren Shop an, ergänzen Sie die vollständige Anschrift von Haufe-Lexware und stellen Sie sicher, dass für Ihr Lexware-Office-Konto ein Auftragsverarbeitungsvertrag mit Haufe-Lexware besteht."
+
+#: includes/class-privacy.php:58
+msgid "Suggested text:"
+msgstr "Textvorschlag:"
+
+#: includes/class-privacy.php:59
+msgid "We create our invoices with Lexware Office, an accounting service of Haufe-Lexware GmbH & Co. KG, Germany. When we create an invoice for your order, we transmit your name, billing address, email address, the ordered items with prices and tax rates, shipping costs, the order number and the order and delivery dates to Lexware Office. Lexware Office processes this data on our behalf as a processor (Art. 28 GDPR)."
+msgstr "Wir erstellen unsere Rechnungen mit Lexware Office, einem Buchhaltungsdienst der Haufe-Lexware GmbH & Co. KG, Deutschland. Wenn wir eine Rechnung zu Ihrer Bestellung erstellen, übermitteln wir Ihren Namen, Ihre Rechnungsanschrift, Ihre E-Mail-Adresse, die bestellten Artikel mit Preisen und Steuersätzen, die Versandkosten, die Bestellnummer sowie das Bestell- und Lieferdatum an Lexware Office. Lexware Office verarbeitet diese Daten in unserem Auftrag als Auftragsverarbeiter (Art. 28 DSGVO)."
+
+#: includes/class-privacy.php:60
+msgid "Legal basis: Art. 6(1)(b) GDPR (performance of the contract) and Art. 6(1)(c) GDPR (our legal obligation to issue invoices and keep accounting records)."
+msgstr "Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) und Art. 6 Abs. 1 lit. c DSGVO (unsere gesetzliche Pflicht zur Rechnungsstellung und zur Aufbewahrung von Buchhaltungsunterlagen)."
+
+#: includes/class-privacy.php:61
+msgid "Invoices, credit notes and other accounting records are kept for eight years as required by German tax and commercial law (§ 147 AO, § 14b UStG, § 257 HGB) and cannot be deleted before this period ends."
+msgstr "Rechnungen, Gutschriften und andere Buchungsbelege werden nach den steuer- und handelsrechtlichen Vorschriften (§ 147 AO, § 14b UStG, § 257 HGB) acht Jahre lang aufbewahrt und können vor Ablauf dieser Frist nicht gelöscht werden."
+
+#. translators: %s: order number.
+#: includes/class-privacy.php:179
+#, php-format
+msgid "Order %s has a finalised Lexware Office invoice. German law requires accounting records to be kept for eight years (§ 147 AO, § 14b UStG), so it was not erased."
+msgstr "Bestellung %s hat eine festgeschriebene Lexware-Office-Rechnung. Das deutsche Recht schreibt für Buchungsbelege eine Aufbewahrungsfrist von acht Jahren vor (§ 147 AO, § 14b UStG), daher wurde sie nicht gelöscht."

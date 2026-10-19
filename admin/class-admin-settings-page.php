@@ -226,7 +226,7 @@ class Nota_Inv_Admin_Settings_Page {
 				<div class="nota-inv-card" id="nota-inv-section-connection">
 				<h2 class="title"><span class="dashicons dashicons-admin-network"></span> <?php esc_html_e( 'Connection', 'nota-invoice-sync' ); ?></h2>
 				<p class="description">
-					<?php esc_html_e( 'When an invoice is created, the customer\'s name, address, email and order contents are sent to Lexware Office (Haufe-Lexware GmbH & Co. KG), where they are stored under Lexware\'s own privacy policy and, once finalised, retained for ten years as required by German accounting law (GoBD).', 'nota-invoice-sync' ); ?>
+					<?php esc_html_e( 'When an invoice is created, the customer\'s name, address, email and order contents are sent to Lexware Office (Haufe-Lexware GmbH & Co. KG), where they are stored under Lexware\'s own privacy policy and, once finalised, retained for eight years as required by German tax law (§ 147 AO, § 14b UStG). A suggested text for your privacy policy is available under Settings → Privacy → Policy Guide.', 'nota-invoice-sync' ); ?>
 				</p>
 				<table class="form-table" role="presentation">
 					<tr>

@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.18
+Stable tag: 0.1.19
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,11 +84,14 @@ with bulk printing, and large-scale bulk import are part of
 When you create an invoice, the customer's name, billing address, email address and the order's
 line items are sent to Lexware Office (operated by Haufe-Lexware GmbH & Co. KG) over their public
 API. That data is then stored and processed under Lexware's own privacy policy. Once an invoice
-is finalised, German accounting law (GoBD) requires it to be kept for ten years — this plugin
-does not delete or modify anything in Lexware Office, including in response to a WordPress
-personal-data erasure request. The plugin integrates with Tools → Export/Erase Personal Data and
-explains this retention conflict there, so shop owners never wrongly assume the data was erased
-everywhere.
+is finalised, German tax law requires it to be kept for eight years (§ 147 AO, § 14b UStG — ten
+years until 2025) — this plugin does not delete or modify anything in Lexware Office, including
+in response to a WordPress personal-data erasure request. The plugin integrates with Tools →
+Export/Erase Personal Data and explains this retention conflict there, so shop owners never
+wrongly assume the data was erased everywhere.
+
+The plugin adds a suggested text for your privacy policy under Settings → Privacy → Policy
+Guide.
 
 The optional debug log level records customer names, addresses and invoice contents in plain
 text in the WooCommerce log files on your own server. The settings page says so next to the
@@ -179,6 +182,10 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.19 =
+* Added: a suggested text for your privacy policy under Settings → Privacy → Policy Guide, describing what is sent to Lexware Office, the legal basis and the retention period.
+* Changed: retention period texts updated to eight years — German law shortened the retention period for invoices and other accounting records from ten to eight years on 1 January 2025 (§ 147 AO, § 14b UStG).
 
 = 0.1.18 =
 * Changed: the order screen, order list and settings page now also show which document features are part of Nota Invoice Sync Pro — delivery notes (Lieferschein) with bulk printing, credit notes for refunds, and payment reminders emailed to the customer. Nothing changes in how this version creates invoices.
