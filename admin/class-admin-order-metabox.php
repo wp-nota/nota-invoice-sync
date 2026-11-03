@@ -306,7 +306,16 @@ class Nota_Inv_Admin_Order_Metabox {
 		}
 
 		$client = new Nota_Inv_Api_Client();
-		$detail = $client->get( '/v1/invoices/' . rawurlencode( $invoice_id ) );
+		// 404 is passed as quiet: for a draft deleted in Lexware Office it
+		// is an expected answer, handled just below.
+		$detail = $client->get( '/v1/invoices/' . rawurlencode( $invoice_id ), array(), array( 404 ) );
+
+		if ( Nota_Inv_Invoice_Service::is_not_found( $detail ) && Nota_Inv_Invoice_Service::forget_deleted_draft( $order, $invoice_id ) ) {
+			wp_safe_redirect(
+				add_query_arg( 'nota_inv_result', 'refresh_deleted', $order->get_edit_order_url() )
+			);
+			exit;
+		}
 
 		if ( is_wp_error( $detail ) ) {
 			Nota_Inv_Logger::error(
@@ -663,6 +672,13 @@ class Nota_Inv_Admin_Order_Metabox {
 		if ( 'refresh_test' === $result ) {
 			echo '<div class="notice notice-info is-dismissible"><p>' .
 				esc_html__( 'Test mode is on — no API request was sent to Lexware Office.', 'nota-invoice-sync' ) .
+				'</p></div>';
+			return;
+		}
+
+		if ( 'refresh_deleted' === $result ) {
+			echo '<div class="notice notice-warning is-dismissible"><p>' .
+				esc_html__( 'The draft invoice no longer exists in Lexware Office (it was deleted there). The link was removed from this order — you can create a new invoice now.', 'nota-invoice-sync' ) .
 				'</p></div>';
 			return;
 		}

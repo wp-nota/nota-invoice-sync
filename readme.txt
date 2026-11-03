@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.19
+Stable tag: 0.1.20
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -182,6 +182,9 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.20 =
+* Fixed: a draft invoice deleted in Lexware Office left the order stuck — "Create invoice now" treated the order as already invoiced and "Refresh invoice status" only showed a generic error. The refresh now detects the deletion, removes the stale link, adds an order note and lets you create a new invoice. Finalised invoices (which Lexware Office does not allow to delete) are never unlinked this way.
 
 = 0.1.19 =
 * Added: a suggested text for your privacy policy under Settings → Privacy → Policy Guide, describing what is sent to Lexware Office, the legal basis and the retention period.

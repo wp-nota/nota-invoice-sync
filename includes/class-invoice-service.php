@@ -290,6 +290,71 @@ class Nota_Inv_Invoice_Service {
 	}
 
 	/**
+	 * Whether an API error is Lexware Office's 404 for the requested
+	 * resource itself — the signal that it was deleted there. Lexware
+	 * answers 403, not 404, for an id that exists in a different account
+	 * (e.g. after switching the API key), so that case is not matched here.
+	 *
+	 * @param mixed $error Result of an API call.
+	 * @return bool
+	 */
+	public static function is_not_found( $error ) {
+		if ( ! is_wp_error( $error ) ) {
+			return false;
+		}
+
+		$data = $error->get_error_data();
+
+		return is_array( $data ) && isset( $data['status'] ) && 404 === (int) $data['status'];
+	}
+
+	/**
+	 * Forget a draft invoice that no longer exists in Lexware Office.
+	 *
+	 * Drafts may be deleted in Lexware Office; until 0.1.20 the order kept
+	 * the stale id, "Create invoice now" skipped it as already invoiced and
+	 * every status refresh failed with 404 from then on. Only orders whose
+	 * stored status is still "draft" are touched — a finalised invoice
+	 * cannot be deleted in Lexware Office, so a 404 there is unexpected and
+	 * is left as an error rather than silently unlinked. No new invoice is
+	 * created automatically: the draft was deleted on purpose by someone.
+	 *
+	 * @param WC_Order $order      Order.
+	 * @param string   $invoice_id The invoice id that answered 404.
+	 * @return bool True if the reference was removed.
+	 */
+	public static function forget_deleted_draft( WC_Order $order, $invoice_id ) {
+		if ( (string) $order->get_meta( NOTA_INV_META_INVOICE_ID ) !== (string) $invoice_id
+			|| 'draft' !== (string) $order->get_meta( NOTA_INV_META_INVOICE_STATUS ) ) {
+			return false;
+		}
+
+		$number = (string) $order->get_meta( NOTA_INV_META_INVOICE_NUMBER );
+
+		$order->delete_meta_data( NOTA_INV_META_INVOICE_ID );
+		$order->delete_meta_data( NOTA_INV_META_INVOICE_NUMBER );
+		$order->delete_meta_data( NOTA_INV_META_INVOICE_STATUS );
+		$order->delete_meta_data( NOTA_INV_META_EDOC_PROFILE );
+		$order->save();
+
+		// Always noted, regardless of the order-note setting: the order's
+		// invoice link disappears, and the timeline should say why.
+		$order->add_order_note(
+			sprintf(
+				/* translators: %s: invoice number or id. */
+				__( 'Lexware Office draft invoice %s no longer exists in Lexware Office (deleted there). The link was removed — use "Create invoice now" to create a new invoice.', 'nota-invoice-sync' ),
+				'' !== $number ? $number : $invoice_id
+			)
+		);
+
+		Nota_Inv_Logger::debug(
+			sprintf( 'Order %d: draft invoice %s was deleted in Lexware Office — reference removed.', $order->get_id(), $invoice_id )
+		);
+
+		return true;
+	}
+
+	/**
 	 * Deeplink to view an invoice in the Lexware web app.
 	 *
 	 * @param string $invoice_id Invoice UUID.

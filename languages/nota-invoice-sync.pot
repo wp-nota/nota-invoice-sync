@@ -2,7 +2,7 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.19\n"
+"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.20\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/nota-invoice-sync\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -916,4 +916,14 @@ msgstr ""
 
 #: nota-invoice-sync.php:98
 msgid "Nota Invoice Sync for Lexware Office requires WooCommerce to be installed and active."
+msgstr ""
+
+#. translators: %s: invoice number or id.
+#: includes/class-invoice-service.php
+#, php-format
+msgid "Lexware Office draft invoice %s no longer exists in Lexware Office (deleted there). The link was removed — use \"Create invoice now\" to create a new invoice."
+msgstr ""
+
+#: admin/class-admin-order-metabox.php
+msgid "The draft invoice no longer exists in Lexware Office (it was deleted there). The link was removed from this order — you can create a new invoice now."
 msgstr ""

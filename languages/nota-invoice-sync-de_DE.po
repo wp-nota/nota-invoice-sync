@@ -917,3 +917,13 @@ msgstr "Rechnungen, Gutschriften und andere Buchungsbelege werden nach den steue
 #, php-format
 msgid "Order %s has a finalised Lexware Office invoice. German law requires accounting records to be kept for eight years (§ 147 AO, § 14b UStG), so it was not erased."
 msgstr "Bestellung %s hat eine festgeschriebene Lexware-Office-Rechnung. Das deutsche Recht schreibt für Buchungsbelege eine Aufbewahrungsfrist von acht Jahren vor (§ 147 AO, § 14b UStG), daher wurde sie nicht gelöscht."
+
+#. translators: %s: invoice number or id.
+#: includes/class-invoice-service.php
+#, php-format
+msgid "Lexware Office draft invoice %s no longer exists in Lexware Office (deleted there). The link was removed — use \"Create invoice now\" to create a new invoice."
+msgstr "Der Lexware-Office-Rechnungsentwurf %s existiert in Lexware Office nicht mehr (dort gelöscht). Die Verknüpfung wurde entfernt – mit „Rechnung jetzt erstellen“ können Sie eine neue Rechnung erstellen."
+
+#: admin/class-admin-order-metabox.php
+msgid "The draft invoice no longer exists in Lexware Office (it was deleted there). The link was removed from this order — you can create a new invoice now."
+msgstr "Der Rechnungsentwurf existiert in Lexware Office nicht mehr (er wurde dort gelöscht). Die Verknüpfung wurde von dieser Bestellung entfernt – Sie können jetzt eine neue Rechnung erstellen."
