@@ -78,6 +78,9 @@ function nota_inv_run_uninstall() {
 	delete_option( 'nota_inv_settings' );
 	delete_option( 'nota_inv_health_status' );
 
+	// Per-user "dismissed" flags of the time-limited Pro offer notice.
+	delete_metadata( 'user', 0, 'nota_inv_promo_dismissed', '', true );
+
 	$timestamp = wp_next_scheduled( 'nota_inv_health_check' );
 	if ( $timestamp ) {
 		wp_unschedule_event( $timestamp, 'nota_inv_health_check' );

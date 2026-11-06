@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.18\n"
+"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.21\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/nota-invoice-sync\n"
 "Last-Translator: wp-nota.com <support@wp-nota.com>\n"
 "Language-Team: Deutsch <support@wp-nota.com>\n"
@@ -927,3 +927,19 @@ msgstr "Der Lexware-Office-Rechnungsentwurf %s existiert in Lexware Office nicht
 #: admin/class-admin-order-metabox.php
 msgid "The draft invoice no longer exists in Lexware Office (it was deleted there). The link was removed from this order — you can create a new invoice now."
 msgstr "Der Rechnungsentwurf existiert in Lexware Office nicht mehr (er wurde dort gelöscht). Die Verknüpfung wurde von dieser Bestellung entfernt – Sie können jetzt eine neue Rechnung erstellen."
+
+#. translators: %s: coupon code.
+#: admin/class-admin-promo-notice.php
+#, php-format
+msgid "Black Friday is coming: 40%% off your first year of Nota Invoice Sync Pro with code %s — 27 Nov to 1 Dec."
+msgstr "Black Friday kommt: 40 %% Rabatt auf das erste Jahr von Nota Invoice Sync Pro mit dem Code %s – 27.11. bis 01.12."
+
+#. translators: %s: coupon code.
+#: admin/class-admin-promo-notice.php
+#, php-format
+msgid "Black Friday: 40%% off your first year of Nota Invoice Sync Pro with code %s — until 1 Dec."
+msgstr "Black Friday: 40 %% Rabatt auf das erste Jahr von Nota Invoice Sync Pro mit dem Code %s – bis 01.12."
+
+#: admin/class-admin-promo-notice.php
+msgid "See Pro features"
+msgstr "Pro-Funktionen ansehen"

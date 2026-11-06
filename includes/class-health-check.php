@@ -114,6 +114,12 @@ class Nota_Inv_Health_Check {
 	 * A lightweight count for the admin notice — not exhaustive, just enough
 	 * to say "something needs attention" without a heavy query.
 	 *
+	 * The meta query uses `!= ''` rather than EXISTS / NOT EXISTS: on some
+	 * WooCommerce order storage setups the EXISTS form did not filter at all
+	 * and the count became "recent orders" instead of "failed orders". Each
+	 * result is re-checked in PHP as well, so a query that filters loosely
+	 * can never inflate the number.
+	 *
 	 * @return int
 	 */
 	private function count_recent_failures() {
@@ -124,18 +130,32 @@ class Nota_Inv_Health_Check {
 				'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 					array(
 						'key'     => NOTA_INV_META_LAST_ERROR,
-						'compare' => 'EXISTS',
-					),
-					array(
-						'key'     => NOTA_INV_META_INVOICE_ID,
-						'compare' => 'NOT EXISTS',
+						'value'   => '',
+						'compare' => '!=',
 					),
 				),
-				'return'     => 'ids',
 			)
 		);
 
-		return is_array( $orders ) ? count( $orders ) : 0;
+		if ( ! is_array( $orders ) ) {
+			return 0;
+		}
+
+		$count = 0;
+		foreach ( $orders as $order ) {
+			if ( ! $order instanceof WC_Order ) {
+				continue;
+			}
+			if ( '' === trim( (string) $order->get_meta( NOTA_INV_META_LAST_ERROR ) ) ) {
+				continue;
+			}
+			if ( '' !== (string) $order->get_meta( NOTA_INV_META_INVOICE_ID ) ) {
+				continue;
+			}
+			++$count;
+		}
+
+		return $count;
 	}
 
 	/**
