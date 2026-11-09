@@ -78,14 +78,21 @@ class Nota_Inv_Admin_Product_Fields {
 		echo '</p>';
 
 		echo '<p class="form-field">';
+		echo '<label>' . esc_html__( 'Lexware unit', 'nota-invoice-sync' ) . '</label>';
+		echo '<select style="opacity:.55;" disabled="disabled"><option>' . esc_html__( 'Default (Stück)', 'nota-invoice-sync' ) . '</option></select>';
+		echo '</p>';
+
+		echo '<p class="form-field">';
 		echo '<span class="description">';
 		printf(
 			/* translators: %s: link to Nota Invoice Sync Pro. */
-			esc_html__( 'Per-product delivery date and invoice line text override — %s', 'nota-invoice-sync' ),
-			'<a href="https://www.wp-nota.com/lexware-invoice-sync" target="_blank" rel="noopener">' . esc_html__( 'available in Nota Invoice Sync Pro', 'nota-invoice-sync' ) . ' →</a>'
+			esc_html__( 'Per-product delivery date, invoice line text and unit (kg, Liter, Stunde …) — %s', 'nota-invoice-sync' ),
+			'<a href="' . esc_url( Nota_Inv_Admin_Pro_Link::info_url() ) . '" target="_blank" rel="noopener">' . esc_html__( 'available in Nota Invoice Sync Pro', 'nota-invoice-sync' ) . ' →</a>'
 		);
 		echo '</span>';
 		echo '</p>';
+
+		echo '<p class="form-field"><span class="description">' . Nota_Inv_Admin_Pro_Link::trial_html() . '</span></p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from esc_url()/esc_html__().
 
 		echo '</div>';
 		echo '</div>';
@@ -108,6 +115,10 @@ class Nota_Inv_Admin_Product_Fields {
 		echo '<div class="form-row form-row-full">';
 		echo '<label>' . esc_html__( 'Invoice line description', 'nota-invoice-sync' ) . ' <span style="color:#8c8f94;">(Pro)</span></label>';
 		echo '<textarea class="short" rows="2" style="width:100%;opacity:.55;" disabled="disabled"></textarea>';
+		echo '</div>';
+		echo '<div class="form-row form-row-full">';
+		echo '<label>' . esc_html__( 'Lexware unit', 'nota-invoice-sync' ) . ' <span style="color:#8c8f94;">(Pro)</span> ';
+		echo '<select style="opacity:.55;" disabled="disabled"><option>' . esc_html__( 'Default (Stück)', 'nota-invoice-sync' ) . '</option></select></label>';
 		echo '</div>';
 	}
 }

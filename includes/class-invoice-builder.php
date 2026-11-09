@@ -21,6 +21,13 @@ class Nota_Inv_Invoice_Builder {
 	const MAX_LINE_ITEMS = 300;
 
 	/**
+	 * Lexware unitName sent on every line of this edition. Fixed on purpose
+	 * and not translatable: a unit per product is a Pro feature, and this
+	 * edition contains no code for it.
+	 */
+	const UNIT_NAME = 'Stück';
+
+	/**
 	 * @var Nota_Inv_Tax_Resolver
 	 */
 	private $tax;
@@ -119,10 +126,23 @@ class Nota_Inv_Invoice_Builder {
 			);
 		}
 
-		foreach ( array( 'invoice_title' => 'title', 'invoice_introduction' => 'introduction', 'invoice_remark' => 'remark' ) as $option => $field ) {
+		// Maximum lengths from the Lexware API FAQ "Texts in Sales Vouchers"
+		// (title 25, introduction and remark 2000 characters each). Applied
+		// after the placeholders are filled in, since a placeholder value can
+		// make the text longer than what was typed in the settings.
+		$text_fields = array(
+			'invoice_title'        => array( 'title', 25 ),
+			'invoice_introduction' => array( 'introduction', 2000 ),
+			'invoice_remark'       => array( 'remark', 2000 ),
+		);
+
+		foreach ( $text_fields as $option => $target ) {
 			$value = trim( (string) $settings->get( $option ) );
 			if ( '' !== $value ) {
-				$payload[ $field ] = $this->replace_placeholders( $value, $order );
+				$value = $this->clean( $this->replace_placeholders( $value, $order ), $target[1] );
+				if ( '' !== $value ) {
+					$payload[ $target[0] ] = $value;
+				}
 			}
 		}
 
@@ -180,7 +200,7 @@ class Nota_Inv_Invoice_Builder {
 				'type'      => 'custom',
 				'name'      => $this->clean( $item->get_name(), 255 ),
 				'quantity'  => $quantity,
-				'unitName'  => __( 'Stück', 'nota-invoice-sync' ),
+				'unitName'  => self::UNIT_NAME,
 				'unitPrice' => array(
 					'currency'          => 'EUR',
 					'netAmount'         => round( $unit_net, 4 ),
@@ -220,7 +240,7 @@ class Nota_Inv_Invoice_Builder {
 				'type'      => 'custom',
 				'name'      => $this->clean( $fee->get_name(), 255 ),
 				'quantity'  => 1,
-				'unitName'  => __( 'Stück', 'nota-invoice-sync' ),
+				'unitName'  => self::UNIT_NAME,
 				'unitPrice' => array(
 					'currency'          => 'EUR',
 					'netAmount'         => round( $net, 4 ),
@@ -262,7 +282,7 @@ class Nota_Inv_Invoice_Builder {
 					'type'      => 'custom',
 					'name'      => $this->clean( $label, 255 ),
 					'quantity'  => 1,
-					'unitName'  => __( 'Stück', 'nota-invoice-sync' ),
+					'unitName'  => self::UNIT_NAME,
 					'unitPrice' => array(
 						'currency'          => 'EUR',
 						'netAmount'         => round( $shipping_net, 4 ),

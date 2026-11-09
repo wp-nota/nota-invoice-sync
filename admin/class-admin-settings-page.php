@@ -293,11 +293,12 @@ class Nota_Inv_Admin_Settings_Page {
 							</p>
 							<p>
 								<strong>
-									<a href="https://www.wp-nota.com/lexware-invoice-sync" target="_blank" rel="noopener">
+									<a href="<?php echo esc_url( Nota_Inv_Admin_Pro_Link::info_url() ); ?>" target="_blank" rel="noopener">
 										<?php esc_html_e( 'Automatic invoicing on order status is available in Nota Invoice Sync Pro', 'nota-invoice-sync' ); ?> →
 									</a>
 								</strong>
 							</p>
+							<?php Nota_Inv_Admin_Pro_Link::render_trial_line(); ?>
 						</td>
 					</tr>
 					<tr>
@@ -397,7 +398,7 @@ class Nota_Inv_Admin_Settings_Page {
 						<td>
 							<input type="text" class="regular-text" id="nota_inv_invoice_title"
 								name="nota_inv[invoice_title]" value="<?php echo esc_attr( $s['invoice_title'] ); ?>" />
-							<p class="description"><?php esc_html_e( 'Leave empty to use the Lexware Office default.', 'nota-invoice-sync' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Leave empty to use the Lexware Office default.', 'nota-invoice-sync' ); ?> <?php esc_html_e( 'Lexware Office allows at most 25 characters; longer titles are shortened.', 'nota-invoice-sync' ); ?></p>
 						</td>
 					</tr>
 					<tr>
@@ -411,6 +412,13 @@ class Nota_Inv_Admin_Settings_Page {
 								<?php esc_html_e( 'Leave empty to reference the order number automatically.', 'nota-invoice-sync' ); ?>
 								<?php esc_html_e( 'Placeholders:', 'nota-invoice-sync' ); ?>
 								<code>{order_number}</code> <code>{order_date}</code> <code>{payment_method}</code> <code>{customer_name}</code>
+							</p>
+							<p class="description">
+								<span style="color:#8c8f94;">
+									<?php esc_html_e( 'More placeholders in Pro:', 'nota-invoice-sync' ); ?>
+									<code>{customer_note}</code> <code>{billing_company}</code> <code>{shipping_method}</code> <code>{meta:…}</code>
+								</span>
+								<a href="<?php echo esc_url( Nota_Inv_Admin_Pro_Link::info_url() ); ?>" target="_blank" rel="noopener">(Pro)</a>
 							</p>
 						</td>
 					</tr>
@@ -462,11 +470,32 @@ class Nota_Inv_Admin_Settings_Page {
 							</p>
 							<p class="description">
 								<strong>
-									<a href="https://www.wp-nota.com/lexware-invoice-sync" target="_blank" rel="noopener">
+									<a href="<?php echo esc_url( Nota_Inv_Admin_Pro_Link::info_url() ); ?>" target="_blank" rel="noopener">
 										<?php esc_html_e( 'Print layout selection is available in Nota Invoice Sync Pro', 'nota-invoice-sync' ); ?> →
 									</a>
 								</strong>
 							</p>
+							<?php Nota_Inv_Admin_Pro_Link::render_trial_line(); ?>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Default unit', 'nota-invoice-sync' ); ?></th>
+						<td>
+							<?php // Pro teaser only: this edition always sends "Stück" (Nota_Inv_Invoice_Builder::UNIT_NAME). ?>
+							<select disabled="disabled" style="opacity:.55;">
+								<option><?php echo esc_html( Nota_Inv_Invoice_Builder::UNIT_NAME ); ?></option>
+							</select>
+							<p class="description">
+								<?php esc_html_e( 'This version uses "Stück" on every invoice line.', 'nota-invoice-sync' ); ?>
+							</p>
+							<p class="description">
+								<strong>
+									<a href="<?php echo esc_url( Nota_Inv_Admin_Pro_Link::info_url() ); ?>" target="_blank" rel="noopener">
+										<?php esc_html_e( 'A default unit for all products (kg, Liter, Stunde …) and a unit per product are available in Nota Invoice Sync Pro', 'nota-invoice-sync' ); ?> →
+									</a>
+								</strong>
+							</p>
+							<?php Nota_Inv_Admin_Pro_Link::render_trial_line(); ?>
 						</td>
 					</tr>
 				</table>
@@ -564,11 +593,12 @@ class Nota_Inv_Admin_Settings_Page {
 				</table>
 				<p class="description">
 					<strong>
-						<a href="https://www.wp-nota.com/lexware-invoice-sync" target="_blank" rel="noopener">
+						<a href="<?php echo esc_url( Nota_Inv_Admin_Pro_Link::info_url() ); ?>" target="_blank" rel="noopener">
 							<?php esc_html_e( 'These automation features are available in Nota Invoice Sync Pro', 'nota-invoice-sync' ); ?> →
 						</a>
 					</strong>
 				</p>
+				<?php Nota_Inv_Admin_Pro_Link::render_trial_line(); ?>
 				</div>
 
 				<div class="nota-inv-card" id="nota-inv-section-diagnostics">
@@ -681,11 +711,12 @@ class Nota_Inv_Admin_Settings_Page {
 			</p>
 			<p class="description">
 				<strong>
-					<a href="https://www.wp-nota.com/lexware-invoice-sync" target="_blank" rel="noopener">
+					<a href="<?php echo esc_url( Nota_Inv_Admin_Pro_Link::info_url() ); ?>" target="_blank" rel="noopener">
 						<?php esc_html_e( 'The compliance export is available in Nota Invoice Sync Pro', 'nota-invoice-sync' ); ?> →
 					</a>
 				</strong>
 			</p>
+			<?php Nota_Inv_Admin_Pro_Link::render_trial_line(); ?>
 			</div>
 		</div>
 		<?php

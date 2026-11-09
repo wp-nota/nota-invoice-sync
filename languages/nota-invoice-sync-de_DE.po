@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.21\n"
+"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.22\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/nota-invoice-sync\n"
 "Last-Translator: wp-nota.com <support@wp-nota.com>\n"
 "Language-Team: Deutsch <support@wp-nota.com>\n"
@@ -943,3 +943,41 @@ msgstr "Black Friday: 40 %% Rabatt auf das erste Jahr von Nota Invoice Sync Pro 
 #: admin/class-admin-promo-notice.php
 msgid "See Pro features"
 msgstr "Pro-Funktionen ansehen"
+
+#: admin/class-admin-pro-link.php
+msgid "Try Pro free for 14 days — no credit card required"
+msgstr "Pro 14 Tage kostenlos testen – keine Kreditkarte nötig"
+
+#: admin/class-admin-settings-page.php
+msgid "More placeholders in Pro:"
+msgstr "Weitere Platzhalter in Pro:"
+
+#: admin/class-admin-settings-page.php
+msgid "Lexware Office allows at most 25 characters; longer titles are shortened."
+msgstr "Lexware Office erlaubt höchstens 25 Zeichen; längere Titel werden gekürzt."
+
+#: admin/class-admin-product-fields.php
+msgid "Lexware unit"
+msgstr "Lexware-Einheit"
+
+#: admin/class-admin-product-fields.php
+msgid "Default (Stück)"
+msgstr "Standard (Stück)"
+
+#. translators: %s: link to Nota Invoice Sync Pro.
+#: admin/class-admin-product-fields.php
+#, php-format
+msgid "Per-product delivery date, invoice line text and unit (kg, Liter, Stunde …) — %s"
+msgstr "Lieferdatum, Positionstext und Einheit (kg, Liter, Stunde …) pro Produkt – %s"
+
+#: admin/class-admin-settings-page.php
+msgid "Default unit"
+msgstr "Standardeinheit"
+
+#: admin/class-admin-settings-page.php
+msgid "This version uses \"Stück\" on every invoice line."
+msgstr "Diese Version verwendet „Stück“ in allen Rechnungspositionen."
+
+#: admin/class-admin-settings-page.php
+msgid "A default unit for all products (kg, Liter, Stunde …) and a unit per product are available in Nota Invoice Sync Pro"
+msgstr "Eine Standardeinheit für alle Produkte (kg, Liter, Stunde …) und eine Einheit pro Produkt gibt es in Nota Invoice Sync Pro"

@@ -212,9 +212,9 @@ class Nota_Inv_Admin_Order_List {
 			esc_html_e( 'Bulk invoice creation is available in Nota Invoice Sync Pro.', 'nota-invoice-sync' );
 		}
 
-		echo ' <a href="https://www.wp-nota.com/lexware-invoice-sync" target="_blank" rel="noopener">';
+		echo ' <a href="' . esc_url( Nota_Inv_Admin_Pro_Link::info_url() ) . '" target="_blank" rel="noopener">';
 		esc_html_e( 'Learn more', 'nota-invoice-sync' );
-		echo ' &rarr;</a></p></div>';
+		echo ' &rarr;</a> &middot; ' . Nota_Inv_Admin_Pro_Link::trial_html() . '</p></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from esc_url()/esc_html__().
 	}
 
 	/**

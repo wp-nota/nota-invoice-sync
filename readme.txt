@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.21
+Stable tag: 0.1.22
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -182,6 +182,11 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.22 =
+* Fixed: invoice title, introduction and closing remark are now shortened to Lexware Office's limits (25 / 2000 / 2000 characters) after the placeholders are filled in, instead of the invoice being rejected.
+* Added: a (locked) "Default unit" row in the settings showing that this version uses "Stück" on every line; a default unit for all products and a unit per product are Pro features.
+* Changed: the hints about Pro features now mention the 14-day free trial of Pro (no credit card required). All of them link to the product page on wp-nota.com — the German page for German-language admins. They are plain links — no external request is made.
 
 = 0.1.21 =
 * Added: a dismissible notice about the Black Friday offer for Nota Invoice Sync Pro (24 November – 1 December 2026). Shown only to shop managers, only on the Dashboard, Plugins, WooCommerce screens and this plugin's settings page. Each of its two stages (announcement, offer) stays hidden for good once dismissed. The dates are part of the plugin — no external request is made. Developers can turn it off with the `nota_inv_show_promo_notice` filter.

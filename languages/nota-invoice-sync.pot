@@ -2,7 +2,7 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.21\n"
+"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.22\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/nota-invoice-sync\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -942,4 +942,42 @@ msgstr ""
 
 #: admin/class-admin-promo-notice.php
 msgid "See Pro features"
+msgstr ""
+
+#: admin/class-admin-pro-link.php
+msgid "Try Pro free for 14 days — no credit card required"
+msgstr ""
+
+#: admin/class-admin-settings-page.php
+msgid "More placeholders in Pro:"
+msgstr ""
+
+#: admin/class-admin-settings-page.php
+msgid "Lexware Office allows at most 25 characters; longer titles are shortened."
+msgstr ""
+
+#: admin/class-admin-product-fields.php
+msgid "Lexware unit"
+msgstr ""
+
+#: admin/class-admin-product-fields.php
+msgid "Default (Stück)"
+msgstr ""
+
+#. translators: %s: link to Nota Invoice Sync Pro.
+#: admin/class-admin-product-fields.php
+#, php-format
+msgid "Per-product delivery date, invoice line text and unit (kg, Liter, Stunde …) — %s"
+msgstr ""
+
+#: admin/class-admin-settings-page.php
+msgid "Default unit"
+msgstr ""
+
+#: admin/class-admin-settings-page.php
+msgid "This version uses \"Stück\" on every invoice line."
+msgstr ""
+
+#: admin/class-admin-settings-page.php
+msgid "A default unit for all products (kg, Liter, Stunde …) and a unit per product are available in Nota Invoice Sync Pro"
 msgstr ""

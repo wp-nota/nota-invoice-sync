@@ -167,7 +167,7 @@ class Nota_Inv_Admin_Order_Metabox {
 				printf(
 					'<p><span style="color:#8c8f94;">%s</span> <a href="%s" target="_blank" rel="noopener">(%s)</a></p>',
 					esc_html__( 'Download PDF', 'nota-invoice-sync' ),
-					esc_url( 'https://www.wp-nota.com/lexware-invoice-sync' ),
+					esc_url( Nota_Inv_Admin_Pro_Link::info_url() ),
 					esc_html__( 'Pro', 'nota-invoice-sync' )
 				);
 			}
@@ -235,7 +235,7 @@ class Nota_Inv_Admin_Order_Metabox {
 		echo '<p><button type="button" class="button button-small" disabled="disabled">' . esc_html__( 'Create credit note for a refund', 'nota-invoice-sync' ) . '</button></p>';
 		printf(
 			'<p class="description"><strong><a href="%s" target="_blank" rel="noopener">%s →</a></strong></p>',
-			esc_url( 'https://www.wp-nota.com/lexware-invoice-sync' ),
+			esc_url( Nota_Inv_Admin_Pro_Link::info_url() ),
 			esc_html__( 'Credit notes (Gutschrift) for refunds — itemised with the right tax rates and emailed to the customer — are available in Nota Invoice Sync Pro', 'nota-invoice-sync' )
 		);
 		echo '</div>';
@@ -259,9 +259,11 @@ class Nota_Inv_Admin_Order_Metabox {
 		echo '<p><button type="button" class="button button-small" disabled="disabled">' . esc_html__( 'Create delivery note (PDF)', 'nota-invoice-sync' ) . '</button></p>';
 		printf(
 			'<p class="description"><strong><a href="%s" target="_blank" rel="noopener">%s →</a></strong></p>',
-			esc_url( 'https://www.wp-nota.com/lexware-invoice-sync' ),
+			esc_url( Nota_Inv_Admin_Pro_Link::info_url() ),
 			esc_html__( 'Delivery notes (Lieferschein) from Lexware Office, also bulk-printed as one PDF, are available in Nota Invoice Sync Pro', 'nota-invoice-sync' )
 		);
+		// Once per order box: this teaser is the last Pro hint in it.
+		Nota_Inv_Admin_Pro_Link::render_trial_line();
 		echo '</div>';
 	}
 
@@ -580,7 +582,7 @@ class Nota_Inv_Admin_Order_Metabox {
 		update_option( 'nota_inv_nudge_suppressed_until', time() + self::NUDGE_AUTO_SNOOZE, false );
 
 		printf(
-			'<div class="notice notice-info"><p>%s <a href="%s" target="_blank" rel="noopener">%s</a> &middot; <a href="%s">%s</a></p></div>',
+			'<div class="notice notice-info"><p>%s <a href="%s" target="_blank" rel="noopener">%s</a> &middot; %s &middot; <a href="%s">%s</a></p></div>',
 			esc_html(
 				sprintf(
 					/* translators: %d: number of invoices created by hand in the last 7 days. */
@@ -593,8 +595,9 @@ class Nota_Inv_Admin_Order_Metabox {
 					$count
 				)
 			),
-			esc_url( 'https://www.wp-nota.com/lexware-invoice-sync' ),
+			esc_url( Nota_Inv_Admin_Pro_Link::info_url() ),
 			esc_html__( 'Pro creates them automatically →', 'nota-invoice-sync' ),
+			Nota_Inv_Admin_Pro_Link::trial_html(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from esc_url()/esc_html__().
 			esc_url(
 				wp_nonce_url(
 					admin_url( 'admin-post.php?action=' . self::DISMISS_NUDGE_ACTION ),
