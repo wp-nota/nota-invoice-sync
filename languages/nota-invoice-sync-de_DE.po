@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.22\n"
+"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.23\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/nota-invoice-sync\n"
 "Last-Translator: wp-nota.com <support@wp-nota.com>\n"
 "Language-Team: Deutsch <support@wp-nota.com>\n"
@@ -981,3 +981,83 @@ msgstr "Diese Version verwendet „Stück“ in allen Rechnungspositionen."
 #: admin/class-admin-settings-page.php
 msgid "A default unit for all products (kg, Liter, Stunde …) and a unit per product are available in Nota Invoice Sync Pro"
 msgstr "Eine Standardeinheit für alle Produkte (kg, Liter, Stunde …) und eine Einheit pro Produkt gibt es in Nota Invoice Sync Pro"
+
+#: admin/class-admin-order-metabox.php
+msgid "Create a NEW draft invoice in Lexware Office? The existing draft stays there — delete it in Lexware Office so it is not finalised by mistake."
+msgstr "Einen NEUEN Rechnungsentwurf in Lexware Office erstellen? Der bisherige Entwurf bleibt dort bestehen – löschen Sie ihn in Lexware Office, damit er nicht versehentlich festgeschrieben wird."
+
+#: admin/class-admin-order-metabox.php
+msgid "Creating again produces a second draft in Lexware Office. The old draft is not removed."
+msgstr "Erneutes Erstellen legt einen zweiten Entwurf in Lexware Office an. Der alte Entwurf wird nicht entfernt."
+
+#: admin/class-admin-order-metabox.php
+msgid "Create corrected invoice"
+msgstr "Korrigierte Rechnung erstellen"
+
+#: admin/class-admin-order-metabox.php
+msgid "No new invoice was created: the current invoice could not be checked in Lexware Office. See WooCommerce → Status → Logs."
+msgstr "Es wurde keine neue Rechnung erstellt: Die aktuelle Rechnung konnte in Lexware Office nicht geprüft werden. Siehe WooCommerce → Status → Protokolle."
+
+#: admin/class-admin-order-metabox.php
+msgid "Create a corrected invoice in Lexware Office? The voided invoice stays in Lexware Office; this order then links to the new one."
+msgstr "Eine korrigierte Rechnung in Lexware Office erstellen? Die stornierte Rechnung bleibt in Lexware Office; diese Bestellung verweist danach auf die neue."
+
+#: admin/class-admin-order-metabox.php
+msgid "A finalised invoice cannot simply be created again — that would invoice the order twice. To correct it, cancel it in Lexware Office (Stornieren). Once \"Refresh invoice status\" shows it as voided, a corrected invoice can be created here."
+msgstr "Eine festgeschriebene Rechnung kann nicht einfach erneut erstellt werden – die Bestellung würde sonst doppelt berechnet. Stornieren Sie sie zur Korrektur in Lexware Office. Sobald „Rechnungsstatus aktualisieren“ sie als storniert anzeigt, kann hier eine korrigierte Rechnung erstellt werden."
+
+#: admin/class-admin-order-metabox.php
+msgid "No new invoice was created: the current invoice is finalised. Cancel it in Lexware Office first (Stornieren), then try again."
+msgstr "Es wurde keine neue Rechnung erstellt: Die aktuelle Rechnung ist festgeschrieben. Stornieren Sie sie zuerst in Lexware Office und versuchen Sie es dann erneut."
+
+#. translators: %s: invoice number.
+#: admin/class-admin-order-metabox.php
+#, php-format
+msgid "Lexware Office invoice %s is voided. A corrected invoice is created and replaces it on this order; the voided invoice stays in Lexware Office."
+msgstr "Die Lexware-Office-Rechnung %s ist storniert. Eine korrigierte Rechnung wird erstellt und ersetzt sie bei dieser Bestellung; die stornierte Rechnung bleibt in Lexware Office."
+
+#: admin/class-admin-order-metabox.php
+msgid "Nothing was created: the invoice of this order changed in the meantime (for example through a second click). Check the order below."
+msgstr "Es wurde nichts erstellt: Die Rechnung dieser Bestellung hat sich inzwischen geändert (zum Beispiel durch einen zweiten Klick). Prüfen Sie die Bestellung unten."
+
+#: admin/class-admin-product-fields.php
+msgid "Supply type"
+msgstr "Leistungsart"
+
+#: admin/class-admin-product-fields.php
+msgid "HS code (customs tariff number)"
+msgstr "Zolltarifnummer (HS-Code)"
+
+#: admin/class-admin-product-fields.php
+msgid "Country of origin"
+msgstr "Ursprungsland"
+
+#: admin/class-admin-product-fields.php
+msgid "— none —"
+msgstr "— keines —"
+
+#: admin/class-admin-product-fields.php
+msgid "Automatic (virtual product = service)"
+msgstr "Automatisch (virtuelles Produkt = Dienstleistung)"
+
+#: admin/class-admin-product-fields.php
+msgid "HS code"
+msgstr "Zolltarifnummer"
+
+#: admin/class-admin-settings-page.php
+msgid "Customs data"
+msgstr "Zolldaten"
+
+#: admin/class-admin-settings-page.php
+msgid "Only for deliveries outside the EU"
+msgstr "Nur bei Lieferungen außerhalb der EU"
+
+#. translators: %s: link to Nota Invoice Sync Pro.
+#: admin/class-admin-product-fields.php
+#, php-format
+msgid "Per-product delivery date, invoice line text, unit (kg, Liter, Stunde …), service or goods, and customs data (HS code, country of origin) — %s"
+msgstr "Lieferdatum, Positionstext, Einheit (kg, Liter, Stunde …), Dienstleistung oder Ware sowie Zolldaten (Zolltarifnummer, Ursprungsland) pro Produkt – %s"
+
+#: admin/class-admin-settings-page.php
+msgid "HS code (Zolltarifnummer), country of origin and EAN/GTIN on invoice and delivery note lines — for shipments to Switzerland, the UK and other non-EU countries — are available in Nota Invoice Sync Pro"
+msgstr "Zolltarifnummer (HS-Code), Ursprungsland und EAN/GTIN in Rechnungs- und Lieferscheinpositionen – für Sendungen in die Schweiz, nach Großbritannien und in andere Nicht-EU-Länder – gibt es in Nota Invoice Sync Pro"

@@ -498,6 +498,22 @@ class Nota_Inv_Admin_Settings_Page {
 							<?php Nota_Inv_Admin_Pro_Link::render_trial_line(); ?>
 						</td>
 					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Customs data', 'nota-invoice-sync' ); ?></th>
+						<td>
+							<?php // Pro teaser only: no customs data code exists in this edition. ?>
+							<select disabled="disabled" style="opacity:.55;">
+								<option><?php esc_html_e( 'Only for deliveries outside the EU', 'nota-invoice-sync' ); ?></option>
+							</select>
+							<p class="description">
+								<strong>
+									<a href="<?php echo esc_url( Nota_Inv_Admin_Pro_Link::info_url() ); ?>" target="_blank" rel="noopener">
+										<?php esc_html_e( 'HS code (Zolltarifnummer), country of origin and EAN/GTIN on invoice and delivery note lines — for shipments to Switzerland, the UK and other non-EU countries — are available in Nota Invoice Sync Pro', 'nota-invoice-sync' ); ?> →
+									</a>
+								</strong>
+							</p>
+						</td>
+					</tr>
 				</table>
 				</div>
 

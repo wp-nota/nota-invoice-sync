@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.22
+Stable tag: 0.1.23
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -182,6 +182,12 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.23 =
+* Added: the product's Lexware tab and the settings page now show the new Pro options (customs data: HS code and country of origin; supply type: service or goods) as locked previews.
+* Changed: a finalised invoice can no longer be created a second time from the order screen by mistake — that would have invoiced the order twice. To correct a finalised invoice, cancel it in Lexware Office; once "Refresh invoice status" shows it as voided, a corrected invoice can be created. The status is checked in Lexware Office before anything is created.
+* Changed: "Create again" on a draft invoice now asks for confirmation and reminds you to delete the old draft in Lexware Office.
+* Changed: the create button on the order screen now runs one at a time per order and ignores a second click or a stale browser tab, so a double click can no longer create two invoices.
 
 = 0.1.22 =
 * Fixed: invoice title, introduction and closing remark are now shortened to Lexware Office's limits (25 / 2000 / 2000 characters) after the placeholders are filled in, instead of the invoice being rejected.

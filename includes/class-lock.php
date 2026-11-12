@@ -37,11 +37,14 @@ class Nota_Inv_Lock {
 	/**
 	 * Try to acquire the lock for one order.
 	 *
-	 * @param int $order_id Order id.
+	 * @param int    $order_id Order id.
+	 * @param string $scope    Optional lock scope, so unrelated jobs on the same order
+	 *                         (e.g. a delivery note next to the invoice) never block each
+	 *                         other. Empty = the invoice lock, as before.
 	 * @return bool True when this process now holds the lock.
 	 */
-	public static function acquire( $order_id ) {
-		$name = self::option_name( $order_id );
+	public static function acquire( $order_id, $scope = '' ) {
+		$name = self::option_name( $order_id, $scope );
 		$now  = time();
 
 		// Atomic: relies on the unique index on wp_options.option_name.
@@ -66,20 +69,22 @@ class Nota_Inv_Lock {
 	/**
 	 * Release the lock.
 	 *
-	 * @param int $order_id Order id.
+	 * @param int    $order_id Order id.
+	 * @param string $scope    Same scope as passed to acquire().
 	 * @return void
 	 */
-	public static function release( $order_id ) {
-		delete_option( self::option_name( $order_id ) );
+	public static function release( $order_id, $scope = '' ) {
+		delete_option( self::option_name( $order_id, $scope ) );
 	}
 
 	/**
 	 * Option name for an order's lock.
 	 *
-	 * @param int $order_id Order id.
+	 * @param int    $order_id Order id.
+	 * @param string $scope    Lock scope.
 	 * @return string
 	 */
-	private static function option_name( $order_id ) {
-		return 'nota_inv_lock_' . absint( $order_id );
+	private static function option_name( $order_id, $scope = '' ) {
+		return 'nota_inv_lock_' . ( '' !== $scope ? sanitize_key( $scope ) . '_' : '' ) . absint( $order_id );
 	}
 }

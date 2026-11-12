@@ -2,7 +2,7 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.22\n"
+"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.23\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/nota-invoice-sync\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -980,4 +980,84 @@ msgstr ""
 
 #: admin/class-admin-settings-page.php
 msgid "A default unit for all products (kg, Liter, Stunde …) and a unit per product are available in Nota Invoice Sync Pro"
+msgstr ""
+
+#: admin/class-admin-order-metabox.php
+msgid "Create a NEW draft invoice in Lexware Office? The existing draft stays there — delete it in Lexware Office so it is not finalised by mistake."
+msgstr ""
+
+#: admin/class-admin-order-metabox.php
+msgid "Creating again produces a second draft in Lexware Office. The old draft is not removed."
+msgstr ""
+
+#: admin/class-admin-order-metabox.php
+msgid "Create corrected invoice"
+msgstr ""
+
+#: admin/class-admin-order-metabox.php
+msgid "No new invoice was created: the current invoice could not be checked in Lexware Office. See WooCommerce → Status → Logs."
+msgstr ""
+
+#: admin/class-admin-order-metabox.php
+msgid "Create a corrected invoice in Lexware Office? The voided invoice stays in Lexware Office; this order then links to the new one."
+msgstr ""
+
+#: admin/class-admin-order-metabox.php
+msgid "A finalised invoice cannot simply be created again — that would invoice the order twice. To correct it, cancel it in Lexware Office (Stornieren). Once \"Refresh invoice status\" shows it as voided, a corrected invoice can be created here."
+msgstr ""
+
+#: admin/class-admin-order-metabox.php
+msgid "No new invoice was created: the current invoice is finalised. Cancel it in Lexware Office first (Stornieren), then try again."
+msgstr ""
+
+#. translators: %s: invoice number.
+#: admin/class-admin-order-metabox.php
+#, php-format
+msgid "Lexware Office invoice %s is voided. A corrected invoice is created and replaces it on this order; the voided invoice stays in Lexware Office."
+msgstr ""
+
+#: admin/class-admin-order-metabox.php
+msgid "Nothing was created: the invoice of this order changed in the meantime (for example through a second click). Check the order below."
+msgstr ""
+
+#: admin/class-admin-product-fields.php
+msgid "Supply type"
+msgstr ""
+
+#: admin/class-admin-product-fields.php
+msgid "HS code (customs tariff number)"
+msgstr ""
+
+#: admin/class-admin-product-fields.php
+msgid "Country of origin"
+msgstr ""
+
+#: admin/class-admin-product-fields.php
+msgid "— none —"
+msgstr ""
+
+#: admin/class-admin-product-fields.php
+msgid "Automatic (virtual product = service)"
+msgstr ""
+
+#: admin/class-admin-product-fields.php
+msgid "HS code"
+msgstr ""
+
+#: admin/class-admin-settings-page.php
+msgid "Customs data"
+msgstr ""
+
+#: admin/class-admin-settings-page.php
+msgid "Only for deliveries outside the EU"
+msgstr ""
+
+#. translators: %s: link to Nota Invoice Sync Pro.
+#: admin/class-admin-product-fields.php
+#, php-format
+msgid "Per-product delivery date, invoice line text, unit (kg, Liter, Stunde …), service or goods, and customs data (HS code, country of origin) — %s"
+msgstr ""
+
+#: admin/class-admin-settings-page.php
+msgid "HS code (Zolltarifnummer), country of origin and EAN/GTIN on invoice and delivery note lines — for shipments to Switzerland, the UK and other non-EU countries — are available in Nota Invoice Sync Pro"
 msgstr ""

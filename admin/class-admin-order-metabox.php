@@ -13,6 +13,11 @@ class Nota_Inv_Admin_Order_Metabox {
 
 	const NONCE  = 'nota_inv_order_action';
 	const ACTION = 'nota_inv_order_action';
+
+	/**
+	 * Lock scope for the manual create button (see handle_action()).
+	 */
+	const LOCK_SCOPE = 'manual';
 	const PAYMENT_ACTION = 'nota_inv_check_payment';
 	const REFRESH_ACTION = 'nota_inv_refresh_status';
 	const DISMISS_NUDGE_ACTION = 'nota_inv_dismiss_nudge';
@@ -193,28 +198,62 @@ class Nota_Inv_Admin_Order_Metabox {
 			echo '<p><em>' . esc_html__( 'Test mode is on — payloads are logged, nothing is sent.', 'nota-invoice-sync' ) . '</em></p>';
 		}
 
-		$label = '' !== $invoice_id
-			? __( 'Create again', 'nota-invoice-sync' )
-			: __( 'Create invoice now', 'nota-invoice-sync' );
-
-		printf(
-			'<p><a href="%s" class="button %s">%s</a></p>',
-			esc_url(
-				wp_nonce_url(
-					admin_url( 'admin-post.php?action=' . self::ACTION . '&order_id=' . $order->get_id() ),
-					self::NONCE
-				)
-			),
-			'' === $invoice_id ? 'button-primary' : '',
-			esc_html( $label )
-		);
-
-		if ( '' !== $invoice_id ) {
-			echo '<p class="description">' . esc_html__( 'Creating again produces a second document in Lexware Office. The old one is not removed.', 'nota-invoice-sync' ) . '</p>';
-		}
+		$this->render_create_button( $order, $invoice_id, $status );
 
 		$this->render_credit_note_teaser( $invoice_id );
 		$this->render_delivery_note_teaser( $order );
+	}
+
+	/**
+	 * "Create invoice now" / "Create again" / "Create corrected invoice".
+	 *
+	 * A finalised invoice is permanent; issuing a second one next to it
+	 * would book the sale twice. So once the invoice is finalised, a new
+	 * one is only offered after it was voided in Lexware Office —
+	 * handle_action() re-checks the status in Lexware Office first.
+	 *
+	 * @param WC_Order $order      Order.
+	 * @param string   $invoice_id Current invoice id, '' if none.
+	 * @param string   $status     Stored invoice status.
+	 * @return void
+	 */
+	private function render_create_button( WC_Order $order, $invoice_id, $status ) {
+		$url = wp_nonce_url(
+			admin_url( 'admin-post.php?action=' . self::ACTION . '&order_id=' . $order->get_id() . '&expect=' . rawurlencode( $invoice_id ) ),
+			self::NONCE
+		);
+
+		if ( '' === $invoice_id ) {
+			printf(
+				'<p><a href="%s" class="button button-primary">%s</a></p>',
+				esc_url( $url ),
+				esc_html__( 'Create invoice now', 'nota-invoice-sync' )
+			);
+			return;
+		}
+
+		if ( '' === $status || 'draft' === $status ) {
+			printf(
+				'<p><a href="%s" class="button" onclick="return confirm(%s);">%s</a></p>',
+				esc_url( $url ),
+				esc_attr( wp_json_encode( __( 'Create a NEW draft invoice in Lexware Office? The existing draft stays there — delete it in Lexware Office so it is not finalised by mistake.', 'nota-invoice-sync' ) ) ),
+				esc_html__( 'Create again', 'nota-invoice-sync' )
+			);
+			echo '<p class="description">' . esc_html__( 'Creating again produces a second draft in Lexware Office. The old draft is not removed.', 'nota-invoice-sync' ) . '</p>';
+			return;
+		}
+
+		if ( 'voided' === $status ) {
+			printf(
+				'<p><a href="%s" class="button" onclick="return confirm(%s);">%s</a></p>',
+				esc_url( $url ),
+				esc_attr( wp_json_encode( __( 'Create a corrected invoice in Lexware Office? The voided invoice stays in Lexware Office; this order then links to the new one.', 'nota-invoice-sync' ) ) ),
+				esc_html__( 'Create corrected invoice', 'nota-invoice-sync' )
+			);
+			return;
+		}
+
+		echo '<p class="description">' . esc_html__( 'A finalised invoice cannot simply be created again — that would invoice the order twice. To correct it, cancel it in Lexware Office (Stornieren). Once "Refresh invoice status" shows it as voided, a corrected invoice can be created here.', 'nota-invoice-sync' ) . '</p>';
 	}
 
 	/**
@@ -458,36 +497,155 @@ class Nota_Inv_Admin_Order_Metabox {
 		check_admin_referer( self::NONCE );
 
 		$order_id = isset( $_GET['order_id'] ) ? absint( $_GET['order_id'] ) : 0;
-		$order    = $order_id ? wc_get_order( $order_id ) : null;
+
+		// The invoice id the button was rendered for. A second click (or a
+		// stale tab) arrives with the old id and is refused below.
+		$expected = isset( $_GET['expect'] ) ? sanitize_text_field( wp_unslash( $_GET['expect'] ) ) : null;
+
+		// One manual run per order at a time: the whole "check in Lexware
+		// Office, create" sequence, not just the create step that
+		// Invoice_Service locks on its own. Without it two quick clicks
+		// could both pass the check and create two invoices.
+		if ( ! $order_id || ! Nota_Inv_Lock::acquire( $order_id, self::LOCK_SCOPE ) ) {
+			$status = $order_id ? 'recreate_locked' : 'error';
+		} else {
+			try {
+				$status = $this->run_manual_create( $order_id, $expected );
+			} finally {
+				// Released before the redirect: exit would skip a later finally.
+				Nota_Inv_Lock::release( $order_id, self::LOCK_SCOPE );
+			}
+		}
+
+		$order = $order_id ? wc_get_order( $order_id ) : null;
 
 		if ( ! $order instanceof WC_Order ) {
 			wp_die( esc_html__( 'Order not found.', 'nota-invoice-sync' ) );
 		}
 
-		$service = new Nota_Inv_Invoice_Service();
-		$result  = $service->create_for_order( $order_id, true );
+		wp_safe_redirect( add_query_arg( 'nota_inv_result', $status, $order->get_edit_order_url() ) );
+		exit;
+	}
 
-		$status = 'ok';
+	/**
+	 * The manual create run, called while holding the manual-run lock.
+	 *
+	 * @param int         $order_id Order id.
+	 * @param string|null $expected Invoice id the button was rendered for, null if not sent.
+	 * @return string Result code for the admin notice.
+	 */
+	private function run_manual_create( $order_id, $expected ) {
+		// Loaded only now, with the lock held, and with the meta re-read
+		// from the database rather than from this request's object cache.
+		$order = wc_get_order( $order_id );
 
-		if ( is_wp_error( $result ) ) {
-			$status = 'error';
-		} elseif ( ! empty( $result['test_mode'] ) ) {
-			$status = 'test';
-		} else {
-			// A genuine new invoice (the metabox button always passes
-			// $force = true, so a real "already invoiced" skip never
-			// reaches here — see Invoice_Service::create_for_order_locked()).
-			$this->record_manual_invoice();
+		if ( ! $order instanceof WC_Order ) {
+			return 'error';
 		}
 
-		wp_safe_redirect(
-			add_query_arg(
-				'nota_inv_result',
-				$status,
-				$order->get_edit_order_url()
+		$order->read_meta_data( true );
+
+		$force = $this->plan_manual_create( $order, $expected );
+
+		if ( is_string( $force ) ) {
+			return $force;
+		}
+
+		$service = new Nota_Inv_Invoice_Service();
+		$result  = $service->create_for_order( $order_id, $force );
+
+		if ( is_wp_error( $result ) ) {
+			return 'error';
+		}
+
+		if ( ! empty( $result['test_mode'] ) ) {
+			return 'test';
+		}
+
+		// A genuine new invoice: create_for_order() is only reached with no
+		// invoice linked, or with $force for a draft/voided one, so an
+		// "already invoiced" skip never lands here.
+		$this->record_manual_invoice();
+
+		return 'ok';
+	}
+
+	/**
+	 * Decide what the manual create button may do for this order right now.
+	 *
+	 * @param WC_Order    $order    Order, freshly loaded.
+	 * @param string|null $expected Invoice id the button was rendered for, null if not sent.
+	 * @return bool|string Value for create_for_order()'s $force, or a result code that blocks.
+	 */
+	private function plan_manual_create( WC_Order $order, $expected ) {
+		$invoice_id = (string) $order->get_meta( NOTA_INV_META_INVOICE_ID );
+
+		if ( null !== $expected && $expected !== $invoice_id ) {
+			return 'recreate_changed';
+		}
+
+		if ( '' === $invoice_id ) {
+			return false;
+		}
+
+		if ( Nota_Inv_Settings::instance()->is( 'test_mode' ) ) {
+			// Nothing is sent in test mode; the payload is only logged.
+			return true;
+		}
+
+		return $this->check_before_recreate( $order, $invoice_id );
+	}
+
+	/**
+	 * Decide, against Lexware Office itself, whether the order may get a
+	 * new invoice although it already has one. The stored status can be
+	 * out of date (e.g. a draft finalised in Lexware Office), so it is
+	 * re-read first. Only drafts and voided invoices may be replaced.
+	 *
+	 * @param WC_Order $order      Order.
+	 * @param string   $invoice_id Current invoice id.
+	 * @return bool|string Value for create_for_order()'s $force, or a result code that blocks.
+	 */
+	private function check_before_recreate( WC_Order $order, $invoice_id ) {
+		$client = new Nota_Inv_Api_Client();
+		$detail = $client->get( '/v1/invoices/' . rawurlencode( $invoice_id ), array(), array( 404 ) );
+
+		if ( Nota_Inv_Invoice_Service::is_not_found( $detail ) ) {
+			// A deleted draft: unlink it, then create normally.
+			return Nota_Inv_Invoice_Service::forget_deleted_draft( $order, $invoice_id ) ? false : 'recreate_check_error';
+		}
+
+		if ( is_wp_error( $detail ) || ! is_array( $detail ) ) {
+			return 'recreate_check_error';
+		}
+
+		$status = ! empty( $detail['voucherStatus'] ) ? (string) $detail['voucherStatus'] : (string) $order->get_meta( NOTA_INV_META_INVOICE_STATUS );
+
+		if ( $status !== (string) $order->get_meta( NOTA_INV_META_INVOICE_STATUS ) ) {
+			$order->update_meta_data( NOTA_INV_META_INVOICE_STATUS, $status );
+			$order->save();
+		}
+
+		if ( 'draft' === $status ) {
+			return true;
+		}
+
+		if ( 'voided' !== $status ) {
+			return 'recreate_blocked';
+		}
+
+		$number = (string) $order->get_meta( NOTA_INV_META_INVOICE_NUMBER );
+
+		// Always noted: the order's link to the voided invoice is replaced.
+		$order->add_order_note(
+			sprintf(
+				/* translators: %s: invoice number. */
+				__( 'Lexware Office invoice %s is voided. A corrected invoice is created and replaces it on this order; the voided invoice stays in Lexware Office.', 'nota-invoice-sync' ),
+				'' !== $number ? $number : $invoice_id
 			)
 		);
-		exit;
+
+		return true;
 	}
 
 	/**
@@ -654,6 +812,34 @@ class Nota_Inv_Admin_Order_Metabox {
 		if ( 'test' === $result ) {
 			echo '<div class="notice notice-info is-dismissible"><p>' .
 				esc_html__( 'Test mode: the invoice payload was written to the log but nothing was sent to Lexware Office.', 'nota-invoice-sync' ) .
+				'</p></div>';
+			return;
+		}
+
+		if ( 'recreate_locked' === $result ) {
+			echo '<div class="notice notice-warning is-dismissible"><p>' .
+				esc_html__( 'An invoice for this order is already being created by another process. Please wait a moment and refresh.', 'nota-invoice-sync' ) .
+				'</p></div>';
+			return;
+		}
+
+		if ( 'recreate_changed' === $result ) {
+			echo '<div class="notice notice-warning is-dismissible"><p>' .
+				esc_html__( 'Nothing was created: the invoice of this order changed in the meantime (for example through a second click). Check the order below.', 'nota-invoice-sync' ) .
+				'</p></div>';
+			return;
+		}
+
+		if ( 'recreate_blocked' === $result ) {
+			echo '<div class="notice notice-error is-dismissible"><p>' .
+				esc_html__( 'No new invoice was created: the current invoice is finalised. Cancel it in Lexware Office first (Stornieren), then try again.', 'nota-invoice-sync' ) .
+				'</p></div>';
+			return;
+		}
+
+		if ( 'recreate_check_error' === $result ) {
+			echo '<div class="notice notice-error is-dismissible"><p>' .
+				esc_html__( 'No new invoice was created: the current invoice could not be checked in Lexware Office. See WooCommerce → Status → Logs.', 'nota-invoice-sync' ) .
 				'</p></div>';
 			return;
 		}
