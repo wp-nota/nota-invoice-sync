@@ -2,7 +2,7 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.23\n"
+"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.24\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/nota-invoice-sync\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1060,4 +1060,16 @@ msgstr ""
 
 #: admin/class-admin-settings-page.php
 msgid "HS code (Zolltarifnummer), country of origin and EAN/GTIN on invoice and delivery note lines — for shipments to Switzerland, the UK and other non-EU countries — are available in Nota Invoice Sync Pro"
+msgstr ""
+
+#: includes/class-api-client.php
+msgid "Lexware Office did not answer in time, so it is not certain whether the document was created."
+msgstr ""
+
+#: includes/class-uncertain-post.php
+msgid "Lexware Office did not answer in time, so it is not certain whether the document was created. Nothing was sent again automatically — please check in Lexware Office before trying again."
+msgstr ""
+
+#: includes/class-invoice-service.php
+msgid "Lexware Office did not answer the request in time, but the invoice had been created there — it was linked to this order and not sent a second time."
 msgstr ""

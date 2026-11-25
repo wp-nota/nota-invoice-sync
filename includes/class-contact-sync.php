@@ -175,10 +175,13 @@ class Nota_Inv_Contact_Sync {
 	 * @return string|WP_Error Contact UUID, or empty string when not found.
 	 */
 	private function find_by_email( $email ) {
+		// The email filter treats _ and % as wildcards (API docs, Filtering
+		// Contacts); escaped with a backslash so only this address is searched
+		// for — the result is still checked for an exact match below.
 		$response = $this->client->get(
 			'/v1/contacts',
 			array(
-				'email'    => $email,
+				'email'    => addcslashes( $email, '\_%' ),
 				'customer' => 'true',
 			)
 		);
@@ -251,7 +254,20 @@ class Nota_Inv_Contact_Sync {
 
 		Nota_Inv_Logger::debug( 'Creating Lexware contact for order ' . $order->get_id(), array( 'payload' => $payload ) );
 
-		$response = $this->client->post( '/v1/contacts', $payload );
+		// A contact request that times out may still have created the
+		// contact; it is searched for by email before anything is sent again.
+		$email = (string) $order->get_billing_email();
+		$find  = function () use ( $email ) {
+			if ( '' === $email ) {
+				return new WP_Error( Nota_Inv_Uncertain_Post::ERROR_CODE, 'no email to search by' );
+			}
+
+			$found = $this->find_by_email( $email );
+
+			return ( is_string( $found ) && '' === $found ) ? null : $found;
+		};
+
+		$response = Nota_Inv_Uncertain_Post::post( $this->client, '/v1/contacts', $payload, $find );
 
 		if ( is_wp_error( $response ) ) {
 			return $response;

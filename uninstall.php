@@ -42,6 +42,7 @@ function nota_inv_uninstall_remove_order_meta() {
 		'_nota_inv_invoice_status',
 		'_nota_inv_contact_id',
 		'_nota_inv_last_error',
+		'_nota_inv_uncertain_invoice',
 	);
 
 	foreach ( $meta_keys as $key ) {

@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.23\n"
+"Project-Id-Version: Nota Invoice Sync for Lexware Office 0.1.24\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/nota-invoice-sync\n"
 "Last-Translator: wp-nota.com <support@wp-nota.com>\n"
 "Language-Team: Deutsch <support@wp-nota.com>\n"
@@ -1061,3 +1061,15 @@ msgstr "Lieferdatum, Positionstext, Einheit (kg, Liter, Stunde …), Dienstleist
 #: admin/class-admin-settings-page.php
 msgid "HS code (Zolltarifnummer), country of origin and EAN/GTIN on invoice and delivery note lines — for shipments to Switzerland, the UK and other non-EU countries — are available in Nota Invoice Sync Pro"
 msgstr "Zolltarifnummer (HS-Code), Ursprungsland und EAN/GTIN in Rechnungs- und Lieferscheinpositionen – für Sendungen in die Schweiz, nach Großbritannien und in andere Nicht-EU-Länder – gibt es in Nota Invoice Sync Pro"
+
+#: includes/class-api-client.php
+msgid "Lexware Office did not answer in time, so it is not certain whether the document was created."
+msgstr "Lexware Office hat nicht rechtzeitig geantwortet, daher ist nicht sicher, ob der Beleg erstellt wurde."
+
+#: includes/class-uncertain-post.php
+msgid "Lexware Office did not answer in time, so it is not certain whether the document was created. Nothing was sent again automatically — please check in Lexware Office before trying again."
+msgstr "Lexware Office hat nicht rechtzeitig geantwortet, daher ist nicht sicher, ob der Beleg erstellt wurde. Es wurde nichts automatisch erneut gesendet – bitte prüfen Sie in Lexware Office, bevor Sie es noch einmal versuchen."
+
+#: includes/class-invoice-service.php
+msgid "Lexware Office did not answer the request in time, but the invoice had been created there — it was linked to this order and not sent a second time."
+msgstr "Lexware Office hat nicht rechtzeitig auf die Anfrage geantwortet, die Rechnung wurde dort aber erstellt – sie wurde mit dieser Bestellung verknüpft und kein zweites Mal gesendet."

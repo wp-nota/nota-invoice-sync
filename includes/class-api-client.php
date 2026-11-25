@@ -5,7 +5,9 @@
  * Responsibilities:
  *  - attach auth headers from the configured provider
  *  - respect the documented rate limit of 2 requests per second
- *  - retry on 429 / 5xx with exponential backoff
+ *  - retry on 429 / 5xx with exponential backoff — except a POST whose
+ *    outcome is unknown (timeout, 5xx): it may have been processed, so it
+ *    is never repeated here; see Nota_Inv_Uncertain_Post
  *  - turn API error payloads into readable WP_Error objects
  *
  * @package Nota_Invoice_Sync
@@ -32,6 +34,13 @@ class Nota_Inv_Api_Client {
 	 * How often a throttled or temporarily failing call is repeated.
 	 */
 	const MAX_ATTEMPTS = 3;
+
+	/**
+	 * Seconds to wait for an answer. Above Lexware's own 30-second gateway
+	 * timeout (API docs, HTTP 504), so a slow request ends with Lexware's
+	 * answer rather than this side giving up first.
+	 */
+	const TIMEOUT = 45;
 
 	/**
 	 * Transient holding the timestamp (ms) of the last outbound request.
@@ -114,7 +123,7 @@ class Nota_Inv_Api_Client {
 
 		$args = array(
 			'method'  => $method,
-			'timeout' => 30,
+			'timeout' => self::TIMEOUT,
 			'headers' => array_merge(
 				$headers,
 				array(
@@ -126,7 +135,7 @@ class Nota_Inv_Api_Client {
 		);
 
 		if ( null !== $body ) {
-			$args['body'] = wp_json_encode( $body );
+			$args['body'] = self::encode( $body );
 		}
 
 		$url          = self::BASE_URL . $path;
@@ -147,6 +156,12 @@ class Nota_Inv_Api_Client {
 			$response = wp_remote_request( $url, $args );
 
 			if ( is_wp_error( $response ) ) {
+				if ( 'POST' === $method ) {
+					// May have reached Lexware and been processed — never
+					// repeated blindly (see Nota_Inv_Uncertain_Post).
+					return self::uncertain( $response->get_error_message() );
+				}
+
 				// Transport-level failure (DNS, timeout, TLS). Worth retrying.
 				$last_error = $response;
 				$this->backoff( $attempt );
@@ -156,6 +171,15 @@ class Nota_Inv_Api_Client {
 			$status = (int) wp_remote_retrieve_response_code( $response );
 			$raw    = wp_remote_retrieve_body( $response );
 
+			if ( 'POST' === $method && $status >= 500 ) {
+				// API docs, 504: "It is possible that your request has been
+				// processed successfully." Same for the other 5xx here.
+				$this->error_from_response( $status, $raw, $quiet_statuses );
+				return self::uncertain( sprintf( 'HTTP %d', $status ) );
+			}
+
+			// 429: "the actual call will not be performed" (API docs) — safe
+			// to repeat, also for POST.
 			if ( 429 === $status || $status >= 500 ) {
 				$last_error = $this->error_from_response( $status, $raw, $quiet_statuses );
 				$this->backoff( $attempt );
@@ -199,6 +223,56 @@ class Nota_Inv_Api_Client {
 	}
 
 	/**
+	 * JSON body for a request.
+	 *
+	 * PHP writes floats with as many digits as the serialize_precision ini
+	 * setting asks for. Some hosts set it to 17 or 100 instead of the
+	 * default -1, and then round( 21.49 / 2, 4 ) goes out as
+	 * 10.7449999999999992184… — more than the 4 decimals the API accepts
+	 * (customer report 24.11.2026, 406 on every invoice). -1 writes the
+	 * shortest exact form (10.745) and is restored right after.
+	 *
+	 * @param mixed $body Request body.
+	 * @return string|false
+	 */
+	public static function encode( $body ) {
+		$previous = ini_get( 'serialize_precision' );
+		$changed  = false !== $previous && '-1' !== (string) $previous && false !== ini_set( 'serialize_precision', '-1' ); // phpcs:ignore WordPress.PHP.IniSet.Risky
+
+		try {
+			return wp_json_encode( $body );
+		} finally {
+			if ( $changed ) {
+				ini_set( 'serialize_precision', $previous ); // phpcs:ignore WordPress.PHP.IniSet.Risky
+			}
+		}
+	}
+
+	/**
+	 * Error for a POST whose outcome is unknown.
+	 *
+	 * @param string $detail What happened, for the log.
+	 * @return WP_Error
+	 */
+	private static function uncertain( $detail ) {
+		return new WP_Error(
+			'nota_inv_uncertain',
+			__( 'Lexware Office did not answer in time, so it is not certain whether the document was created.', 'nota-invoice-sync' ),
+			array( 'detail' => (string) $detail )
+		);
+	}
+
+	/**
+	 * Whether an API result is a POST with unknown outcome (timeout or 5xx).
+	 *
+	 * @param mixed $result Result of an API call.
+	 * @return bool
+	 */
+	public static function is_uncertain( $result ) {
+		return is_wp_error( $result ) && 'nota_inv_uncertain' === $result->get_error_code();
+	}
+
+	/**
 	 * Keep outbound calls under the documented rate limit by spacing them out.
 	 *
 	 * @return void
@@ -232,8 +306,10 @@ class Nota_Inv_Api_Client {
 	/**
 	 * Translate an API error response into a WP_Error.
 	 *
-	 * Lexware uses two shapes: a legacy one with `message`, and a regular one
-	 * with `IssueList[]` entries carrying field-level details.
+	 * Lexware uses two shapes (API docs, "Error Codes"): the legacy one with
+	 * `IssueList[]`, and the regular one (invoices, profile, voucherlist …)
+	 * with `message` plus an optional `details[]` list of
+	 * {violation, field, message}. Both lists carry the actual cause.
 	 *
 	 * @param int    $status         HTTP status.
 	 * @param string $raw            Raw body.
@@ -258,6 +334,27 @@ class Nota_Inv_Api_Client {
 						$text .= ' (' . $issue['additionalData'] . ')';
 					}
 					$parts[] = trim( $field . ': ' . $text, ': ' );
+				}
+			}
+
+			if ( ! empty( $decoded['details'] ) && is_array( $decoded['details'] ) ) {
+				foreach ( $decoded['details'] as $detail ) {
+					if ( ! is_array( $detail ) ) {
+						continue;
+					}
+
+					$field     = isset( $detail['field'] ) && is_scalar( $detail['field'] ) ? (string) $detail['field'] : '';
+					$text      = isset( $detail['message'] ) && is_scalar( $detail['message'] ) ? (string) $detail['message'] : '';
+					$violation = isset( $detail['violation'] ) && is_scalar( $detail['violation'] ) ? (string) $detail['violation'] : '';
+
+					if ( '' !== $violation ) {
+						$text = trim( $text . ' (' . $violation . ')' );
+					}
+
+					$line = trim( $field . ': ' . $text, ': ' );
+					if ( '' !== $line ) {
+						$parts[] = $line;
+					}
 				}
 			}
 

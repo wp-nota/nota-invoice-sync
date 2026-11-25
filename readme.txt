@@ -5,7 +5,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.23
+Stable tag: 0.1.24
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,11 +73,19 @@ Lexware privacy information: [Datenschutz & Datensicherheit](https://www.lexware
 
 = What this version does not do =
 
-Invoices in this version are created by hand, from a button on the order screen. Automatic
-invoicing on order status, bulk invoice creation, payment status sync, automatic PDF delivery,
-payment reminders emailed to the customer, credit notes for refunds, delivery notes (Lieferschein)
-with bulk printing, and large-scale bulk import are part of
-[Nota Invoice Sync Pro](https://www.wp-nota.com/lexware-invoice-sync).
+Invoices in this version are created by hand, from a button on the order screen. The following
+are part of [Nota Invoice Sync Pro](https://www.wp-nota.com/lexware-invoice-sync), which can be
+tried free for 14 days (no credit card required):
+
+* Automatic invoicing on order status, bulk invoice creation and large-scale bulk import.
+* Payment status sync, automatic PDF delivery, PDF download in My Account, and payment reminders
+  emailed to the customer.
+* Credit notes for refunds, and a corrected invoice after a finalised one has been fully
+  credited, with the invoice history kept on the order.
+* Delivery notes (Lieferschein) with bulk printing.
+* Per-product line descriptions, units (kg, Liter, Stunde …) and delivery dates; services billed
+  with a service period; customs data (HS code, country of origin, EAN/GTIN) for non-EU shipments.
+* More placeholders in invoice texts, print layout selection and a GoBD compliance CSV export.
 
 == Privacy ==
 
@@ -182,6 +190,14 @@ Full logs are under WooCommerce → Status → Logs, source "nota-invoice-sync".
 7. Settings — Compliance export: a GoBD-ready CSV of every finalised invoice (available in Pro).
 
 == Changelog ==
+
+= 0.1.24 =
+* Fixed: on servers with a non-default PHP serialize_precision setting, prices went out with dozens of decimals (e.g. 10.7449999999999992…) although Lexware Office accepts at most 4. Request bodies are now always written with the shortest exact number (10.745).
+* Fixed: discounts that other plugins add as a negative fee (e.g. B2BKing's "Discount") were sent as a line with a negative price. They now become the invoice's total discount (Gesamtrabatt), which is how WooCommerce itself treats them: a discount on the whole order. On an invoice with more than one tax rate the discount is instead taken off the lines of each rate, using WooCommerce's own tax split, so net and VAT per rate match the order. Each reduced line names the discount.
+* Fixed: when Lexware Office rejects a document, the error now shows the field and reason Lexware gives (e.g. "lineItems[3].unitPrice.netAmount: …") instead of only "Validation failed for request".
+* Fixed: when Lexware Office does not answer a create request in time (timeout or server error), the request is no longer sent again blindly — that could create the same invoice or contact twice, and a finalised invoice cannot be deleted. The plugin now waits a moment and checks in Lexware Office whether the invoice was created: if so, it is linked to the order; only if nothing is there is the request sent once more. If it cannot be told, nothing is sent and the order shows a message to check Lexware Office. Rate-limit answers (429) are still retried as before.
+* Fixed: searching for an existing Lexware contact by email no longer treats "_" and "%" in the address as wildcards.
+* Changed: the readme's description now lists all features of Nota Invoice Sync Pro and its 14-day free trial.
 
 = 0.1.23 =
 * Added: the product's Lexware tab and the settings page now show the new Pro options (customs data: HS code and country of origin; supply type: service or goods) as locked previews.

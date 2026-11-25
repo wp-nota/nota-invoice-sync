@@ -95,6 +95,33 @@ class Nota_Inv_Invoice_Builder {
 			'language'           => $this->resolve_language( $order ),
 		);
 
+		// Negative fees — discounts other plugins add as a fee line, e.g.
+		// B2BKing's "Discount" (customer report 24.11.2026) — become the
+		// invoice's total discount ("Gesamtrabatt"). WooCommerce itself treats
+		// a negative fee as a discount on the whole order: its tax is split
+		// over all positive items, shipping and fees by cost (WC_Cart_Totals::
+		// get_fees_from_cart(), WC_Order_Item_Fee::calculate_taxes()). Lexware's
+		// Gesamtrabatt is the same concept: "immer auf die Gesamtsumme der
+		// Rechnung angewendet, einschließlich aller hinzugefügten Positionen"
+		// (Help Center 547984), and Lexware recommends it for a discount on the
+		// invoice total (548179). Sending the fee as a negative line instead
+		// would carry one tax rate for what WooCommerce taxed across rates.
+		// With more than one rate on the invoice WooCommerce's split cannot be
+		// reproduced by a total discount (it counts "inherit" shipping under
+		// the first item's tax class, so it depends on item order — local test
+		// 25.11.2026: 7 ct off on a 7 % + 19 % order); there the discount is
+		// folded into the lines per rate instead, see spread_fee_discount().
+		$fee_discount = $this->negative_fee_discount( $order );
+		if ( $fee_discount > 0 ) {
+			$spread = $this->spread_fee_discount( $line_items, $order, $fee_discount );
+
+			if ( null === $spread ) {
+				$payload['totalPrice']['totalDiscountAbsolute'] = $fee_discount;
+			} else {
+				$payload['lineItems'] = $spread;
+			}
+		}
+
 		// Coupon discounts are deliberately NOT sent as totalDiscountAbsolute:
 		// every line item's net amount below already comes from
 		// $item->get_total(), i.e. after WooCommerce has distributed all
@@ -225,7 +252,10 @@ class Nota_Inv_Invoice_Builder {
 		foreach ( $order->get_items( 'fee' ) as $fee ) {
 			$net = (float) $fee->get_total();
 
-			if ( 0.0 === $net ) {
+			// Negative fees (discounts added by other plugins) are not lines:
+			// they go out as the invoice's total discount, see
+			// negative_fee_discount().
+			if ( $net <= 0.0 ) {
 				continue;
 			}
 
@@ -689,6 +719,261 @@ class Nota_Inv_Invoice_Builder {
 		}
 
 		return $conditions;
+	}
+
+	/**
+	 * Net total of the order's negative fees, as a positive amount rounded
+	 * to the 2 decimals totalDiscountAbsolute allows (0 when there are none).
+	 * Net, because every tax type this plugin sends prices as net.
+	 *
+	 * @param WC_Order $order Order.
+	 * @return float
+	 */
+	private function negative_fee_discount( WC_Order $order ) {
+		$total = 0.0;
+
+		foreach ( $order->get_items( 'fee' ) as $fee ) {
+			$net = (float) $fee->get_total();
+
+			if ( $net < 0.0 ) {
+				$total -= $net;
+			}
+		}
+
+		return round( $total, 2 );
+	}
+
+	/**
+	 * Fold the order's negative fees into the line prices, per tax rate, when
+	 * the invoice carries more than one rate.
+	 *
+	 * Each rate's share is taken from WooCommerce's own tax split of the fee
+	 * (net share = fee tax at that rate / rate), so the invoice's net and tax
+	 * per rate equal WooCommerce's. A share is spread over that rate's lines
+	 * (products and shipping, as WooCommerce counts both) in proportion to
+	 * their net amount, rounded to cents so each share adds up exactly, and
+	 * each reduced line names the discount in its description — the same
+	 * approach as for coupons, see discount_note().
+	 *
+	 * @param array    $line_items Built line items.
+	 * @param WC_Order $order      Order.
+	 * @param float    $discount   Net total of the negative fees (positive).
+	 * @return array|null Line items with the discount folded in, or null when
+	 *                    the invoice has a single rate or the split cannot be
+	 *                    placed — then it is sent as the total discount.
+	 */
+	private function spread_fee_discount( array $line_items, WC_Order $order, $discount ) {
+		$rates = array();
+
+		foreach ( $line_items as $line ) {
+			if ( isset( $line['unitPrice']['netAmount'], $line['unitPrice']['taxRatePercentage'] ) && $line['unitPrice']['netAmount'] > 0 ) {
+				$rate = (float) $line['unitPrice']['taxRatePercentage'];
+
+				$rates[ $this->rate_key( $rate ) ] = $rate;
+			}
+		}
+
+		if ( count( $rates ) < 2 ) {
+			return null;
+		}
+
+		$shares = array();
+		$taxed  = 0.0;
+		$names  = array();
+
+		foreach ( $order->get_items( 'fee' ) as $fee ) {
+			if ( (float) $fee->get_total() >= 0 ) {
+				continue;
+			}
+
+			$names[] = trim( (string) $fee->get_name() );
+			$taxes   = $fee->get_taxes();
+			$totals  = isset( $taxes['total'] ) && is_array( $taxes['total'] ) ? $taxes['total'] : array();
+
+			foreach ( $totals as $rate_id => $amount ) {
+				$percent = $this->wc_rate_percent( $rate_id );
+
+				if ( $percent <= 0 || ! is_numeric( $amount ) || 0.0 === (float) $amount ) {
+					continue;
+				}
+
+				$key = $this->matching_rate_key( $percent, $rates );
+
+				if ( null === $key ) {
+					return null;
+				}
+
+				$net             = -1 * (float) $amount / ( $percent / 100 );
+				$shares[ $key ]  = ( isset( $shares[ $key ] ) ? $shares[ $key ] : 0.0 ) + $net;
+				$taxed          += $net;
+			}
+		}
+
+		// Part of the fee WooCommerce did not tax (non-taxable items) belongs
+		// on the 0 % lines.
+		$untaxed = $discount - $taxed;
+		if ( $untaxed > 0.005 ) {
+			$zero = $this->rate_key( 0.0 );
+
+			if ( ! isset( $rates[ $zero ] ) ) {
+				return null;
+			}
+
+			$shares[ $zero ] = ( isset( $shares[ $zero ] ) ? $shares[ $zero ] : 0.0 ) + $untaxed;
+		}
+
+		if ( empty( $shares ) ) {
+			return null;
+		}
+
+		$shares = $this->round_to_total( $shares, $discount );
+		$names  = implode( ', ', array_unique( array_filter( $names ) ) );
+		$en     = 'en' === $this->resolve_language( $order );
+
+		foreach ( $shares as $key => $share ) {
+			if ( $share <= 0 ) {
+				continue;
+			}
+
+			$indexes = array();
+			$weights = array();
+
+			foreach ( $line_items as $index => $line ) {
+				if ( isset( $line['unitPrice']['netAmount'], $line['unitPrice']['taxRatePercentage'] ) && $line['unitPrice']['netAmount'] > 0 && $this->rate_key( (float) $line['unitPrice']['taxRatePercentage'] ) === $key ) {
+					$indexes[]         = $index;
+					$weights[ $index ] = round( (float) $line['quantity'] * (float) $line['unitPrice']['netAmount'], 2 );
+				}
+			}
+
+			if ( array_sum( $weights ) < $share ) {
+				return null;
+			}
+
+			$raw = array();
+			foreach ( $weights as $index => $weight ) {
+				$raw[ $index ] = $share * $weight / array_sum( $weights );
+			}
+
+			foreach ( $this->round_to_total( $raw, $share ) as $index => $cut ) {
+				if ( $cut < 0.005 ) {
+					continue;
+				}
+
+				$quantity = (float) $line_items[ $index ]['quantity'];
+				$line_net = $weights[ $index ] - $cut;
+
+				$line_items[ $index ]['unitPrice']['netAmount'] = round( $line_net / $quantity, 4 );
+
+				$note = $en
+					? sprintf( 'Discount: -%s €', number_format( $cut, 2, '.', ',' ) )
+					: sprintf( 'Rabatt: -%s €', number_format( $cut, 2, ',', '.' ) );
+
+				if ( '' !== $names ) {
+					$note .= ' (' . $names . ')';
+				}
+
+				$description = isset( $line_items[ $index ]['description'] ) ? (string) $line_items[ $index ]['description'] : '';
+
+				$line_items[ $index ]['description'] = $this->clean( '' !== $description ? $description . "\n" . $note : $note, 1000 );
+			}
+		}
+
+		return $line_items;
+	}
+
+	/**
+	 * Round amounts to cents so they add up to exactly $total (largest
+	 * remainder method).
+	 *
+	 * @param float[] $amounts Amounts, keyed.
+	 * @param float   $total   Total they must add up to.
+	 * @return float[]
+	 */
+	private function round_to_total( array $amounts, $total ) {
+		$cents     = array();
+		$remainder = array();
+
+		foreach ( $amounts as $key => $amount ) {
+			$exact             = $amount * 100;
+			$cents[ $key ]     = (int) floor( $exact + 1e-9 );
+			$remainder[ $key ] = $exact - $cents[ $key ];
+		}
+
+		$missing = (int) round( $total * 100 ) - array_sum( $cents );
+
+		arsort( $remainder );
+
+		foreach ( array_keys( $remainder ) as $key ) {
+			if ( $missing <= 0 ) {
+				break;
+			}
+
+			$cents[ $key ]++;
+			$missing--;
+		}
+
+		// Amounts adding up to slightly more than the total (float noise).
+		foreach ( array_reverse( array_keys( $remainder ) ) as $key ) {
+			if ( $missing >= 0 ) {
+				break;
+			}
+
+			if ( $cents[ $key ] > 0 ) {
+				$cents[ $key ]--;
+				$missing++;
+			}
+		}
+
+		$out = array();
+		foreach ( $cents as $key => $value ) {
+			$out[ $key ] = $value / 100;
+		}
+
+		return $out;
+	}
+
+	/**
+	 * @param float $rate Tax rate in percent.
+	 * @return string Array key for a rate.
+	 */
+	private function rate_key( $rate ) {
+		return number_format( (float) $rate, 2, '.', '' );
+	}
+
+	/**
+	 * The invoice rate a WooCommerce rate belongs to (within half a point,
+	 * as the lines' own rates are snapped to valid ones).
+	 *
+	 * @param float $percent WooCommerce rate in percent.
+	 * @param array $rates   Invoice rates, keyed by rate_key().
+	 * @return string|null
+	 */
+	private function matching_rate_key( $percent, array $rates ) {
+		$best = null;
+
+		foreach ( $rates as $key => $rate ) {
+			if ( $rate > 0 && abs( $rate - $percent ) <= 0.5 && ( null === $best || abs( $rate - $percent ) < abs( $rates[ $best ] - $percent ) ) ) {
+				$best = $key;
+			}
+		}
+
+		return $best;
+	}
+
+	/**
+	 * Percent value of a WooCommerce tax rate id.
+	 *
+	 * @param int|string $rate_id Tax rate id.
+	 * @return float
+	 */
+	private function wc_rate_percent( $rate_id ) {
+		if ( ! class_exists( 'WC_Tax' ) ) {
+			return 0.0;
+		}
+
+		$rate = WC_Tax::_get_tax_rate( (int) $rate_id );
+
+		return is_array( $rate ) && isset( $rate['tax_rate'] ) ? (float) $rate['tax_rate'] : 0.0;
 	}
 
 	/**

@@ -157,11 +157,24 @@ class Nota_Inv_Invoice_Service {
 			$path .= '?finalize=true';
 		}
 
-		$response = $this->client->post( $path, $payload );
+		// Never create the invoice twice: an earlier request whose outcome
+		// stayed unknown is looked for first, and a request that times out
+		// is only repeated once Lexware Office shows no such invoice.
+		$find     = $this->invoice_finder( $order, (string) $contact_id, $payload );
+		$response = Nota_Inv_Uncertain_Post::resolve_pending( $order, 'invoice', $find );
+
+		if ( null === $response ) {
+			$response = Nota_Inv_Uncertain_Post::post( $this->client, $path, $payload, $find, $order, 'invoice' );
+		}
 
 		if ( is_wp_error( $response ) ) {
 			$this->record_failure( $order, $response );
 			return $response;
+		}
+
+		if ( ! empty( $response['nota_inv_adopted'] ) ) {
+			// Always noted: explains why no second invoice was sent.
+			$order->add_order_note( __( 'Lexware Office did not answer the request in time, but the invoice had been created there — it was linked to this order and not sent a second time.', 'nota-invoice-sync' ) );
 		}
 
 		if ( empty( $response['id'] ) ) {
@@ -174,6 +187,34 @@ class Nota_Inv_Invoice_Service {
 		}
 
 		return $this->record_success( $order, (string) $response['id'] );
+	}
+
+	/**
+	 * Finds the invoice an unanswered request created: same contact, created
+	 * after the request started, same total — never one this order already
+	 * knows about.
+	 *
+	 * @param WC_Order $order      Order.
+	 * @param string   $contact_id Lexware contact id.
+	 * @param array    $payload    Invoice payload.
+	 * @return callable See Nota_Inv_Uncertain_Post::post().
+	 */
+	private function invoice_finder( WC_Order $order, $contact_id, array $payload ) {
+		$client  = $this->client;
+		$amount  = Nota_Inv_Uncertain_Post::expected_gross( $payload );
+		$exclude = array( (string) $order->get_meta( NOTA_INV_META_INVOICE_ID ) );
+
+		if ( method_exists( __CLASS__, 'history' ) ) {
+			foreach ( call_user_func( array( __CLASS__, 'history' ), $order ) as $entry ) {
+				$exclude[] = isset( $entry['id'] ) ? (string) $entry['id'] : '';
+			}
+		}
+
+		$exclude = array_values( array_filter( $exclude ) );
+
+		return function ( $since ) use ( $client, $contact_id, $amount, $exclude ) {
+			return Nota_Inv_Uncertain_Post::find_one( $client, 'invoice', $contact_id, $since, $amount, $exclude );
+		};
 	}
 
 	/**
